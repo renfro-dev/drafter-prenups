@@ -20,6 +20,11 @@ export default function Home() {
               <span className="text-xl font-bold tracking-tight">Drafter</span>
             </div>
             <div className="flex items-center space-x-4">
+              <Link href="/privacy-policy" data-testid="link-privacy-policy">
+                <Button variant="ghost" size="sm" className="text-sm">
+                  Data Privacy Policy
+                </Button>
+              </Link>
               <div className="hidden md:flex items-center space-x-2 text-sm text-muted-foreground">
                 <Lock className="h-4 w-4" />
                 <span>Private & Secure</span>
