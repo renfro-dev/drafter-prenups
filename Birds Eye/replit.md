@@ -23,6 +23,10 @@ Preferred communication style: Simple, everyday language.
 - `replit.md` - This file: Project architecture and technical overview
 - `tasks.md` - Action items, future enhancements, and roadmap
 - `Tech.txt` - Technical architecture details
+- **`session-logs/`** - Development session tracking (PST timezone)
+  - `summary.md` - Quick reference (1-2 lines per session)
+  - `detailed-logs.md` - Full session documentation
+  - `template.md` - Logging instructions and structure
 
 **agent-roles/** - SEO implementation playbooks for 50-state expansion
 - `seo-technical-agent.md` - Technical SEO foundation (schema, Core Web Vitals, sitemaps)
