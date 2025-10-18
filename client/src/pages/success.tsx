@@ -9,9 +9,14 @@ export default function Success() {
 
   useEffect(() => {
     const stored = localStorage.getItem('prenup-result');
+    console.log('[Success Page] localStorage data:', stored);
     if (stored) {
-      setResult(JSON.parse(stored));
+      const parsed = JSON.parse(stored);
+      console.log('[Success Page] Parsed result:', parsed);
+      setResult(parsed);
       localStorage.removeItem('prenup-result');
+    } else {
+      console.log('[Success Page] No result in localStorage');
     }
   }, []);
 
@@ -26,7 +31,10 @@ export default function Success() {
     }
   };
 
-  const emailDelivered = result?.emailDelivered !== false;
+  const emailDelivered = result?.emailDelivered === true;
+  
+  console.log('[Success Page] Current result state:', result);
+  console.log('[Success Page] emailDelivered:', emailDelivered);
 
   return (
     <div className="min-h-screen bg-background">

@@ -17,7 +17,17 @@ export async function initializeDatabase() {
       'utf-8'
     );
 
-    await sql(migrationSQL);
+    const lines = migrationSQL.split('\n').filter(line => !line.trim().startsWith('--'));
+    const cleanSQL = lines.join('\n');
+    
+    const statements = cleanSQL
+      .split(';')
+      .map(s => s.trim())
+      .filter(s => s.length > 0);
+
+    for (const statement of statements) {
+      await sql(statement);
+    }
     console.log('✓ Database tables created');
 
     const existingClauses = await sql`SELECT COUNT(*) as count FROM clauses`;

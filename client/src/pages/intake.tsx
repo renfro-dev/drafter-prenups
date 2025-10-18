@@ -66,10 +66,13 @@ export default function Intake() {
       return await apiRequest("POST", "/api/generate", data);
     },
     onSuccess: (response: any) => {
+      console.log('[Intake] API response:', response);
       localStorage.setItem('prenup-result', JSON.stringify(response));
+      console.log('[Intake] Saved to localStorage');
       setLocation("/success");
     },
     onError: (error: Error) => {
+      console.error('[Intake] Error:', error);
       toast({
         title: "Generation Failed",
         description: error.message || "Failed to generate prenup. Please try again.",
