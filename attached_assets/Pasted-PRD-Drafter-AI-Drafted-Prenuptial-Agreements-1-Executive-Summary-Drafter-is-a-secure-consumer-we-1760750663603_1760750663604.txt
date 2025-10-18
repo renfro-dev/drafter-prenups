@@ -1,0 +1,300 @@
+PRD: Drafter – AI-Drafted Prenuptial Agreements
+1. Executive Summary
+Drafter is a secure consumer web application that enables individuals and couples to generate legally sound prenuptial agreements by answering a guided intake form. The system uses a private, self-hosted large language model (LLM) fine-tuned on state-specific legal clauses and jurisdictional rules to produce a high-quality prenup draft, delivered instantly via email as a Word or PDF file.
+This product democratizes access to prenuptial agreements—making them accessible, fast, and affordable—while ensuring data privacy and compliance with jurisdictional standards. The MVP focuses on California, with additional states planned as the clause library grows.
+
+2. Business Context
+Problem
+Traditional prenuptial agreements are expensive and intimidating. Consumers must engage an attorney early, disclose extensive personal information, and pay $3,000–$8,000 per agreement. Many couples skip prenups due to cost or friction—leaving them exposed during divorce or estate events.
+Opportunity
+By pairing open-source LLM technology with a curated, jurisdiction-specific clause library, Drafter can:
+Reduce drafting costs by 80–90%.
+
+
+Allow users to prepare an attorney-ready draft in under 10 minutes.
+
+
+Build trust via private, encrypted on-prem LLM inference—no data leaves the system.
+
+
+Generate affiliate and referral revenue through attorney partnerships (paid review and filing services).
+
+
+Market
+~2.6M marriages per year in the U.S.; ~15% of couples now sign prenups.
+
+
+Top markets: California, Florida, New York, Texas.
+
+
+TAM ≈ $3.1B; early entry niche = self-help + lead-gen funnel for family-law firms.
+
+
+Strategic Fit
+Drafter sits within the broader Native.Legal ecosystem—AI-powered consumer legal tools that feed high-intent leads to partner law firms. Prenups are the beachhead: a clean, high-value entry point for automating other family-law documents.
+
+3. Product Vision
+Mission:
+ Empower consumers to create enforceable, jurisdiction-specific prenups safely, privately, and affordably.
+Core Experience:
+User visits drafter.legal
+
+
+Completes guided intake (names, assets, debts, timing, state, etc.).
+
+
+Chooses jurisdiction (e.g., CA).
+
+
+Enters email address for delivery.
+
+
+Within minutes, receives a customized prenup generated from vetted clauses.
+
+
+Optionally books a licensed attorney for review via partner network.
+
+
+Privacy Promise:
+ No user data leaves the secure environment. Drafting runs on a self-hosted Llama 3.1 8B Instruct model using RAG over a curated clause/jurisdiction corpus.
+
+4. MVP Goals
+Area
+Objective
+Jurisdictions
+California
+Document Type
+Prenuptial Agreement (single or joint intake)
+Delivery
+Email + browser download (.docx, .pdf)
+AI Model
+Llama 3.1 8B Instruct (private, Ollama/vLLM deployment)
+Clause Source
+Firecrawl + Playwright ingestion from state statutes, public templates, firm libraries
+Schema Control
+JSON-first → Template render (Jinja2 → .docx)
+Output Safety
+Guardrails (NeMo or custom validator)
+Data Privacy
+Fully self-hosted; optional PII masking/unmasking
+Human Review
+Optional attorney partner upsell
+
+
+5. Technical Architecture
+5.1 Overview
+[ User Intake Form ]
+       ↓
+ [ JSON Schema Validation ]
+       ↓
+ [ Clause Retrieval (RAG) ]
+       ↓
+ [ LLM (Llama 3.1 8B Instruct) ]
+       ↓
+ [ Draft JSON Output ]
+       ↓
+ [ Template Renderer (Jinja2 → .docx/.pdf) ]
+       ↓
+ [ Email Delivery ]
+
+5.2 Key Components
+1. Clause & Jurisdiction Library
+Built using Playwright/Firecrawl scrapers.
+
+
+Normalized into JSONL corpus (clauses.jsonl, rules.jsonl).
+
+
+Structured with ClauseRecord@v1 and JurisdictionRule@v1 schemas.
+
+
+Stored locally and indexed via Qdrant/Chroma for RAG retrieval.
+
+
+2. Model Layer
+Base: Llama 3.1 8B Instruct (quantized Q4_K_M).
+
+
+Hosted via Ollama for simplicity (or vLLM for scaling).
+
+
+Optional LoRA fine-tune on 2–5k prenup clauses for stylistic control.
+
+
+3. Application Layer
+Frontend: Next.js + Tailwind (simple guided form).
+
+
+Backend: Supabase Edge Function or Node API for:
+
+
+Intake → JSON schema validation.
+
+
+Clause retrieval by jurisdiction.
+
+
+LLM call and output validation.
+
+
+Docx/PDF render and email send (Resend or Supabase Mail).
+
+
+4. Security Layer
+Local inference (no cloud API calls).
+
+
+AES-encrypted user data in transit and at rest.
+
+
+Optional PII masking layer (LegalGuardian-style).
+
+
+Logs anonymized; deletions automatic after 7 days.
+
+
+5. Template Layer
+Jinja2 templates map to sections:
+
+
+Definitions
+
+
+Disclosure
+
+
+Spousal Support
+
+
+Separate/Community Property
+
+
+Debts and Liabilities
+
+
+Execution and Governing Law
+
+
+Each clause pulled from the JSONL library based on jurisdiction logic.
+
+
+
+6. Data Schema
+Intake Schema Example
+{
+  "party_a_name": "Alice Example",
+  "party_b_name": "Bob Example",
+  "state": "CA",
+  "wedding_date": "2025-12-12",
+  "days_before_wedding": 45,
+  "assets": [
+    {"type":"real_property","description":"Condo in San Diego","value":750000},
+    {"type":"bank_account","description":"Joint Savings","value":20000}
+  ],
+  "debts": [
+    {"type":"student_loan","party":"A","value":30000}
+  ],
+  "counsel_represented": true
+}
+
+ClauseRecord Schema (v1)
+(See previous definition; identical except for added “category” field for RAG retrieval.)
+
+7. User Flow
+Step
+Action
+Output
+1
+User visits homepage
+Landing CTA: “Generate Your Prenup”
+2
+Completes guided intake
+JSON validated
+3
+Selects jurisdiction
+State saved to schema
+4
+LLM generates prenup draft
+JSON → Docx
+5
+User enters email
+Stored + trigger delivery
+6
+Receives draft by email
+File + attorney upsell CTA
+
+
+8. Revenue Model
+Source
+Description
+Consumer Draft Fee
+$49–$99 per prenup (document only)
+Attorney Review Referral
+Partner firms pay 10–20% referral fee per booked review
+Subscription Tier
+Firms can license the clause library + private model for internal drafting
+Future Expansion
+Postnups, cohabitation agreements, wills, trusts, estate planning docs
+
+
+9. Metrics & Success Criteria
+KPI
+Target (MVP)
+Conversion Rate (Landing → Draft)
+≥ 15%
+Draft Accuracy (Attorney Review Pass)
+≥ 90%
+Time to Draft
+≤ 2 min for average intake
+Cost per Draft (infra only)
+<$0.10
+Net Promoter Score
+≥ 8/10
+Clauses in Library
+≥ 20 (CA), ≥ 20 (FL)
+
+
+10. Future Roadmap
+Phase
+Focus
+Phase 1 – MVP (3 months)
+Build CA intake → draft → email flow. Seed clause corpus.
+Phase 2 – Expansion (6 months)
+Add FL, NY, TX; implement attorney dashboard; add payments.
+Phase 3 – Full Platform (12 months)
+Enable multi-doc types (MSAs, wills), consumer account login, analytics.
+Phase 4 – AI-Ops Scaling
+Continuous retraining, versioned corpus, attorney feedback loops.
+
+
+11. Compliance & Risk
+Disclaimers: “For informational purposes only; not legal advice. Review by an attorney recommended.”
+
+
+Adhere to state bar UPL (unauthorized practice of law) limits—tool generates a draft, not a signed contract.
+
+
+Ensure GDPR/CCPA compliance; clear data-retention and deletion policies.
+
+
+
+12. Deliverables (MVP Definition of Done)
+✅ Functional intake form (Next.js + Supabase)
+
+
+✅ Working Llama 3.1 8B private inference via Ollama/vLLM
+
+
+✅ Clause library (CA + FL) JSONL corpus
+
+
+✅ Draft generation + docx renderer
+
+
+✅ Email delivery with download link
+
+
+✅ Compliance disclaimers + privacy policy
+
+
+

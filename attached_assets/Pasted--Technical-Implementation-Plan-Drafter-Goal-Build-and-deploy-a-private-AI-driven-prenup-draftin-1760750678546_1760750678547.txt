@@ -1,0 +1,307 @@
+🧠 Technical Implementation Plan — Drafter
+Goal: Build and deploy a private AI-driven prenup drafting system that accepts user intake data, retrieves jurisdictional clauses, generates a prenup via local LLM, and emails the final .docx.
+
+1. Repo Overview
+Monorepo Name: drafter_prenup
+Stack Summary
+Layer
+Technology
+Purpose
+Frontend
+Next.js + Tailwind
+Intake form, state selector, email capture
+Backend
+Supabase Edge Functions (Deno)
+Schema validation, RAG retrieval, LLM orchestration, docx render
+Database
+Supabase Postgres
+Store user intakes, state rules, logs
+Vector Store
+Qdrant or Chroma (local)
+Clause embeddings for RAG
+Model Runtime
+Ollama or vLLM
+Self-hosted Llama 3.1 8B Instruct
+Template Engine
+Jinja2 (via Node or Python)
+Generate Word (.docx) templates
+Mailer
+Resend or Supabase Mail
+Email the prenup to user
+Auth (optional)
+Supabase Auth
+Track users if account creation added
+
+
+2. Folder Structure
+drafter/
+├── apps/
+│   ├── web/                      # Next.js frontend
+│   │   ├── pages/
+│   │   ├── components/
+│   │   └── utils/
+│   └── api/                      # Supabase Edge Functions or Node backend
+│       ├── ingest/
+│       ├── draft/
+│       ├── email/
+│       ├── validate/
+│       └── render/
+│
+├── data/
+│   ├── clauses/clauses.jsonl     # normalized clause corpus
+│   ├── jurisdictions/rules.jsonl # jurisdictional rules
+│   ├── embeddings/               # Qdrant/Chroma exports
+│   └── _manifests/sources.jsonl  # crawl manifests
+│
+├── scripts/
+│   ├── crawl_firecrawl.ts        # Firecrawl/Playwright scraper
+│   ├── normalize.ts              # Normalize raw text into schema
+│   ├── validate.ts               # Schema validation
+│   ├── embed.ts                  # Create embeddings for RAG
+│   └── seed_supabase.ts          # Load seeds into DB
+│
+├── templates/
+│   └── prenup_template.docx.j2   # master clause-stitched template
+│
+├── .env.example
+├── package.json
+├── supabase/
+│   └── migrations/
+└── README.md
+
+
+3. Environment Variables
+SUPABASE_URL=
+SUPABASE_SERVICE_ROLE_KEY=
+OLLAMA_HOST=http://localhost:11434
+QDRANT_URL=http://localhost:6333
+RESEND_API_KEY=
+FROM_EMAIL=no-reply@nativeprenup.com
+SITE_URL=https://nativeprenup.com
+
+
+4. Supabase Schema
+Table: intakes
+Column
+Type
+Description
+id
+uuid
+PK
+email
+text
+user’s email
+state
+text
+e.g., “CA”
+intake_json
+jsonb
+structured responses
+prenup_doc_url
+text
+link to .docx
+created_at
+timestamptz
+—
+
+Table: clause_logs
+Column
+Type
+Description
+id
+uuid
+PK
+clause_id
+text
+from JSONL corpus
+state
+text
+CA, FL, etc.
+applied
+boolean
+if used in draft
+confidence
+numeric
+retrieval confidence
+created_at
+timestamptz
+—
+
+
+5. API Endpoints
+POST /api/ingest
+Purpose: Receive intake JSON from frontend.
+
+
+Validates via Zod schema.
+
+
+Writes to Supabase.
+
+
+POST /api/draft
+Purpose: Generate prenup.
+
+
+Steps:
+
+
+Retrieve applicable clauses (state filter + JSONLogic).
+
+
+Build system prompt.
+
+
+Query LLM (local via Ollama/vLLM REST).
+
+
+Validate output JSON (structure + variables).
+
+
+Render with Jinja2 to .docx.
+
+
+Save file to Supabase Storage.
+
+
+POST /api/email
+Sends document via Resend or Supabase Mail.
+
+
+Optional: triggers attorney upsell email.
+
+
+
+6. Prompt Architecture
+System Prompt (MVP Draft Agent)
+You are a legal drafting model that assembles enforceable, jurisdiction-specific
+Prenuptial Agreements based on validated intake data and a clause library.
+
+Return JSON only in the following format:
+{
+  "jurisdiction": "CA",
+  "sections": [
+    {"title": "Full Financial Disclosure", "text": "..."},
+    {"title": "Separate Property", "text": "..."},
+    {"title": "Spousal Support", "text": "..."},
+    {"title": "Governing Law", "text": "..."}
+  ]
+}
+
+Inputs
+intake_json (validated)
+
+
+retrieved_clauses (array of text from JSONL or Qdrant)
+
+
+jurisdiction_rules (from rules.jsonl)
+
+
+Output Validation
+Parse JSON → ensure all required sections exist.
+
+
+If invalid: fallback to template defaults + re-query.
+
+
+
+7. RAG Retrieval Example
+import { QdrantClient } from "@qdrant/js-client-rest";
+
+const client = new QdrantClient({ url: process.env.QDRANT_URL });
+
+const results = await client.search("clauses", {
+  vector: embedding(intake_text),
+  filter: { must: [{ key: "jurisdiction.state", match: { value: "CA" } }] },
+  limit: 8,
+});
+
+return results.map(r => r.payload.text_normalized);
+
+
+8. Jinja2 Template Example
+File: /templates/prenup_template.docx.j2
+Prenuptial Agreement
+--------------------
+This Prenuptial Agreement ("Agreement") is made and entered into by and between
+{{ party_a_name }} and {{ party_b_name }} on {{ effective_date }}.
+
+{% for section in sections %}
+## {{ section.title }}
+{{ section.text }}
+{% endfor %}
+
+Executed in accordance with the laws of {{ state }}.
+
+
+9. Firecrawl / Playwright Crawler
+Goal: Collect official clauses from state family codes, public templates, and bar association resources.
+// scripts/crawl_firecrawl.ts
+import { FirecrawlClient } from "firecrawl";
+const firecrawl = new FirecrawlClient(process.env.FIRECRAWL_KEY);
+
+await firecrawl.crawl({
+  startUrls: [
+    "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=FAM&sectionNum=1612.",
+    "https://www.leg.state.fl.us/statutes/index.cfm?App_mode=Display_Statute&URL=0000-0099/0061/Sections/0061.079.html"
+  ],
+  includeDomains: ["leginfo.legislature.ca.gov","leg.state.fl.us"],
+  maxDepth: 1,
+  saveRaw: "data/raw/"
+});
+
+Then normalize into clauses.jsonl via scripts/normalize.ts using the schema you already defined.
+
+10. Deployment
+Component
+Where
+Notes
+Frontend
+Vercel or Supabase Hosting
+Static + Edge Functions
+Model
+Local GPU or Modal.com
+Private inference only
+Vector DB
+Qdrant Cloud (private) or local docker
+Keep inside same network
+Database
+Supabase
+Secure with RLS; no PII leaks
+Email
+Resend
+DKIM verified domain
+
+Local Dev:
+ollama pull llama3:8b
+ollama serve &
+npm run dev
+
+
+11. Definition of Done (MVP)
+✅ User can complete form (CA/FL)
+ ✅ Validated JSON intake stored in Supabase
+ ✅ Clauses retrieved via RAG
+ ✅ LLM returns JSON sections
+ ✅ Prenup rendered to .docx
+ ✅ Email with download link sent
+ ✅ All runs locally — no external model API
+ ✅ Attorney disclaimer embedded
+
+12. Future Iterations
+Milestone
+Description
+v1.1
+Add attorney dashboard + Stripe checkout
+v1.2
+Add NY + TX jurisdictions
+v1.3
+Fine-tune custom LoRA for tone/style
+v2.0
+Add postnup & cohabitation agreements
+v3.0
+Launch API licensing for law firms (white-label DraftOps)
+
+
+
