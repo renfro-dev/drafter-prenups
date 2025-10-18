@@ -67,6 +67,54 @@ export default function CaliforniaPrenup() {
             "@type": "Answer",
             "text": "California is a community property state, meaning assets and debts acquired during marriage are owned equally (50/50) by both spouses, regardless of whose name is on the title. A prenup can modify this default rule."
           }
+        },
+        {
+          "@type": "Question",
+          "name": "Do both parties need separate attorneys in California?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Not legally required in all cases, but strongly recommended. California Family Code §1615 creates a rebuttable presumption that a prenup waiving spousal support was involuntary if the disadvantaged party didn't have independent counsel. Courts are far more likely to enforce prenups where both parties had separate attorneys."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can we modify a prenup after marriage?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, through a postnuptial agreement. The same requirements apply: written agreement, voluntary execution, full financial disclosure, and ideally independent legal counsel for both parties. California Family Code §1500 governs postnups."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What happens if we divorce in another state?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "California prenups are generally enforceable in other states under the Full Faith and Credit Clause of the U.S. Constitution, but the enforcing state's laws will apply. It's wise to include a choice of law provision specifying California law governs the agreement."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do we provide full financial disclosure?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Attach a complete schedule of assets and debts to the prenup, including: all real estate, bank accounts, retirement accounts, investment accounts, business interests, vehicles, valuable personal property, and all debts. Include current fair market values and supporting documentation."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I protect my inheritance with a prenup?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Inheritances are separate property by default in California, but they can become commingled with community property. A prenup can explicitly state that inheritances remain separate property and establish how to handle commingling situations (e.g., depositing inheritance in joint accounts)."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What if my spouse refuses to sign a prenup?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "You cannot force someone to sign a prenup. However, you can explain the benefits of financial clarity and protection for both parties. If your fiancé refuses and you have significant assets or business interests, you may need to reconsider the marriage or accept California's default community property rules."
+          }
         }
       ]
     }
@@ -677,6 +725,40 @@ export default function CaliforniaPrenup() {
                 </AccordionContent>
               </AccordionItem>
             </Accordion>
+
+            <h2 className="text-3xl font-bold mt-16 mb-8">People Also Ask About California Prenups</h2>
+            <div className="space-y-8 mb-12">
+              <div>
+                <h3 className="text-xl font-semibold mb-3">How does California's community property law work?</h3>
+                <p className="text-muted-foreground">
+                  California is one of nine community property states where assets and debts acquired during marriage are owned equally (50/50) by both spouses. This applies regardless of whose name is on the title or who earns more. A prenup allows couples to opt out of this default 50/50 split and create custom arrangements.
+                </p>
+              </div>
+              <div>
+                <h3 className="text-xl font-semibold mb-3">Can a prenup include child custody or support provisions?</h3>
+                <p className="text-muted-foreground">
+                  No. California courts will not enforce prenup clauses regarding child custody or child support. These matters are determined by the child's best interests at the time of divorce, not by parental agreements made before marriage. Prenups can only address financial matters between spouses.
+                </p>
+              </div>
+              <div>
+                <h3 className="text-xl font-semibold mb-3">What assets can be protected in a California prenup?</h3>
+                <p className="text-muted-foreground">
+                  You can protect separate property (assets owned before marriage), inheritances, business interests, real estate, retirement accounts, intellectual property, and future earnings from separate property. You can also define how to handle debt, spousal support waivers, and asset appreciation during marriage.
+                </p>
+              </div>
+              <div>
+                <h3 className="text-xl font-semibold mb-3">Do prenups expire in California?</h3>
+                <p className="text-muted-foreground">
+                  No, California prenups do not automatically expire. They remain valid until divorce, death, or mutual agreement to revoke. However, courts may find a prenup unconscionable if circumstances change dramatically (e.g., 30-year marriage with children when prenup anticipated no children). Include sunset clauses or regular review provisions for long marriages.
+                </p>
+              </div>
+              <div>
+                <h3 className="text-xl font-semibold mb-3">Can I waive spousal support in a California prenup?</h3>
+                <p className="text-muted-foreground">
+                  Yes, but with important limitations. California allows spousal support waivers, but courts scrutinize them heavily. Both parties must have independent legal counsel (or the waiving party must explicitly decline in writing after being advised of their right to counsel). Courts can still void unconscionable support waivers.
+                </p>
+              </div>
+            </div>
 
             <div className="bg-muted/50 rounded-lg p-8 my-12">
               <h2 className="text-2xl font-bold mb-4">Next Steps: Creating Your California Prenup</h2>

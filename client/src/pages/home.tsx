@@ -499,6 +499,46 @@ export default function Home() {
           </div>
         </section>
 
+        <section className="py-16 bg-background">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="max-w-3xl mx-auto">
+              <h2 className="text-3xl font-bold mb-10 text-center">People Also Ask About Prenups</h2>
+              <div className="space-y-8">
+                <div>
+                  <h3 className="text-xl font-semibold mb-3">Should I get a prenup if I make more money than my partner?</h3>
+                  <p className="text-muted-foreground">
+                    If there's a significant income disparity, a prenup can protect both parties by clearly defining financial expectations. It's not about mistrust—it's about ensuring both partners enter marriage with clarity about asset division, spousal support, and debt responsibility if the relationship ends.
+                  </p>
+                </div>
+                <div>
+                  <h3 className="text-xl font-semibold mb-3">What happens if you don't have a prenup?</h3>
+                  <p className="text-muted-foreground">
+                    Without a prenup, state law determines how assets and debts are divided in divorce. In community property states like California, everything acquired during marriage is split 50/50. In equitable distribution states, courts divide property "fairly" which may not mean equally. A prenup gives you control over these decisions.
+                  </p>
+                </div>
+                <div>
+                  <h3 className="text-xl font-semibold mb-3">How long before the wedding should you get a prenup?</h3>
+                  <p className="text-muted-foreground">
+                    Start the prenup process 3-6 months before your wedding. While California requires only 7 days between signing and marriage, rushing creates pressure that courts may view as coercion. More time allows thoughtful negotiation, independent legal review, and voluntary agreement—all crucial for enforceability.
+                  </p>
+                </div>
+                <div>
+                  <h3 className="text-xl font-semibold mb-3">Can a prenup protect my business?</h3>
+                  <p className="text-muted-foreground">
+                    Yes. A prenup can designate your business as separate property, protect future business appreciation, prevent your spouse from claiming ownership interest, and establish how business income during marriage is treated. This is essential for entrepreneurs and business owners entering marriage.
+                  </p>
+                </div>
+                <div>
+                  <h3 className="text-xl font-semibold mb-3">Is a prenup worth it for middle-class couples?</h3>
+                  <p className="text-muted-foreground">
+                    Absolutely. Prenups aren't just for the wealthy—they're valuable for anyone with retirement accounts, student loans, family businesses, or expected inheritances. At $49 with Drafter, a prenup is affordable protection that can save thousands in legal fees and emotional stress if divorce occurs.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
         <section className="py-20 bg-muted/50">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="max-w-6xl mx-auto">
