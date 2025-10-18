@@ -130,6 +130,49 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // SEO: Sitemap.xml
+  app.get("/sitemap.xml", (req, res) => {
+    const baseUrl = process.env.NODE_ENV === 'production' 
+      ? 'https://drafter.com' 
+      : `http://localhost:${process.env.PORT || 5000}`;
+    
+    const pages = [
+      { url: '/', changefreq: 'daily', priority: '1.0' },
+      { url: '/intake', changefreq: 'monthly', priority: '0.8' },
+      { url: '/privacy-policy', changefreq: 'monthly', priority: '0.5' },
+      { url: '/states/california', changefreq: 'weekly', priority: '0.9' },
+      { url: '/states/california/prenuptial-agreement', changefreq: 'weekly', priority: '0.9' },
+    ];
+
+    const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${pages.map(page => `  <url>
+    <loc>${baseUrl}${page.url}</loc>
+    <changefreq>${page.changefreq}</changefreq>
+    <priority>${page.priority}</priority>
+  </url>`).join('\n')}
+</urlset>`;
+
+    res.header('Content-Type', 'application/xml');
+    res.send(sitemap);
+  });
+
+  // SEO: robots.txt
+  app.get("/robots.txt", (req, res) => {
+    const baseUrl = process.env.NODE_ENV === 'production' 
+      ? 'https://drafter.com' 
+      : `http://localhost:${process.env.PORT || 5000}`;
+    
+    const robots = `User-agent: *
+Allow: /
+Disallow: /api/
+
+Sitemap: ${baseUrl}/sitemap.xml`;
+
+    res.header('Content-Type', 'text/plain');
+    res.send(robots);
+  });
+
   const httpServer = createServer(app);
 
   return httpServer;

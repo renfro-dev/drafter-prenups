@@ -8,9 +8,128 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { SEOHead } from "@/components/seo-head";
 
 export default function Home() {
+  const schema = [
+    {
+      "@context": "https://schema.org",
+      "@type": "LegalService",
+      "name": "Drafter",
+      "description": "AI-powered prenuptial agreement drafting platform with privacy-first PII masking. Generate California-compliant prenups for $49 in under 10 minutes.",
+      "url": "https://drafter.com",
+      "logo": "https://drafter.com/logo.png",
+      "telephone": "+1-XXX-XXX-XXXX",
+      "email": "support@drafter.com",
+      "priceRange": "$$",
+      "areaServed": {
+        "@type": "State",
+        "name": "California"
+      },
+      "offers": {
+        "@type": "Offer",
+        "price": "49",
+        "priceCurrency": "USD",
+        "description": "AI-powered prenuptial agreement for California couples",
+        "availability": "https://schema.org/InStock"
+      }
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Is this legally binding?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Drafter generates a comprehensive prenup draft based on California family law. While our AI creates attorney-ready documents using verified legal clauses, we strongly recommend having the draft reviewed by a licensed attorney before signing. The document is for informational purposes and not legal advice."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What states do you support?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Currently, Drafter supports California prenuptial agreements. We're expanding to Florida, New York, and Texas in the coming months."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How is my data protected?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "We implement enterprise-grade security: 256-bit encryption, PII masking before AI processing, and strict no-training commitments from Anthropic Claude. Your sensitive information is replaced with placeholders before analysis and only restored in your final document."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I get attorney review?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes! After receiving your draft, you'll have the option to connect with our network of partner attorneys for professional review and filing assistance."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How long does it take?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Most users complete the intake form in 10-15 minutes. Once submitted, our AI generates your prenup within 2-3 minutes. The entire process typically takes under 20 minutes."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I make changes to the draft?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Absolutely. Your prenup is delivered as an editable Word document (.docx). You can make changes directly or work with an attorney to customize specific clauses."
+          }
+        }
+      ]
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "HowTo",
+      "name": "How to Create a Prenuptial Agreement with Drafter",
+      "description": "Step-by-step guide to creating a legally valid California prenup using AI-powered document generation",
+      "totalTime": "PT10M",
+      "step": [
+        {
+          "@type": "HowToStep",
+          "position": 1,
+          "name": "Complete Intake",
+          "text": "Answer questions about you, your partner, assets, and debts in our guided form."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 2,
+          "name": "AI Analysis",
+          "text": "Our private AI reviews California family law and retrieves relevant clauses with PII masking to protect your data."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 3,
+          "name": "Generate Draft",
+          "text": "Receive a customized, jurisdiction-specific prenup in Word format."
+        },
+        {
+          "@type": "HowToStep",
+          "position": 4,
+          "name": "Attorney Review",
+          "text": "Optional: Connect with our partner attorneys for professional review and filing."
+        }
+      ]
+    }
+  ];
+
   return (
+    <>
+      <SEOHead
+        title="Drafter - AI-Powered Prenuptial Agreements | $49 California Prenups"
+        description="Generate attorney-ready prenups in 10 minutes. AI-powered with privacy-first PII masking. California-specific legal clauses. $49 vs $3,000+ traditional cost."
+        schema={schema}
+      />
     <div className="min-h-screen bg-background">
       <header className="fixed top-0 left-0 right-0 z-50 border-b bg-background/95 backdrop-blur-xl">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -452,5 +571,6 @@ export default function Home() {
         </div>
       </footer>
     </div>
+    </>
   );
 }

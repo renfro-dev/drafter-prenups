@@ -2,9 +2,71 @@ import { Link } from "wouter";
 import { Shield, Lock, ChevronLeft, Database, Eye, Key, FileCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { SEOHead } from "@/components/seo-head";
 
 export default function PrivacyPolicy() {
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "How does Drafter protect my personal information?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Drafter uses PII (Personally Identifiable Information) masking to protect your data before AI processing. Your names, financial details, and personal information are replaced with anonymized tokens before being sent to Anthropic Claude AI. The AI never sees your actual data - only masked placeholders."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is PII masking and how does it work?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "PII masking replaces sensitive information with random tokens before AI processing. For example, your name 'Jennifer Martinez' becomes 'PARTY_A_9K2L5M', and financial values become 'VALUE_4P6R2S'. After the AI generates the prenup, we unmask the data to restore your real information in the final document."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is my data used to train AI models?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No. Drafter uses Anthropic Claude with strict no-training commitments. Your data is never used to train, fine-tune, or improve AI models. Anthropic's enterprise privacy policy prohibits using customer data for model training."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How is my data encrypted?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Drafter uses 256-bit AES encryption for all data in transit and at rest. Communication between your browser and our servers uses TLS 1.3. Database storage is encrypted at the field level with industry-standard encryption protocols."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How long is my data retained?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "By default, your data is automatically deleted 7 days after prenup generation. You can request earlier deletion at any time or opt to keep your data longer for future modifications. Deleted data is permanently removed from all systems including backups."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I request deletion of my data?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. You can request immediate data deletion at any time by contacting privacy@drafter.com. We will delete all your personal information, intake data, and generated documents within 24 hours. GDPR and CCPA rights fully supported."
+        }
+      }
+    ]
+  };
+
   return (
+    <>
+      <SEOHead
+        title="Privacy Policy - How Drafter Protects Your Data with PII Masking"
+        description="Drafter uses advanced PII masking to protect your sensitive information before AI processing. 256-bit encryption, Anthropic Claude privacy commitments, no training on your data."
+        schema={schema}
+      />
     <div className="min-h-screen bg-background">
       <header className="border-b bg-background">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -392,5 +454,6 @@ export default function PrivacyPolicy() {
         </div>
       </main>
     </div>
+    </>
   );
 }

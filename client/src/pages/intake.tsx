@@ -31,6 +31,7 @@ import { PrivacyNotice } from "@/components/privacy-notice";
 import { useMutation } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
+import { SEOHead } from "@/components/seo-head";
 
 const STEPS = [
   { id: 1, title: "Personal Info", description: "Basic information about you and your partner" },
@@ -124,6 +125,11 @@ export default function Intake() {
   };
 
   return (
+    <>
+      <SEOHead
+        title="Create Your Prenup - Free California Prenuptial Agreement Form | Drafter"
+        description="Start creating your California prenup with our private AI-powered intake form. 10 minutes to complete, $49 total cost. Attorney-ready prenuptial agreements with PII masking."
+      />
     <div className="min-h-screen bg-background">
       <header className="border-b bg-background">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -565,5 +571,6 @@ export default function Intake() {
         </div>
       </div>
     </div>
+    </>
   );
 }

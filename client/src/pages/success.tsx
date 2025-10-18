@@ -3,6 +3,7 @@ import { CheckCircle, Mail, Shield, FileText, ArrowRight, Download, AlertTriangl
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useEffect, useState } from "react";
+import { SEOHead } from "@/components/seo-head";
 
 export default function Success() {
   const [result, setResult] = useState<any>(null);
@@ -37,6 +38,11 @@ export default function Success() {
   console.log('[Success Page] emailDelivered:', emailDelivered);
 
   return (
+    <>
+      <SEOHead
+        title="Prenup Generated Successfully - Download Your California Prenuptial Agreement"
+        description="Your California prenup has been generated and delivered. Download your attorney-ready prenuptial agreement document or check your email for delivery."
+      />
     <div className="min-h-screen bg-background">
       <header className="border-b bg-background">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -226,5 +232,6 @@ export default function Success() {
         </div>
       </div>
     </div>
+    </>
   );
 }
