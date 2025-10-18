@@ -115,6 +115,86 @@ export default function CaliforniaPrenup() {
             "@type": "Answer",
             "text": "You cannot force someone to sign a prenup. However, you can explain the benefits of financial clarity and protection for both parties. If your fiancé refuses and you have significant assets or business interests, you may need to reconsider the marriage or accept California's default community property rules."
           }
+        },
+        {
+          "@type": "Question",
+          "name": "Is a prenup enforceable if we move out of California?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Generally yes. California prenups are typically enforceable in other states under the Full Faith and Credit Clause. However, the enforcing state's laws will apply, and some states have stricter requirements. Include a choice of law provision stating California law governs the agreement to maximize enforceability nationwide."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can a prenup protect my retirement accounts in California?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. You can designate pre-marriage retirement accounts as separate property and establish how retirement contributions made during marriage are treated. Without a prenup, retirement account contributions and growth during marriage are community property subject to 50/50 division in divorce."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the 7-day rule for prenups in California?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "California Family Code §1615 requires at least 7 calendar days between when a party receives the final prenup and when they sign it. This cooling-off period prevents rushed decisions under wedding pressure. Signing earlier can make the prenup voidable for lack of voluntary execution."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Do I need a prenup if I own a home before marriage?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Not required, but highly recommended. While homes owned before marriage are separate property, complications arise with mortgage payments, improvements, and refinancing during marriage. A prenup clarifies ownership, prevents transmutation claims, and protects your equity from community property claims."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can a prenup protect future business income in California?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, with careful drafting. You can specify that business income during marriage remains separate property rather than community property. This is crucial for entrepreneurs and business owners, but courts scrutinize these provisions heavily, so attorney review is essential."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How does a prenup affect student loan debt in California?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Student loans brought into marriage are separate debt. However, a prenup can clarify who pays for loans incurred during marriage, how joint income is used for payments, and whether the educated spouse must reimburse the community for loans paid with marital funds. Without a prenup, California law presumes community funds used for separate debt create reimbursement rights."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I include a cheating clause in my California prenup?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Lifestyle clauses including infidelity penalties are legally unenforceable in California. Courts view them as against public policy because California is a no-fault divorce state. Prenups can only address financial matters like property division and spousal support, not behavior-based penalties."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What makes a prenup invalid in California court?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "California courts invalidate prenups for: being unsigned or not in writing; lack of voluntary execution (coercion, duress); failure to provide full financial disclosure; unconscionability at enforcement; fraud or undue influence; violations of the 7-day rule; or attempting to limit child support obligations."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How much does attorney review cost for a California prenup?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Attorney review of an existing prenup draft typically costs $500-$2,000 in California, depending on the attorney's hourly rate and complexity. This is 70-80% cheaper than full-service prenup preparation ($3,000-$10,000). Independent review for both parties ensures enforceability and catches potential issues."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can a prenup be changed after signing in California?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, but only through a written amendment signed by both parties, or by creating a postnuptial agreement that supersedes the prenup. Verbal modifications are unenforceable. Both parties should have independent legal counsel review any changes to ensure they're valid and protect their interests."
+          }
         }
       ]
     }
@@ -662,7 +742,7 @@ export default function CaliforniaPrenup() {
             <h2 className="text-3xl font-bold mt-12 mb-6">Frequently Asked Questions</h2>
             
             <Accordion type="single" collapsible className="mb-8">
-              <AccordionItem value="faq-1">
+              <AccordionItem value="faq-1" data-testid="faq-separate-attorneys">
                 <AccordionTrigger className="text-left font-semibold">
                   Do both parties need separate attorneys in California?
                 </AccordionTrigger>
@@ -673,7 +753,7 @@ export default function CaliforniaPrenup() {
                   parties had separate attorneys.
                 </AccordionContent>
               </AccordionItem>
-              <AccordionItem value="faq-2">
+              <AccordionItem value="faq-2" data-testid="faq-modify-after-marriage">
                 <AccordionTrigger className="text-left font-semibold">
                   Can we modify a prenup after marriage?
                 </AccordionTrigger>
@@ -683,7 +763,7 @@ export default function CaliforniaPrenup() {
                   California Family Code §1500 governs postnups.
                 </AccordionContent>
               </AccordionItem>
-              <AccordionItem value="faq-3">
+              <AccordionItem value="faq-3" data-testid="faq-divorce-other-state">
                 <AccordionTrigger className="text-left font-semibold">
                   What happens if we divorce in another state?
                 </AccordionTrigger>
@@ -693,7 +773,7 @@ export default function CaliforniaPrenup() {
                   of law provision specifying California law governs the agreement.
                 </AccordionContent>
               </AccordionItem>
-              <AccordionItem value="faq-4">
+              <AccordionItem value="faq-4" data-testid="faq-financial-disclosure">
                 <AccordionTrigger className="text-left font-semibold">
                   How do we provide full financial disclosure?
                 </AccordionTrigger>
@@ -703,7 +783,7 @@ export default function CaliforniaPrenup() {
                   property, and all debts. Include current fair market values and supporting documentation.
                 </AccordionContent>
               </AccordionItem>
-              <AccordionItem value="faq-5">
+              <AccordionItem value="faq-5" data-testid="faq-inheritance-protection">
                 <AccordionTrigger className="text-left font-semibold">
                   Can I protect my inheritance with a prenup?
                 </AccordionTrigger>
@@ -713,7 +793,7 @@ export default function CaliforniaPrenup() {
                   and establish how to handle commingling situations (e.g., depositing inheritance in joint accounts).
                 </AccordionContent>
               </AccordionItem>
-              <AccordionItem value="faq-6">
+              <AccordionItem value="faq-6" data-testid="faq-spouse-refuses">
                 <AccordionTrigger className="text-left font-semibold">
                   What if my spouse refuses to sign a prenup?
                 </AccordionTrigger>
@@ -722,6 +802,159 @@ export default function CaliforniaPrenup() {
                   and protection for both parties. If your fiancé refuses and you have significant assets or business
                   interests, you may need to reconsider the marriage or accept California's default community property
                   rules.
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="faq-7" data-testid="faq-cost">
+                <AccordionTrigger className="text-left font-semibold">
+                  How much does a prenup cost in California?
+                </AccordionTrigger>
+                <AccordionContent className="text-muted-foreground">
+                  Traditional attorney-drafted prenups in California cost between $3,000 and $10,000, depending on
+                  complexity and attorney rates. AI-powered options like Drafter provide California-compliant prenups
+                  for $49, with optional attorney review available for $500-$2,000.
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="faq-8" data-testid="faq-when">
+                <AccordionTrigger className="text-left font-semibold">
+                  When should I get a prenup in California?
+                </AccordionTrigger>
+                <AccordionContent className="text-muted-foreground">
+                  California law requires prenups be signed at least 7 days before the wedding. However, it's recommended
+                  to begin the process 3-6 months before marriage to allow time for financial disclosure, independent
+                  legal review, and revisions. Starting early prevents the appearance of coercion and ensures both parties
+                  have adequate time to understand the agreement.
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="faq-9" data-testid="faq-invalidated">
+                <AccordionTrigger className="text-left font-semibold">
+                  Can a prenup be invalidated in California?
+                </AccordionTrigger>
+                <AccordionContent className="text-muted-foreground">
+                  Yes. California courts can invalidate prenups for: lack of voluntary execution (coercion, duress),
+                  failure to provide full financial disclosure, unconscionability at the time of enforcement, lack of
+                  independent legal counsel (in some cases), fraud, undue influence, or violations of the 7-day waiting
+                  period. Proper execution and transparency are essential for enforceability.
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="faq-10" data-testid="faq-community-property">
+                <AccordionTrigger className="text-left font-semibold">
+                  What is community property in California?
+                </AccordionTrigger>
+                <AccordionContent className="text-muted-foreground">
+                  California is a community property state, meaning assets and debts acquired during marriage are owned
+                  equally (50/50) by both spouses, regardless of whose name is on the title or who earns more. This
+                  includes income, real estate, vehicles, retirement contributions, and debt. A prenup allows couples
+                  to opt out of this default 50/50 split and create custom arrangements.
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="faq-11" data-testid="faq-move-out-of-state">
+                <AccordionTrigger className="text-left font-semibold">
+                  Is a prenup enforceable if we move out of California?
+                </AccordionTrigger>
+                <AccordionContent className="text-muted-foreground">
+                  Generally yes. California prenups are typically enforceable in other states under the Full Faith and
+                  Credit Clause. However, the enforcing state's laws will apply, and some states have stricter requirements.
+                  Include a choice of law provision stating California law governs the agreement to maximize enforceability
+                  nationwide.
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="faq-12" data-testid="faq-retirement">
+                <AccordionTrigger className="text-left font-semibold">
+                  Can a prenup protect my retirement accounts in California?
+                </AccordionTrigger>
+                <AccordionContent className="text-muted-foreground">
+                  Yes. You can designate pre-marriage retirement accounts as separate property and establish how retirement
+                  contributions made during marriage are treated. Without a prenup, retirement account contributions and
+                  growth during marriage are community property subject to 50/50 division in divorce. This is especially
+                  important for professionals with established 401(k)s, IRAs, or pensions.
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="faq-13" data-testid="faq-7-day-rule">
+                <AccordionTrigger className="text-left font-semibold">
+                  What is the 7-day rule for prenups in California?
+                </AccordionTrigger>
+                <AccordionContent className="text-muted-foreground">
+                  California Family Code §1615 requires at least 7 calendar days between when a party receives the final
+                  prenup and when they sign it. This cooling-off period prevents rushed decisions under wedding pressure.
+                  Signing earlier can make the prenup voidable for lack of voluntary execution. The 7-day clock starts when
+                  the final version is presented, not drafts.
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="faq-14" data-testid="faq-home-ownership">
+                <AccordionTrigger className="text-left font-semibold">
+                  Do I need a prenup if I own a home before marriage?
+                </AccordionTrigger>
+                <AccordionContent className="text-muted-foreground">
+                  Not required, but highly recommended. While homes owned before marriage are separate property, complications
+                  arise with mortgage payments, improvements, and refinancing during marriage. A prenup clarifies ownership,
+                  prevents transmutation claims, and protects your equity from community property claims. It also addresses
+                  what happens if your spouse contributes to mortgage payments or renovations.
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="faq-15" data-testid="faq-business-income">
+                <AccordionTrigger className="text-left font-semibold">
+                  Can a prenup protect future business income in California?
+                </AccordionTrigger>
+                <AccordionContent className="text-muted-foreground">
+                  Yes, with careful drafting. You can specify that business income during marriage remains separate property
+                  rather than community property. This is crucial for entrepreneurs and business owners, but courts scrutinize
+                  these provisions heavily, so attorney review is essential. The prenup should clearly define how to value
+                  business appreciation and separate labor from capital contributions.
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="faq-16" data-testid="faq-student-loans">
+                <AccordionTrigger className="text-left font-semibold">
+                  How does a prenup affect student loan debt in California?
+                </AccordionTrigger>
+                <AccordionContent className="text-muted-foreground">
+                  Student loans brought into marriage are separate debt. However, a prenup can clarify who pays for loans
+                  incurred during marriage, how joint income is used for payments, and whether the educated spouse must
+                  reimburse the community for loans paid with marital funds. Without a prenup, California law presumes
+                  community funds used for separate debt create reimbursement rights.
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="faq-17" data-testid="faq-cheating-clause">
+                <AccordionTrigger className="text-left font-semibold">
+                  Can I include a cheating clause in my California prenup?
+                </AccordionTrigger>
+                <AccordionContent className="text-muted-foreground">
+                  Lifestyle clauses including infidelity penalties are legally unenforceable in California. Courts view them
+                  as against public policy because California is a no-fault divorce state. Prenups can only address financial
+                  matters like property division and spousal support, not behavior-based penalties. Focus your prenup on
+                  protecting assets and clarifying financial rights instead.
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="faq-18" data-testid="faq-what-makes-invalid">
+                <AccordionTrigger className="text-left font-semibold">
+                  What makes a prenup invalid in California court?
+                </AccordionTrigger>
+                <AccordionContent className="text-muted-foreground">
+                  California courts invalidate prenups for: being unsigned or not in writing; lack of voluntary execution
+                  (coercion, duress); failure to provide full financial disclosure; unconscionability at enforcement; fraud
+                  or undue influence; violations of the 7-day rule; or attempting to limit child support obligations.
+                  Proper execution with independent legal counsel minimizes these risks.
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="faq-19" data-testid="faq-attorney-review-cost">
+                <AccordionTrigger className="text-left font-semibold">
+                  How much does attorney review cost for a California prenup?
+                </AccordionTrigger>
+                <AccordionContent className="text-muted-foreground">
+                  Attorney review of an existing prenup draft typically costs $500-$2,000 in California, depending on the
+                  attorney's hourly rate and complexity. This is 70-80% cheaper than full-service prenup preparation
+                  ($3,000-$10,000). Independent review for both parties ensures enforceability and catches potential issues
+                  before signing.
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="faq-20" data-testid="faq-change-after-signing">
+                <AccordionTrigger className="text-left font-semibold">
+                  Can a prenup be changed after signing in California?
+                </AccordionTrigger>
+                <AccordionContent className="text-muted-foreground">
+                  Yes, but only through a written amendment signed by both parties, or by creating a postnuptial agreement
+                  that supersedes the prenup. Verbal modifications are unenforceable. Both parties should have independent
+                  legal counsel review any changes to ensure they're valid and protect their interests. Changes require the
+                  same formalities as the original prenup.
                 </AccordionContent>
               </AccordionItem>
             </Accordion>
