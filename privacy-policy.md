@@ -213,12 +213,8 @@ You can request deletion of your data at any time:
 - We'll permanently delete within 7 business days
 - Generated documents already delivered cannot be recalled
 
-### Correct Your Data
 
-If you find errors in your generated prenup:
-- Generate a new version with corrected information
-- No additional charge for corrections within 30 days
-- Previous versions are automatically deleted
+
 
 ---
 
