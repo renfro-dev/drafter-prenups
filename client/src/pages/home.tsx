@@ -85,6 +85,54 @@ export default function Home() {
             "@type": "Answer",
             "text": "Absolutely. Your prenup is delivered as an editable Word document (.docx). You can make changes directly or work with an attorney to customize specific clauses."
           }
+        },
+        {
+          "@type": "Question",
+          "name": "What if my partner doesn't want a prenup?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Start by explaining that prenups protect both partners, not just one. Frame it as financial planning rather than distrust. Share that at $49, it's affordable protection that brings clarity to your marriage. Many partners become supportive once they understand the mutual benefits and see it as responsible financial planning together."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Will Drafter AI see my financial information?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. We use PII masking technology that replaces all sensitive information with placeholder tokens before the AI ever sees your data. Names become PARTY_A and PARTY_B. Dollar amounts become VALUE_1, VALUE_2, etc. The AI works with masked data and never has access to your actual personal or financial information."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What happens after I receive my prenup draft?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "You'll receive an editable Word document via email. Review it carefully, ideally with an attorney. Make any desired edits. Once finalized, both parties should sign in front of a notary or witnesses (depending on California requirements). Keep original copies in a safe place. We recommend having independent legal counsel review before signing."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Do you offer refunds?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. We offer a 100% satisfaction guarantee. If you're not satisfied with your generated prenup draft for any reason, contact us within 30 days for a full refund. Our goal is to provide value and peace of mind, and we stand behind our service."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I use this prenup if we're already married?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "If you're already married, you need a postnuptial agreement, not a prenup. While similar in content, postnups have different legal requirements and face more scrutiny from courts. We recommend consulting with an attorney for postnup creation, as the process requires additional safeguards to ensure enforceability."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How does Drafter compare to traditional attorneys?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Traditional attorneys cost $3,000-$10,000 and take 4-8 weeks. Drafter costs $49 and takes 10 minutes to generate your draft. We use the same legal clauses attorneys use, but automate the drafting process. We still recommend attorney review of the final document, but you save thousands in drafting costs while maintaining legal quality."
+          }
         }
       ]
     },
@@ -492,6 +540,71 @@ export default function Home() {
                     directly in the document or work with an attorney to customize specific clauses. We recommend
                     consulting with legal counsel before making substantive modifications to ensure the agreement
                     remains enforceable under California law.
+                  </AccordionContent>
+                </AccordionItem>
+                <AccordionItem value="partner-resistant" data-testid="faq-partner-resistant">
+                  <AccordionTrigger className="text-left">
+                    What if my partner doesn't want a prenup?
+                  </AccordionTrigger>
+                  <AccordionContent className="text-muted-foreground">
+                    Start by explaining that prenups protect both partners, not just one. Frame it as financial planning
+                    rather than distrust. Share that at $49, it's affordable protection that brings clarity to your marriage.
+                    Many partners become supportive once they understand the mutual benefits and see it as responsible
+                    financial planning together.
+                  </AccordionContent>
+                </AccordionItem>
+                <AccordionItem value="ai-privacy" data-testid="faq-ai-privacy">
+                  <AccordionTrigger className="text-left">
+                    Will Drafter AI see my financial information?
+                  </AccordionTrigger>
+                  <AccordionContent className="text-muted-foreground">
+                    No. We use PII masking technology that replaces all sensitive information with placeholder tokens
+                    before the AI ever sees your data. Names become PARTY_A and PARTY_B. Dollar amounts become VALUE_1,
+                    VALUE_2, etc. The AI works with masked data and never has access to your actual personal or financial
+                    information.
+                  </AccordionContent>
+                </AccordionItem>
+                <AccordionItem value="after-draft" data-testid="faq-after-draft">
+                  <AccordionTrigger className="text-left">
+                    What happens after I receive my prenup draft?
+                  </AccordionTrigger>
+                  <AccordionContent className="text-muted-foreground">
+                    You'll receive an editable Word document via email. Review it carefully, ideally with an attorney.
+                    Make any desired edits. Once finalized, both parties should sign in front of a notary or witnesses
+                    (depending on California requirements). Keep original copies in a safe place. We recommend having
+                    independent legal counsel review before signing.
+                  </AccordionContent>
+                </AccordionItem>
+                <AccordionItem value="refunds" data-testid="faq-refunds">
+                  <AccordionTrigger className="text-left">
+                    Do you offer refunds?
+                  </AccordionTrigger>
+                  <AccordionContent className="text-muted-foreground">
+                    Yes. We offer a 100% satisfaction guarantee. If you're not satisfied with your generated prenup
+                    draft for any reason, contact us within 30 days for a full refund. Our goal is to provide value
+                    and peace of mind, and we stand behind our service.
+                  </AccordionContent>
+                </AccordionItem>
+                <AccordionItem value="already-married" data-testid="faq-already-married">
+                  <AccordionTrigger className="text-left">
+                    Can I use this prenup if we're already married?
+                  </AccordionTrigger>
+                  <AccordionContent className="text-muted-foreground">
+                    If you're already married, you need a postnuptial agreement, not a prenup. While similar in content,
+                    postnups have different legal requirements and face more scrutiny from courts. We recommend consulting
+                    with an attorney for postnup creation, as the process requires additional safeguards to ensure
+                    enforceability.
+                  </AccordionContent>
+                </AccordionItem>
+                <AccordionItem value="vs-attorney" data-testid="faq-vs-attorney">
+                  <AccordionTrigger className="text-left">
+                    How does Drafter compare to traditional attorneys?
+                  </AccordionTrigger>
+                  <AccordionContent className="text-muted-foreground">
+                    Traditional attorneys cost $3,000-$10,000 and take 4-8 weeks. Drafter costs $49 and takes 10 minutes
+                    to generate your draft. We use the same legal clauses attorneys use, but automate the drafting process.
+                    We still recommend attorney review of the final document, but you save thousands in drafting costs
+                    while maintaining legal quality.
                   </AccordionContent>
                 </AccordionItem>
               </Accordion>

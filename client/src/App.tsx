@@ -10,6 +10,10 @@ import PrivacyPolicy from "@/pages/privacy-policy";
 import CaliforniaLanding from "@/pages/california-landing";
 import CaliforniaPrenup from "@/pages/california-prenup";
 import Blog from "@/pages/blog";
+import PrenupMistakes from "@/pages/blog/prenup-mistakes";
+import PrenupTimeline from "@/pages/blog/prenup-timeline";
+import SecondMarriagePrenup from "@/pages/blog/second-marriage-prenup";
+import PrenupVsPostnup from "@/pages/blog/prenup-vs-postnup";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -20,6 +24,10 @@ function Router() {
       <Route path="/success" component={Success} />
       <Route path="/privacy-policy" component={PrivacyPolicy} />
       <Route path="/blog" component={Blog} />
+      <Route path="/blog/prenup-mistakes" component={PrenupMistakes} />
+      <Route path="/blog/prenup-timeline" component={PrenupTimeline} />
+      <Route path="/blog/second-marriage-prenup" component={SecondMarriagePrenup} />
+      <Route path="/blog/prenup-vs-postnup" component={PrenupVsPostnup} />
       <Route path="/states/california" component={CaliforniaLanding} />
       <Route path="/states/california/prenuptial-agreement" component={CaliforniaPrenup} />
       <Route component={NotFound} />
