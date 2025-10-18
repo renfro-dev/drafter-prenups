@@ -499,6 +499,79 @@ export default function Home() {
           </div>
         </section>
 
+        <section className="py-20 bg-muted/50">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="max-w-6xl mx-auto">
+              <div className="text-center mb-12">
+                <h2 className="text-3xl md:text-4xl font-bold mb-4" data-testid="text-blog-cta-title">
+                  Expert Prenup Guidance & Legal Insights
+                </h2>
+                <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+                  Learn about prenuptial agreements, privacy-preserving technology, and state-specific legal requirements
+                </p>
+              </div>
+              <div className="grid md:grid-cols-3 gap-6 mb-8">
+                <Card className="hover-elevate" data-testid="card-blog-featured-1">
+                  <CardHeader>
+                    <CardTitle className="text-lg">California Prenup Guide</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-sm text-muted-foreground mb-4">
+                      Complete guide to California prenuptial agreements, community property laws, and enforceability requirements.
+                    </p>
+                    <Link href="/states/california/prenuptial-agreement">
+                      <Button variant="ghost" size="sm" className="w-full justify-between group" data-testid="button-read-ca-guide">
+                        Read Guide
+                        <ChevronRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                      </Button>
+                    </Link>
+                  </CardContent>
+                </Card>
+                <Card className="hover-elevate" data-testid="card-blog-featured-2">
+                  <CardHeader>
+                    <CardTitle className="text-lg">How PII Masking Works</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-sm text-muted-foreground mb-4">
+                      Learn how we use advanced privacy technology to protect your personal information during AI processing.
+                    </p>
+                    <Link href="/privacy-policy">
+                      <Button variant="ghost" size="sm" className="w-full justify-between group" data-testid="button-read-privacy">
+                        Learn More
+                        <ChevronRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                      </Button>
+                    </Link>
+                  </CardContent>
+                </Card>
+                <Card className="hover-elevate" data-testid="card-blog-featured-3">
+                  <CardHeader>
+                    <CardTitle className="text-lg">Common Prenup Mistakes</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-sm text-muted-foreground mb-4">
+                      Avoid critical errors that could invalidate your prenuptial agreement and protect your future.
+                    </p>
+                    <Link href="/blog">
+                      <Button variant="ghost" size="sm" className="w-full justify-between group" data-testid="button-read-mistakes">
+                        View Articles
+                        <ChevronRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                      </Button>
+                    </Link>
+                  </CardContent>
+                </Card>
+              </div>
+              <div className="text-center">
+                <Link href="/blog">
+                  <Button variant="outline" size="lg" data-testid="button-view-all-articles">
+                    View All Articles
+                    <ChevronRight className="ml-2 h-5 w-5" />
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
+
         <section className="py-20 md:py-32 bg-gradient-to-br from-primary/10 via-background to-background">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="max-w-4xl mx-auto text-center space-y-8">
@@ -541,9 +614,16 @@ export default function Home() {
                 </ul>
               </div>
               <div>
+                <h3 className="font-semibold mb-4">Resources</h3>
+                <ul className="space-y-2 text-sm text-muted-foreground">
+                  <li><Link href="/blog" className="hover:text-foreground transition-colors" data-testid="link-footer-blog">Blog</Link></li>
+                  <li><Link href="/states/california" className="hover:text-foreground transition-colors" data-testid="link-footer-california">California Prenups</Link></li>
+                </ul>
+              </div>
+              <div>
                 <h3 className="font-semibold mb-4">Legal</h3>
                 <ul className="space-y-2 text-sm text-muted-foreground">
-                  <li><a href="#" className="hover:text-foreground transition-colors">Privacy Policy</a></li>
+                  <li><Link href="/privacy-policy" className="hover:text-foreground transition-colors" data-testid="link-footer-privacy">Privacy Policy</Link></li>
                   <li><a href="#" className="hover:text-foreground transition-colors">Terms of Service</a></li>
                   <li><a href="#" className="hover:text-foreground transition-colors">Disclaimers</a></li>
                 </ul>

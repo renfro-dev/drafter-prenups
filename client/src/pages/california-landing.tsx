@@ -345,6 +345,25 @@ export default function CaliforniaLanding() {
           </div>
         </section>
 
+        <section className="py-20 bg-background">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="max-w-4xl mx-auto text-center">
+              <h2 className="text-3xl md:text-4xl font-bold mb-6" data-testid="text-blog-cta">
+                Learn More About California Prenups
+              </h2>
+              <p className="text-lg text-muted-foreground mb-8">
+                Read our comprehensive guide to prenuptial agreements in California
+              </p>
+              <Link href="/states/california/prenuptial-agreement">
+                <Button variant="outline" size="lg" data-testid="button-read-guide">
+                  Read Complete California Prenup Guide
+                  <ChevronRight className="ml-2 h-5 w-5" />
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </section>
+
         <section className="py-20 md:py-32 bg-gradient-to-br from-primary/10 via-background to-background">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="max-w-4xl mx-auto text-center space-y-8">

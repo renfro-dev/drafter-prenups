@@ -9,6 +9,7 @@ import Success from "@/pages/success";
 import PrivacyPolicy from "@/pages/privacy-policy";
 import CaliforniaLanding from "@/pages/california-landing";
 import CaliforniaPrenup from "@/pages/california-prenup";
+import Blog from "@/pages/blog";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -18,6 +19,7 @@ function Router() {
       <Route path="/intake" component={Intake} />
       <Route path="/success" component={Success} />
       <Route path="/privacy-policy" component={PrivacyPolicy} />
+      <Route path="/blog" component={Blog} />
       <Route path="/states/california" component={CaliforniaLanding} />
       <Route path="/states/california/prenuptial-agreement" component={CaliforniaPrenup} />
       <Route component={NotFound} />

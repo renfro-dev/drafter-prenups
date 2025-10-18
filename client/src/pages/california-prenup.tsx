@@ -728,6 +728,55 @@ export default function CaliforniaPrenup() {
             </div>
           </div>
         </article>
+
+        <section className="py-20 bg-muted/50">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="max-w-4xl mx-auto">
+              <div className="text-center mb-12">
+                <h2 className="text-3xl md:text-4xl font-bold mb-4" data-testid="text-related-articles">
+                  Related Articles & Resources
+                </h2>
+                <p className="text-lg text-muted-foreground">
+                  Continue learning about prenuptial agreements and privacy-first legal technology
+                </p>
+              </div>
+              <div className="grid md:grid-cols-2 gap-6 mb-8">
+                <Card className="hover-elevate" data-testid="card-related-1">
+                  <CardHeader>
+                    <CardTitle className="text-lg">California State Overview</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-sm text-muted-foreground mb-4">
+                      Learn about community property laws and why California couples should consider prenups.
+                    </p>
+                    <Link href="/states/california">
+                      <Button variant="ghost" size="sm" className="w-full justify-between group" data-testid="button-read-overview">
+                        Read Overview
+                        <ChevronRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                      </Button>
+                    </Link>
+                  </CardContent>
+                </Card>
+                <Card className="hover-elevate" data-testid="card-related-2">
+                  <CardHeader>
+                    <CardTitle className="text-lg">All Prenup Articles</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-sm text-muted-foreground mb-4">
+                      Browse expert guidance on prenups, privacy technology, and relationship planning.
+                    </p>
+                    <Link href="/blog">
+                      <Button variant="ghost" size="sm" className="w-full justify-between group" data-testid="button-view-blog">
+                        View Blog
+                        <ChevronRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                      </Button>
+                    </Link>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
+          </div>
+        </section>
       </main>
 
       <footer className="border-t bg-muted/30 py-12">
