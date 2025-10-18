@@ -16,8 +16,6 @@
 - California FAQs: 10 → 20
 - Total site FAQs: 25 → 51 (+104%)
 
-**Impact:** $13,426/month potential revenue | 4,662x ROI
-
 ---
 
 ## Session 3: SEO Deep Dive & LLM Optimization
@@ -28,9 +26,7 @@
 - FAQ schema gap fixed (19 → 25 FAQs)
 - "People Also Ask" sections added (10 questions)
 - Sitemap updated with /blog route
-- 12-month SEO roadmap ($2.94M/year projected revenue)
-
-**Impact:** Clear path to 100K monthly visitors
+- 12-month SEO roadmap
 
 ---
 
@@ -44,8 +40,6 @@
 - Article + FAQ + HowTo schemas across all pages
 - Blog CTAs on 4+ major pages
 
-**Impact:** Technical SEO foundation complete, ready for Google Search Console
-
 ---
 
 ## Session 1: MVP Development
@@ -57,8 +51,6 @@
 - 21 California legal clauses
 - 5 pages (3,500+ words of content)
 - Database schema + PostgreSQL integration
-
-**Impact:** Functional MVP ready for production testing
 
 ---
 
@@ -75,10 +67,9 @@
 - Schema markup: ✅ 4 types implemented
 - LLM optimization: ✅ 100% coverage
 
-**Business:**
+**Progress:**
 - Month 1 goal: ✅ Technical foundation
 - Month 2 goal: 🟡 In progress (content expansion 60% complete)
-- Month 12 goal: 📊 On track ($245K/month organic revenue target)
 
 ---
 
