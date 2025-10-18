@@ -1,0 +1,451 @@
+import { Link } from "wouter";
+import { Shield, Clock, DollarSign, FileCheck, Lock, ChevronRight, Check } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+
+export default function Home() {
+  return (
+    <div className="min-h-screen bg-background">
+      <header className="fixed top-0 left-0 right-0 z-50 border-b bg-background/95 backdrop-blur-xl">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex h-16 items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <Shield className="h-7 w-7 text-primary" />
+              <span className="text-xl font-bold tracking-tight">Drafter</span>
+            </div>
+            <div className="flex items-center space-x-4">
+              <div className="hidden md:flex items-center space-x-2 text-sm text-muted-foreground">
+                <Lock className="h-4 w-4" />
+                <span>Private & Secure</span>
+              </div>
+              <Link href="/intake" data-testid="link-start-prenup">
+                <Button size="default" data-testid="button-get-started">
+                  Get Started
+                  <ChevronRight className="ml-1 h-4 w-4" />
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main className="pt-16">
+        <section className="relative min-h-[600px] lg:min-h-screen flex items-center overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-background" />
+          <div className="container relative mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-32">
+            <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+              <div className="space-y-8">
+                <div className="inline-flex items-center space-x-2 rounded-full bg-primary/10 px-4 py-2 text-sm font-medium text-primary">
+                  <Shield className="h-4 w-4" />
+                  <span>AI-Powered Legal Technology</span>
+                </div>
+                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-tight">
+                  Draft Your Prenup in 10 Minutes
+                </h1>
+                <p className="text-lg md:text-xl text-muted-foreground max-w-2xl">
+                  Private, affordable, and attorney-ready prenuptial agreements powered by AI.
+                  Protect your future without the $3,000+ price tag.
+                </p>
+                <div className="flex flex-wrap gap-4 items-center">
+                  <Link href="/intake" data-testid="link-start-prenup-hero">
+                    <Button size="lg" className="h-12 px-8 text-base" data-testid="button-start-prenup">
+                      Start Your Prenup
+                      <ChevronRight className="ml-2 h-5 w-5" />
+                    </Button>
+                  </Link>
+                  <div className="flex items-center space-x-6 text-sm">
+                    <div className="flex items-center space-x-2">
+                      <Check className="h-4 w-4 text-chart-2" />
+                      <span className="text-muted-foreground">Private AI</span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Check className="h-4 w-4 text-chart-2" />
+                      <span className="text-muted-foreground">$49 Fixed Price</span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Check className="h-4 w-4 text-chart-2" />
+                      <span className="text-muted-foreground">10 Minutes</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="relative hidden lg:block">
+                <div className="relative rounded-xl border bg-card p-8 shadow-lg">
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-3">
+                        <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center">
+                          <FileCheck className="h-6 w-6 text-primary" />
+                        </div>
+                        <div>
+                          <div className="font-semibold">California Prenup</div>
+                          <div className="text-sm text-muted-foreground">Community Property State</div>
+                        </div>
+                      </div>
+                      <div className="rounded-full bg-chart-2/10 px-3 py-1 text-sm font-medium text-chart-2">
+                        Ready
+                      </div>
+                    </div>
+                    <div className="h-px bg-border" />
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="text-muted-foreground">Financial Disclosure</span>
+                        <Check className="h-4 w-4 text-chart-2" />
+                      </div>
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="text-muted-foreground">Property Division</span>
+                        <Check className="h-4 w-4 text-chart-2" />
+                      </div>
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="text-muted-foreground">Spousal Support</span>
+                        <Check className="h-4 w-4 text-chart-2" />
+                      </div>
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="text-muted-foreground">Governing Law</span>
+                        <Check className="h-4 w-4 text-chart-2" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="py-20 md:py-24 bg-muted/30" data-testid="section-how-it-works">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="max-w-7xl mx-auto">
+              <div className="text-center mb-16">
+                <h2 className="text-3xl md:text-4xl font-bold mb-4">How It Works</h2>
+                <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+                  Four simple steps to your attorney-ready prenuptial agreement
+                </p>
+              </div>
+              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                {[
+                  {
+                    step: "1",
+                    title: "Complete Intake",
+                    description: "Answer questions about you, your partner, assets, and debts in our guided form.",
+                    icon: FileCheck,
+                  },
+                  {
+                    step: "2",
+                    title: "AI Analysis",
+                    description: "Our private AI reviews California family law and retrieves relevant clauses.",
+                    icon: Shield,
+                  },
+                  {
+                    step: "3",
+                    title: "Generate Draft",
+                    description: "Receive a customized, jurisdiction-specific prenup in Word format.",
+                    icon: Clock,
+                  },
+                  {
+                    step: "4",
+                    title: "Attorney Review",
+                    description: "Optional: Connect with our partner attorneys for professional review and filing.",
+                    icon: Check,
+                  },
+                ].map((item) => (
+                  <Card key={item.step} className="relative" data-testid={`card-step-${item.step}`}>
+                    <CardHeader>
+                      <div className="h-12 w-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
+                        <item.icon className="h-6 w-6 text-primary" />
+                      </div>
+                      <div className="absolute top-6 right-6 h-8 w-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-sm font-bold">
+                        {item.step}
+                      </div>
+                      <CardTitle className="text-xl">{item.title}</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-muted-foreground">{item.description}</p>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="py-20 md:py-24" data-testid="section-privacy">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="max-w-7xl mx-auto">
+              <div className="grid lg:grid-cols-2 gap-12 items-center">
+                <div className="space-y-6">
+                  <div className="inline-flex items-center space-x-2 rounded-full bg-chart-3/10 px-4 py-2 text-sm font-medium text-chart-3">
+                    <Lock className="h-4 w-4" />
+                    <span>Privacy First</span>
+                  </div>
+                  <h2 className="text-3xl md:text-4xl font-bold">Your Information Stays Private</h2>
+                  <p className="text-lg text-muted-foreground">
+                    We use advanced PII masking to protect your sensitive information before any AI processing.
+                    Your names, financial details, and personal data are encrypted and never used to train AI models.
+                  </p>
+                  <div className="space-y-4">
+                    {[
+                      "256-bit encryption for all data in transit and at rest",
+                      "PII masking before AI analysis—your data stays anonymized",
+                      "No training on your data—Anthropic Claude privacy commitments",
+                      "Automatic data deletion after 7 days (optional)",
+                    ].map((item, i) => (
+                      <div key={i} className="flex items-start space-x-3">
+                        <div className="h-6 w-6 rounded-full bg-chart-3/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                          <Check className="h-4 w-4 text-chart-3" />
+                        </div>
+                        <span className="text-muted-foreground">{item}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <Card className="p-8">
+                  <div className="space-y-6">
+                    <div className="flex items-center justify-between pb-4 border-b">
+                      <span className="font-semibold">Traditional Attorney</span>
+                      <span className="text-2xl font-bold text-muted-foreground">$3,000+</span>
+                    </div>
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="text-muted-foreground">Multiple office visits</span>
+                        <span className="text-destructive">3-5 meetings</span>
+                      </div>
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="text-muted-foreground">Time to complete</span>
+                        <span className="text-destructive">2-4 weeks</span>
+                      </div>
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="text-muted-foreground">Privacy concerns</span>
+                        <span className="text-destructive">Paper files</span>
+                      </div>
+                    </div>
+                    <div className="h-px bg-border" />
+                    <div className="flex items-center justify-between pb-4 border-b">
+                      <span className="font-semibold text-primary">Drafter Platform</span>
+                      <span className="text-2xl font-bold text-primary">$49</span>
+                    </div>
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="text-muted-foreground">Online process</span>
+                        <span className="text-chart-2">Fully remote</span>
+                      </div>
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="text-muted-foreground">Time to complete</span>
+                        <span className="text-chart-2">10 minutes</span>
+                      </div>
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="text-muted-foreground">Privacy protection</span>
+                        <span className="text-chart-2">AI + encryption</span>
+                      </div>
+                    </div>
+                  </div>
+                </Card>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="py-20 md:py-24 bg-muted/30" data-testid="section-pricing">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="max-w-4xl mx-auto">
+              <div className="text-center mb-16">
+                <h2 className="text-3xl md:text-4xl font-bold mb-4">Simple, Transparent Pricing</h2>
+                <p className="text-lg text-muted-foreground">
+                  One price, complete prenup draft—no hidden fees
+                </p>
+              </div>
+              <Card className="p-8 md:p-12">
+                <div className="text-center mb-8">
+                  <div className="inline-flex items-baseline">
+                    <span className="text-5xl md:text-6xl font-bold">$49</span>
+                    <span className="text-xl text-muted-foreground ml-2">/prenup</span>
+                  </div>
+                </div>
+                <div className="space-y-4 mb-8">
+                  {[
+                    "California-specific prenuptial agreement draft",
+                    "AI-powered clause selection from verified legal library",
+                    "Word document (.docx) delivered via email",
+                    "Private, encrypted processing with PII masking",
+                    "Instant delivery—receive draft in minutes",
+                    "Legal disclaimers and compliance guidance included",
+                  ].map((item, i) => (
+                    <div key={i} className="flex items-start space-x-3">
+                      <div className="h-6 w-6 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <Check className="h-4 w-4 text-primary" />
+                      </div>
+                      <span>{item}</span>
+                    </div>
+                  ))}
+                </div>
+                <Link href="/intake" data-testid="link-start-draft">
+                  <Button size="lg" className="w-full h-12 text-base" data-testid="button-start-draft">
+                    Start Your Draft
+                    <ChevronRight className="ml-2 h-5 w-5" />
+                  </Button>
+                </Link>
+                <p className="text-center text-sm text-muted-foreground mt-6">
+                  Optional attorney review available for additional fee
+                </p>
+              </Card>
+            </div>
+          </div>
+        </section>
+
+        <section className="py-20 md:py-24" data-testid="section-faq">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="max-w-3xl mx-auto">
+              <div className="text-center mb-16">
+                <h2 className="text-3xl md:text-4xl font-bold mb-4">Frequently Asked Questions</h2>
+              </div>
+              <Accordion type="single" collapsible className="space-y-4">
+                <AccordionItem value="legal" data-testid="faq-legal">
+                  <AccordionTrigger className="text-left">
+                    Is this legally binding?
+                  </AccordionTrigger>
+                  <AccordionContent className="text-muted-foreground">
+                    Drafter generates a comprehensive prenup draft based on California family law. While our AI
+                    creates attorney-ready documents using verified legal clauses, we strongly recommend having
+                    the draft reviewed by a licensed attorney before signing. The document is for informational
+                    purposes and not legal advice. Proper execution with independent counsel for both parties
+                    is essential for enforceability.
+                  </AccordionContent>
+                </AccordionItem>
+                <AccordionItem value="states" data-testid="faq-states">
+                  <AccordionTrigger className="text-left">
+                    What states do you support?
+                  </AccordionTrigger>
+                  <AccordionContent className="text-muted-foreground">
+                    Currently, Drafter supports California prenuptial agreements. We're expanding to Florida,
+                    New York, and Texas in the coming months. Each jurisdiction has unique family law requirements,
+                    and our clause library is carefully curated to ensure compliance with state-specific regulations.
+                  </AccordionContent>
+                </AccordionItem>
+                <AccordionItem value="privacy" data-testid="faq-privacy">
+                  <AccordionTrigger className="text-left">
+                    How is my data protected?
+                  </AccordionTrigger>
+                  <AccordionContent className="text-muted-foreground">
+                    We implement enterprise-grade security measures: 256-bit encryption, PII masking before AI
+                    processing, and strict no-training commitments from Anthropic Claude. Your sensitive information
+                    (names, financial details) is replaced with placeholders before analysis and only restored in
+                    your final document. Data is automatically deleted after 7 days unless you request otherwise.
+                  </AccordionContent>
+                </AccordionItem>
+                <AccordionItem value="attorney" data-testid="faq-attorney">
+                  <AccordionTrigger className="text-left">
+                    Can I get attorney review?
+                  </AccordionTrigger>
+                  <AccordionContent className="text-muted-foreground">
+                    Yes! After receiving your draft, you'll have the option to connect with our network of partner
+                    attorneys for professional review and filing assistance. Attorney review fees vary by firm but
+                    are typically 70-80% less expensive than traditional full-service prenup preparation since the
+                    heavy lifting is already done.
+                  </AccordionContent>
+                </AccordionItem>
+                <AccordionItem value="time" data-testid="faq-time">
+                  <AccordionTrigger className="text-left">
+                    How long does it take?
+                  </AccordionTrigger>
+                  <AccordionContent className="text-muted-foreground">
+                    Most users complete the intake form in 10-15 minutes. Once submitted, our AI analyzes your
+                    information and generates your prenup within 2-3 minutes. You'll receive an email with your
+                    Word document ready for download and review. The entire process from start to draft delivery
+                    typically takes under 20 minutes.
+                  </AccordionContent>
+                </AccordionItem>
+                <AccordionItem value="changes" data-testid="faq-changes">
+                  <AccordionTrigger className="text-left">
+                    Can I make changes to the draft?
+                  </AccordionTrigger>
+                  <AccordionContent className="text-muted-foreground">
+                    Absolutely. Your prenup is delivered as an editable Word document (.docx). You can make changes
+                    directly in the document or work with an attorney to customize specific clauses. We recommend
+                    consulting with legal counsel before making substantive modifications to ensure the agreement
+                    remains enforceable under California law.
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
+            </div>
+          </div>
+        </section>
+
+        <section className="py-20 md:py-32 bg-gradient-to-br from-primary/10 via-background to-background">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="max-w-4xl mx-auto text-center space-y-8">
+              <h2 className="text-3xl md:text-5xl font-bold">Ready to Protect Your Future?</h2>
+              <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
+                Join couples who are taking control of their financial future with affordable,
+                private prenuptial agreements.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <Link href="/intake" data-testid="link-get-started-footer">
+                  <Button size="lg" className="h-12 px-8 text-base" data-testid="button-get-started-footer">
+                    Get Started Now
+                    <ChevronRight className="ml-2 h-5 w-5" />
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer className="border-t bg-muted/30 py-12">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-7xl mx-auto">
+            <div className="grid md:grid-cols-4 gap-8 mb-8">
+              <div className="space-y-4">
+                <div className="flex items-center space-x-2">
+                  <Shield className="h-6 w-6 text-primary" />
+                  <span className="text-lg font-bold">Drafter</span>
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  AI-powered prenuptial agreements for modern couples.
+                </p>
+              </div>
+              <div>
+                <h3 className="font-semibold mb-4">Product</h3>
+                <ul className="space-y-2 text-sm text-muted-foreground">
+                  <li><Link href="/intake" className="hover:text-foreground transition-colors" data-testid="link-footer-how-it-works">How It Works</Link></li>
+                  <li><Link href="/intake" className="hover:text-foreground transition-colors" data-testid="link-footer-pricing">Pricing</Link></li>
+                </ul>
+              </div>
+              <div>
+                <h3 className="font-semibold mb-4">Legal</h3>
+                <ul className="space-y-2 text-sm text-muted-foreground">
+                  <li><a href="#" className="hover:text-foreground transition-colors">Privacy Policy</a></li>
+                  <li><a href="#" className="hover:text-foreground transition-colors">Terms of Service</a></li>
+                  <li><a href="#" className="hover:text-foreground transition-colors">Disclaimers</a></li>
+                </ul>
+              </div>
+              <div>
+                <h3 className="font-semibold mb-4">Security</h3>
+                <div className="space-y-3">
+                  <div className="flex items-center space-x-2 text-sm text-muted-foreground">
+                    <Lock className="h-4 w-4" />
+                    <span>256-bit Encryption</span>
+                  </div>
+                  <div className="flex items-center space-x-2 text-sm text-muted-foreground">
+                    <Shield className="h-4 w-4" />
+                    <span>PII Protection</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="pt-8 border-t">
+              <p className="text-sm text-muted-foreground text-center">
+                © 2025 Drafter. For informational purposes only; not legal advice. Attorney review recommended.
+              </p>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+}

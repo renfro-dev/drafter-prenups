@@ -1,0 +1,170 @@
+[
+  {
+    "clauseId": "CA-RECITALS-001",
+    "title": "Recitals - Intent to Marry",
+    "category": "recitals",
+    "jurisdiction": "CA",
+    "textNormalized": "WHEREAS, PARTY_A_* and PARTY_B_* (collectively, the \"Parties\") intend to marry each other on or about DATE_* in the State of California; and WHEREAS, the Parties desire to enter into this Prenuptial Agreement (\"Agreement\") to establish their respective rights and obligations regarding property, assets, debts, and spousal support in the event of divorce, legal separation, or death.",
+    "version": "1.0"
+  },
+  {
+    "clauseId": "CA-RECITALS-002",
+    "title": "Recitals - Independent Counsel",
+    "category": "recitals",
+    "jurisdiction": "CA",
+    "textNormalized": "WHEREAS, each Party has been advised of their right to obtain independent legal counsel and has either obtained such counsel or knowingly and voluntarily waived such right; and WHEREAS, each Party has made full and fair disclosure of their respective assets, debts, income, and financial obligations as required by California Family Code Section 1615.",
+    "version": "1.0"
+  },
+  {
+    "clauseId": "CA-DISCLOSURE-001",
+    "title": "Full Financial Disclosure",
+    "category": "disclosure",
+    "jurisdiction": "CA",
+    "textNormalized": "ARTICLE I: FULL FINANCIAL DISCLOSURE\n\n1.1 Disclosure Requirement. The Parties acknowledge that California law requires full and fair disclosure of all assets, debts, income, and financial obligations as a condition for the enforceability of this Agreement pursuant to California Family Code Section 1615.\n\n1.2 Party A's Disclosure. PARTY_A_* represents and warrants that they have fully disclosed all assets, debts, income sources, and financial obligations to PARTY_B_* in writing. A complete financial disclosure is attached hereto as Exhibit A.\n\n1.3 Party B's Disclosure. PARTY_B_* represents and warrants that they have fully disclosed all assets, debts, income sources, and financial obligations to PARTY_A_* in writing. A complete financial disclosure is attached hereto as Exhibit B.\n\n1.4 Opportunity to Review. Each Party has had adequate time and opportunity to review the other Party's financial disclosures and ask questions about the same.",
+    "version": "1.0"
+  },
+  {
+    "clauseId": "CA-SEPARATE-001",
+    "title": "Separate Property - Premarital Assets",
+    "category": "separate_property",
+    "jurisdiction": "CA",
+    "textNormalized": "ARTICLE II: SEPARATE PROPERTY\n\n2.1 Definition. \"Separate Property\" means all property, whether real or personal, owned by either Party before the marriage, including but not limited to: (a) All property acquired by either Party before the date of marriage; (b) All property acquired by either Party during the marriage by gift, bequest, devise, or descent; (c) The rents, issues, and profits of separate property; and (d) All property acquired with the proceeds of separate property.\n\n2.2 Characterization. Notwithstanding the provisions of California Family Code Section 760, all Separate Property shall remain the sole and separate property of the Party owning such property and shall not be subject to division upon dissolution of marriage, legal separation, or death.\n\n2.3 Premarital Property of Party A. PARTY_A_* owns the following premarital separate property, which shall remain their sole and separate property: [Assets to be listed from intake data]\n\n2.4 Premarital Property of Party B. PARTY_B_* owns the following premarital separate property, which shall remain their sole and separate property: [Assets to be listed from intake data]",
+    "version": "1.0"
+  },
+  {
+    "clauseId": "CA-SEPARATE-002",
+    "title": "Separate Property - Income and Earnings",
+    "category": "separate_property",
+    "jurisdiction": "CA",
+    "textNormalized": "2.5 Earnings During Marriage. Notwithstanding California Family Code Section 760, all earnings and income received by either Party during the marriage, whether from employment, self-employment, investment, or any other source, shall be the separate property of the Party earning or receiving such income.\n\n2.6 Appreciation and Growth. Any appreciation, growth, or increase in value of either Party's separate property shall remain the separate property of that Party, regardless of whether such appreciation is active or passive, or whether the other Party contributed effort, skill, or labor to such appreciation.",
+    "version": "1.0"
+  },
+  {
+    "clauseId": "CA-COMMUNITY-001",
+    "title": "Community Property Waiver",
+    "category": "community_property",
+    "jurisdiction": "CA",
+    "textNormalized": "ARTICLE III: COMMUNITY PROPERTY\n\n3.1 Waiver of Community Property Rights. The Parties expressly waive and relinquish any and all rights to community property as defined in California Family Code Sections 760 and 2550. All property acquired during the marriage shall be characterized as separate property of the Party who acquires, earns, or receives such property, except as otherwise expressly provided in this Agreement.\n\n3.2 No Transmutation. The Parties agree that no gift, transfer, or conveyance of property between them shall constitute a transmutation of separate property to community property unless such transmutation is expressly set forth in writing and signed by both Parties, in accordance with California Family Code Section 852.",
+    "version": "1.0"
+  },
+  {
+    "clauseId": "CA-DEBTS-001",
+    "title": "Separate Debts and Liabilities",
+    "category": "debts",
+    "jurisdiction": "CA",
+    "textNormalized": "ARTICLE IV: DEBTS AND LIABILITIES\n\n4.1 Premarital Debts of Party A. PARTY_A_* is solely responsible for all debts and liabilities incurred prior to the date of marriage, including but not limited to: [Debts to be listed from intake data]. PARTY_B_* shall have no obligation or liability for these debts.\n\n4.2 Premarital Debts of Party B. PARTY_B_* is solely responsible for all debts and liabilities incurred prior to the date of marriage, including but not limited to: [Debts to be listed from intake data]. PARTY_A_* shall have no obligation or liability for these debts.\n\n4.3 Debts Incurred During Marriage. Each Party shall be solely responsible for any debts or liabilities incurred in their own name during the marriage, unless the Parties agree in writing that a particular debt or liability shall be a joint obligation.\n\n4.4 Indemnification. Each Party agrees to indemnify and hold harmless the other Party from any claims, actions, or liabilities arising from debts or obligations for which that Party is solely responsible under this Agreement.",
+    "version": "1.0"
+  },
+  {
+    "clauseId": "CA-SPOUSAL-001",
+    "title": "Spousal Support - Waiver",
+    "category": "spousal_support",
+    "jurisdiction": "CA",
+    "textNormalized": "ARTICLE V: SPOUSAL SUPPORT\n\n5.1 Mutual Waiver. Subject to the limitations set forth in California Family Code Section 1612, each Party hereby waives, releases, and relinquishes any and all rights to temporary spousal support, permanent spousal support, and alimony (collectively, \"Spousal Support\") from the other Party in the event of dissolution of marriage, legal separation, or nullity.\n\n5.2 Voluntary and Informed Waiver. Each Party acknowledges that this waiver of Spousal Support is made voluntarily, with full knowledge of its legal significance, and after having the opportunity to obtain independent legal counsel regarding such waiver.\n\n5.3 No Modification. The Parties intend that the waiver of Spousal Support shall not be modifiable by any court, except as required by law to prevent unconscionability at the time of enforcement.",
+    "version": "1.0"
+  },
+  {
+    "clauseId": "CA-SPOUSAL-002",
+    "title": "Spousal Support - Limited Terms",
+    "category": "spousal_support",
+    "jurisdiction": "CA",
+    "textNormalized": "ARTICLE V: SPOUSAL SUPPORT\n\n5.1 Limited Spousal Support. In the event of dissolution of marriage or legal separation, spousal support may be awarded in accordance with California Family Code Sections 4320-4326, subject to the limitations and provisions set forth in this Agreement.\n\n5.2 Factors for Consideration. Any award of spousal support shall be determined based on the standard factors enumerated in California Family Code Section 4320, including but not limited to the duration of the marriage, the standard of living during marriage, each Party's earning capacity, and each Party's contributions to the education or career of the other Party.\n\n5.3 Duration Limitation. Notwithstanding any provision of California law, the duration of any spousal support obligation shall not exceed one-half of the length of the marriage, measured from the date of marriage to the date of separation.",
+    "version": "1.0"
+  },
+  {
+    "clauseId": "CA-REPRESENTATIONS-001",
+    "title": "Mutual Representations",
+    "category": "representations",
+    "jurisdiction": "CA",
+    "textNormalized": "ARTICLE VI: MUTUAL REPRESENTATIONS AND WARRANTIES\n\n6.1 Voluntary Execution. Each Party represents and warrants that they are entering into this Agreement voluntarily, without duress, fraud, undue influence, or coercion of any kind.\n\n6.2 Full Understanding. Each Party represents and warrants that they have read this Agreement in its entirety, understand its terms and provisions, and are aware of its legal effect.\n\n6.3 Independent Legal Advice. Each Party acknowledges that they have been advised of their right to independent legal counsel and have either: (a) consulted with independent legal counsel of their own choosing regarding this Agreement; or (b) knowingly and voluntarily waived the right to independent legal counsel.\n\n6.4 Adequate Time. Each Party has been provided with adequate time (no less than seven days from final presentation of this Agreement) to review this Agreement and seek independent legal advice before execution.",
+    "version": "1.0"
+  },
+  {
+    "clauseId": "CA-EXECUTION-001",
+    "title": "Execution Requirements",
+    "category": "execution",
+    "jurisdiction": "CA",
+    "textNormalized": "ARTICLE VII: EXECUTION AND ENFORCEABILITY\n\n7.1 Timing of Execution. This Agreement is executed at least seven (7) calendar days before the date of marriage, in compliance with California Family Code Section 1615(c)(2).\n\n7.2 Notarization. This Agreement shall be acknowledged before a notary public by both Parties to ensure its validity and enforceability.\n\n7.3 Independent Execution. Each Party acknowledges that they are executing this Agreement of their own free will, without pressure or coercion from the other Party, and that they have had adequate opportunity to negotiate the terms of this Agreement.",
+    "version": "1.0"
+  },
+  {
+    "clauseId": "CA-GOVERNING-001",
+    "title": "Governing Law and Severability",
+    "category": "governing_law",
+    "jurisdiction": "CA",
+    "textNormalized": "ARTICLE VIII: GOVERNING LAW AND GENERAL PROVISIONS\n\n8.1 Governing Law. This Agreement shall be governed by and construed in accordance with the laws of the State of California, without regard to its conflict of law principles.\n\n8.2 Severability. If any provision of this Agreement is held to be invalid, illegal, or unenforceable by a court of competent jurisdiction, such provision shall be deemed severed from this Agreement, and the remaining provisions shall continue in full force and effect to the maximum extent permitted by law.\n\n8.3 Entire Agreement. This Agreement constitutes the entire agreement between the Parties regarding the subject matter hereof and supersedes all prior negotiations, understandings, and agreements, whether written or oral.\n\n8.4 Amendment. This Agreement may be amended or modified only by a written instrument signed by both Parties and complying with the requirements of California Family Code Section 1615.",
+    "version": "1.0"
+  },
+  {
+    "clauseId": "CA-DEFINITIONS-001",
+    "title": "Definitions",
+    "category": "definitions",
+    "jurisdiction": "CA",
+    "textNormalized": "DEFINITIONS\n\nFor purposes of this Agreement, the following terms shall have the meanings set forth below:\n\n\"Date of Marriage\" means the date on which the Parties are lawfully married.\n\n\"Date of Separation\" means the date on which one Party communicates to the other Party the intent to end the marriage and acts in a manner consistent with that intent, as defined in California Family Code Section 70.\n\n\"Dissolution of Marriage\" means the legal termination of the marriage by court order.\n\n\"Fair Market Value\" means the price that property would bring in an open market transaction between a willing buyer and a willing seller, with both parties having reasonable knowledge of relevant facts.\n\n\"Legal Separation\" means a court-decreed status in which the Parties remain married but live separate and apart with a division of their property and debts.",
+    "version": "1.0"
+  },
+  {
+    "clauseId": "CA-ESTATE-001",
+    "title": "Estate Planning Rights",
+    "category": "estate_planning",
+    "jurisdiction": "CA",
+    "textNormalized": "ARTICLE IX: ESTATE PLANNING AND DEATH\n\n9.1 Waiver of Statutory Rights. Each Party waives any and all rights to elect against the other Party's will or to claim a statutory share of the other Party's estate under California Probate Code Sections 21610-21630 (omitted spouse provisions) or any other provision of California law.\n\n9.2 Right to Dispose by Will. Each Party shall have the absolute right to dispose of their separate property by will, trust, or other testamentary instrument without any claim or interest by the other Party.\n\n9.3 No Pretermitted Spouse Claim. Each Party waives any right to claim status as a pretermitted spouse under California Probate Code Section 21610 in the event the other Party fails to provide for them in a will or trust executed after the date of marriage.",
+    "version": "1.0"
+  },
+  {
+    "clauseId": "CA-SUNSET-001",
+    "title": "Sunset Provision",
+    "category": "sunset",
+    "jurisdiction": "CA",
+    "textNormalized": "ARTICLE X: SUNSET PROVISION\n\n10.1 Duration of Agreement. This Agreement shall remain in full force and effect indefinitely unless terminated or modified by mutual written agreement of the Parties.\n\n10.2 No Automatic Termination. The Parties expressly acknowledge that this Agreement does not contain any sunset provision and shall not automatically terminate upon the birth of children, passage of time, or any other event unless expressly agreed to in writing by both Parties.",
+    "version": "1.0"
+  },
+  {
+    "clauseId": "CA-BUSINESS-001",
+    "title": "Business Interests",
+    "category": "business",
+    "jurisdiction": "CA",
+    "textNormalized": "ARTICLE XI: BUSINESS INTERESTS\n\n11.1 Separate Business Property. Any business interest, including but not limited to sole proprietorships, partnerships, limited liability companies, or corporate stock, owned by either Party prior to the marriage or acquired during the marriage with separate property funds, shall remain the separate property of that Party.\n\n11.2 Future Business Ventures. Any business interest acquired by either Party during the marriage through their own efforts, skills, or labor shall be the separate property of the Party who acquired such interest, notwithstanding California Family Code Section 760.\n\n11.3 Business Income. All income, profits, and distributions from any business interest owned as separate property by either Party shall remain the separate property of that Party.",
+    "version": "1.0"
+  },
+  {
+    "clauseId": "CA-RETIREMENT-001",
+    "title": "Retirement Accounts",
+    "category": "retirement",
+    "jurisdiction": "CA",
+    "textNormalized": "ARTICLE XII: RETIREMENT ACCOUNTS\n\n12.1 Premarital Retirement Accounts. All retirement accounts, including but not limited to 401(k), IRA, pension, profit-sharing, and deferred compensation plans, owned by either Party prior to the marriage shall remain the separate property of that Party, including all appreciation, contributions, and earnings thereon.\n\n12.2 Contributions During Marriage. All contributions made by either Party to their retirement accounts during the marriage, whether made with separate property or from earnings during the marriage, shall be the separate property of the contributing Party.\n\n12.3 Waiver of Community Interest. Each Party waives any community property interest in the other Party's retirement accounts, including any interest that would otherwise arise under California Family Code Section 2610.",
+    "version": "1.0"
+  },
+  {
+    "clauseId": "CA-RESIDENCE-001",
+    "title": "Marital Residence",
+    "category": "real_property",
+    "jurisdiction": "CA",
+    "textNormalized": "ARTICLE XIII: MARITAL RESIDENCE\n\n13.1 Ownership Structure. If the Parties acquire a marital residence during the marriage, the ownership interest of each Party shall be determined by the source of funds used for the acquisition and shall be documented in writing at the time of purchase.\n\n13.2 Separate Property Purchase. If either Party purchases real property with their separate property funds, such property shall remain the separate property of that Party, and the other Party shall have no ownership interest therein unless expressly agreed to in writing.\n\n13.3 Title Holding. The manner in which title to real property is held shall not control the characterization of such property, and this Agreement shall govern the ownership rights of the Parties notwithstanding the form of title.",
+    "version": "1.0"
+  },
+  {
+    "clauseId": "CA-GIFTS-001",
+    "title": "Gifts Between Spouses",
+    "category": "gifts",
+    "jurisdiction": "CA",
+    "textNormalized": "ARTICLE XIV: GIFTS AND TRANSFERS\n\n14.1 Separate Property Gifts. Any gift of separate property from one Party to the other shall remain the separate property of the donor unless there is a clear written statement signed by both Parties that the gift is intended to be community property or the separate property of the donee.\n\n14.2 No Presumption of Gift. No transfer or payment between the Parties shall be presumed to be a gift. Any Party alleging a gift must prove such gift by clear and convincing evidence.\n\n14.3 Compliance with Transmutation Requirements. Any transfer of property that would constitute a transmutation under California Family Code Section 852 must comply with the express written requirements of that statute to be valid.",
+    "version": "1.0"
+  },
+  {
+    "clauseId": "CA-ATTORNEY-FEES-001",
+    "title": "Attorney Fees and Costs",
+    "category": "attorney_fees",
+    "jurisdiction": "CA",
+    "textNormalized": "ARTICLE XV: ATTORNEY FEES AND COSTS\n\n15.1 Enforcement Costs. In the event of any legal action to enforce this Agreement, the prevailing party shall be entitled to recover their reasonable attorney fees and costs from the non-prevailing party.\n\n15.2 Independent Counsel Costs. Each Party shall bear their own costs and attorney fees incurred in connection with the negotiation, review, and execution of this Agreement.\n\n15.3 Divorce or Separation Costs. In the event of dissolution of marriage or legal separation, each Party shall be responsible for their own attorney fees and costs, except as may be awarded by a court of competent jurisdiction based on the factors set forth in California Family Code Section 2030.",
+    "version": "1.0"
+  },
+  {
+    "clauseId": "CA-MEDIATION-001",
+    "title": "Dispute Resolution",
+    "category": "dispute_resolution",
+    "jurisdiction": "CA",
+    "textNormalized": "ARTICLE XVI: DISPUTE RESOLUTION\n\n16.1 Mediation Requirement. In the event of any dispute arising out of or relating to this Agreement, the Parties agree to participate in good faith mediation before filing any court action. The Parties shall share equally the costs of mediation.\n\n16.2 Selection of Mediator. The Parties shall mutually agree upon a qualified mediator licensed to practice law in California and experienced in family law matters.\n\n16.3 Mediation Confidentiality. All mediation communications shall be confidential and inadmissible in any subsequent legal proceeding, except as required by California Evidence Code Section 1119.\n\n16.4 Right to Litigate. If mediation is unsuccessful, either Party may pursue their legal remedies in a court of competent jurisdiction.",
+    "version": "1.0"
+  }
+]
