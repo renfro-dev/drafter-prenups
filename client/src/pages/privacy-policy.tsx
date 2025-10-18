@@ -14,7 +14,7 @@ export default function PrivacyPolicy() {
               <span className="text-xl font-bold tracking-tight">Drafter</span>
             </div>
             <Link href="/" data-testid="link-back-home">
-              <Button variant="ghost" size="default">
+              <Button variant="ghost" size="default" data-testid="button-back-home">
                 <ChevronLeft className="mr-1 h-4 w-4" />
                 Back to Home
               </Button>
@@ -377,7 +377,7 @@ export default function PrivacyPolicy() {
                 By using Drafter, you agree to this Privacy Policy.
               </p>
               <Link href="/" data-testid="link-back-home-bottom">
-                <Button variant="outline">
+                <Button variant="outline" data-testid="button-back-home-bottom">
                   <ChevronLeft className="mr-2 h-4 w-4" />
                   Back to Home
                 </Button>
