@@ -16,10 +16,11 @@ Preferred communication style: Simple, everyday language.
 
 **Framework**: React with Vite as the build tool and development server
 
-**Routing**: Wouter for lightweight client-side routing with three main pages:
-- Home (marketing/landing page)
+**Routing**: Wouter for lightweight client-side routing with four main pages:
+- Home (marketing/landing page with header link to privacy policy)
 - Intake (multi-step form for collecting user data)
 - Success (confirmation and document delivery)
+- Privacy Policy (detailed data privacy and PII masking explanation)
 
 **UI Framework**: Shadcn/ui component library with Radix UI primitives and Tailwind CSS
 - Design system follows a professional legal tech aesthetic inspired by Stripe, Linear, and Notion
