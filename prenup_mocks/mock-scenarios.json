@@ -1,0 +1,209 @@
+[
+  {
+    "name": "Young Tech Couple",
+    "description": "Both work in tech, high income, RSUs, minimal existing assets",
+    "data": {
+      "email": "demo-tech@example.com",
+      "state": "CA",
+      "partyAName": "Jennifer Martinez",
+      "partyBName": "Michael Chen",
+      "weddingDate": "2025-08-15",
+      "assets": [
+        {
+          "type": "bank_account",
+          "description": "Chase Savings Account",
+          "value": 45000,
+          "owner": "A"
+        },
+        {
+          "type": "investment",
+          "description": "Vanguard Index Funds",
+          "value": 120000,
+          "owner": "A"
+        },
+        {
+          "type": "investment",
+          "description": "Tesla RSUs (unvested)",
+          "value": 250000,
+          "owner": "A"
+        },
+        {
+          "type": "bank_account",
+          "description": "Wells Fargo Checking",
+          "value": 28000,
+          "owner": "B"
+        },
+        {
+          "type": "retirement",
+          "description": "401k - Google",
+          "value": 180000,
+          "owner": "B"
+        }
+      ],
+      "debts": [
+        {
+          "type": "student_loan",
+          "description": "Stanford University student loans",
+          "value": 65000,
+          "party": "A"
+        },
+        {
+          "type": "student_loan",
+          "description": "UC Berkeley student loans",
+          "value": 42000,
+          "party": "B"
+        }
+      ],
+      "spousalSupportWaived": true,
+      "separatePropertyProtection": true,
+      "counselRepresented": false,
+      "additionalProvisions": "Future equity compensation from employment (RSUs, stock options) shall be treated as separate property of the earning spouse."
+    }
+  },
+  {
+    "name": "Second Marriage with Children",
+    "description": "Both previously married, children from prior relationships, established assets",
+    "data": {
+      "email": "demo-second-marriage@example.com",
+      "state": "CA",
+      "partyAName": "Robert Anderson",
+      "partyBName": "Elizabeth Thompson",
+      "weddingDate": "2026-03-20",
+      "assets": [
+        {
+          "type": "real_property",
+          "description": "Primary residence - 456 Oak Street, San Diego",
+          "value": 1250000,
+          "owner": "A"
+        },
+        {
+          "type": "retirement",
+          "description": "401k and IRA accounts",
+          "value": 580000,
+          "owner": "A"
+        },
+        {
+          "type": "investment",
+          "description": "Brokerage account - Fidelity",
+          "value": 340000,
+          "owner": "A"
+        },
+        {
+          "type": "real_property",
+          "description": "Rental property - 789 Pine Avenue, Sacramento",
+          "value": 650000,
+          "owner": "B"
+        },
+        {
+          "type": "retirement",
+          "description": "Teacher's pension (CalSTRS)",
+          "value": 420000,
+          "owner": "B"
+        },
+        {
+          "type": "bank_account",
+          "description": "Bank of America savings",
+          "value": 95000,
+          "owner": "B"
+        }
+      ],
+      "debts": [
+        {
+          "type": "mortgage",
+          "description": "Mortgage on Oak Street residence",
+          "value": 380000,
+          "party": "A"
+        },
+        {
+          "type": "mortgage",
+          "description": "Mortgage on Pine Avenue rental",
+          "value": 245000,
+          "party": "B"
+        }
+      ],
+      "spousalSupportWaived": false,
+      "separatePropertyProtection": true,
+      "counselRepresented": true,
+      "additionalProvisions": "All assets owned prior to marriage shall remain separate property. Each party's children from previous marriage shall be designated as primary beneficiaries of their respective parent's separate property. Life insurance policies shall name biological children as beneficiaries."
+    }
+  },
+  {
+    "name": "Entrepreneur and Professional",
+    "description": "One party owns business, other is medical professional, income disparity",
+    "data": {
+      "email": "demo-business-owner@example.com",
+      "state": "CA",
+      "partyAName": "Sarah Kim",
+      "partyBName": "David Rodriguez",
+      "weddingDate": "2025-11-10",
+      "assets": [
+        {
+          "type": "business",
+          "description": "TechStart Solutions LLC (software consulting firm)",
+          "value": 850000,
+          "owner": "A"
+        },
+        {
+          "type": "real_property",
+          "description": "Commercial office space - Palo Alto",
+          "value": 920000,
+          "owner": "A"
+        },
+        {
+          "type": "investment",
+          "description": "Business investment account",
+          "value": 185000,
+          "owner": "A"
+        },
+        {
+          "type": "bank_account",
+          "description": "Chase business operating account",
+          "value": 140000,
+          "owner": "A"
+        },
+        {
+          "type": "retirement",
+          "description": "Physician 401k - Kaiser Permanente",
+          "value": 280000,
+          "owner": "B"
+        },
+        {
+          "type": "bank_account",
+          "description": "Personal savings",
+          "value": 68000,
+          "owner": "B"
+        },
+        {
+          "type": "vehicle",
+          "description": "2023 Tesla Model S",
+          "value": 75000,
+          "owner": "B"
+        }
+      ],
+      "debts": [
+        {
+          "type": "business_debt",
+          "description": "Business line of credit - TechStart Solutions",
+          "value": 120000,
+          "party": "A"
+        },
+        {
+          "type": "mortgage",
+          "description": "Commercial property mortgage",
+          "value": 480000,
+          "party": "A"
+        },
+        {
+          "type": "student_loan",
+          "description": "Medical school loans - UCSF",
+          "value": 195000,
+          "party": "B"
+        }
+      ],
+      "spousalSupportWaived": false,
+      "separatePropertyProtection": true,
+      "counselRepresented": true,
+      "additionalProvisions": "TechStart Solutions LLC shall remain the separate property of Sarah Kim. Business appreciation and growth during marriage shall be separate property. Any future businesses started by either party shall be governed by a separate business prenup addendum. Medical practice income earned by David Rodriguez during marriage shall be community property subject to standard California division."
+    }
+  }
+]
