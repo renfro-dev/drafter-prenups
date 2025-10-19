@@ -65,6 +65,26 @@ const blogArticles = [
     publishDate: "October 18, 2025",
     slug: "/blog/prenup-vs-postnup",
     featured: false
+  },
+  {
+    id: "prenup-cost",
+    title: "How Much Does a Prenup Cost? Complete Price Guide for 2025",
+    excerpt: "Breaking down prenup costs from traditional attorneys to AI-powered services, plus hidden fees and how to save money.",
+    category: "Prenups 101",
+    readTime: "12 min read",
+    publishDate: "October 18, 2025",
+    slug: "/blog/prenup-cost",
+    featured: false
+  },
+  {
+    id: "do-i-need-prenup",
+    title: "Do I Need a Prenup? Complete Guide to Deciding",
+    excerpt: "Honest assessment of when prenups are essential, when they're optional, and when you can skip one—plus how to have the conversation.",
+    category: "Prenups 101",
+    readTime: "15 min read",
+    publishDate: "October 18, 2025",
+    slug: "/blog/do-i-need-prenup",
+    featured: false
   }
 ];
 

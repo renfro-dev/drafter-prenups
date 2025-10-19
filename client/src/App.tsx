@@ -14,6 +14,8 @@ import PrenupMistakes from "@/pages/blog/prenup-mistakes";
 import PrenupTimeline from "@/pages/blog/prenup-timeline";
 import SecondMarriagePrenup from "@/pages/blog/second-marriage-prenup";
 import PrenupVsPostnup from "@/pages/blog/prenup-vs-postnup";
+import PrenupCost from "@/pages/blog/prenup-cost";
+import DoINeedPrenup from "@/pages/blog/do-i-need-prenup";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -28,6 +30,8 @@ function Router() {
       <Route path="/blog/prenup-timeline" component={PrenupTimeline} />
       <Route path="/blog/second-marriage-prenup" component={SecondMarriagePrenup} />
       <Route path="/blog/prenup-vs-postnup" component={PrenupVsPostnup} />
+      <Route path="/blog/prenup-cost" component={PrenupCost} />
+      <Route path="/blog/do-i-need-prenup" component={DoINeedPrenup} />
       <Route path="/states/california" component={CaliforniaLanding} />
       <Route path="/states/california/prenuptial-agreement" component={CaliforniaPrenup} />
       <Route component={NotFound} />
