@@ -6,9 +6,187 @@ import { maskPII, unmaskText } from "./utils/pii-masking";
 import { generatePrenup } from "./lib/anthropic-client";
 import { generateWordDocument } from "./utils/document-generator";
 import { sendEmail, generatePrenupEmail } from "./utils/email-sender";
+import { setupAuth, isAuthenticated } from "./replitAuth";
 import { z } from "zod";
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Setup Replit Auth
+  await setupAuth(app);
+
+  // Auth route
+  app.get('/api/auth/user', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const user = await storage.getUser(userId);
+      res.json(user);
+    } catch (error) {
+      console.error("Error fetching user:", error);
+      res.status(500).json({ message: "Failed to fetch user" });
+    }
+  });
+
+  // Collaborative review endpoints
+  app.get('/api/review/:intakeId/clauses', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const intakeId = req.params.intakeId;
+      
+      // Verify user has access to this intake
+      const intake = await storage.getIntake(intakeId);
+      if (!intake) {
+        return res.status(404).json({ error: 'Prenup not found' });
+      }
+      
+      if (intake.partyAUserId !== userId && intake.partyBUserId !== userId) {
+        return res.status(403).json({ error: 'Unauthorized access to this prenup' });
+      }
+
+      const clauses = await storage.getPrenupClauses(intakeId);
+      res.json(clauses);
+    } catch (error) {
+      console.error('Error fetching prenup clauses:', error);
+      res.status(500).json({ error: 'Failed to fetch clauses' });
+    }
+  });
+
+  app.post('/api/clauses/:id/explain', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const clauseId = req.params.id;
+      const { intakeId } = req.body;
+      
+      // Get the clause and verify access
+      const clauses = await storage.getPrenupClauses(intakeId);
+      const clause = clauses.find(c => c.id === clauseId);
+      if (!clause) {
+        return res.status(404).json({ error: 'Clause not found' });
+      }
+
+      // If already has explanation, return it
+      if (clause.plainExplanation) {
+        return res.json({ explanation: clause.plainExplanation });
+      }
+
+      // TODO: Integrate with Anthropic to generate plain-English explanation
+      // For now, use a simplified placeholder
+      const explanation = `This clause means: ${clause.title}. This is a standard provision in California prenuptial agreements.`;
+
+      await storage.updateClauseExplanation(clauseId, explanation);
+      res.json({ explanation });
+    } catch (error) {
+      console.error('Error generating explanation:', error);
+      res.status(500).json({ error: 'Failed to generate explanation' });
+    }
+  });
+
+  app.post('/api/clauses/:id/question', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const clauseId = req.params.id;
+      const { question } = req.body;
+
+      if (!question) {
+        return res.status(400).json({ error: 'Question is required' });
+      }
+
+      // Create question record
+      const questionRecord = await storage.createClauseQuestion({
+        prenupClauseId: clauseId,
+        userId,
+        question,
+        answer: null,
+      });
+
+      // TODO: Integrate with Anthropic to generate contextual answers
+      // For now, use a simplified placeholder
+      const answer = `Thank you for your question. This clause is designed to protect both parties under California Family Code. If you need specific legal advice, please consult with a family law attorney.`;
+
+      await storage.updateClauseAnswer(questionRecord.id, answer);
+      
+      const updatedQuestion = await storage.getClauseQuestions(clauseId);
+      res.json(updatedQuestion.find(q => q.id === questionRecord.id));
+    } catch (error) {
+      console.error('Error creating question:', error);
+      res.status(500).json({ error: 'Failed to create question' });
+    }
+  });
+
+  app.post('/api/clauses/:id/flag', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const clauseId = req.params.id;
+      const { reason } = req.body;
+
+      const flag = await storage.createClauseFlag({
+        prenupClauseId: clauseId,
+        userId,
+        reason: reason || null,
+        resolved: false,
+      });
+
+      res.json(flag);
+    } catch (error) {
+      console.error('Error creating flag:', error);
+      res.status(500).json({ error: 'Failed to flag clause' });
+    }
+  });
+
+  app.post('/api/clauses/:id/comment', isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const clauseId = req.params.id;
+      const { comment } = req.body;
+
+      if (!comment) {
+        return res.status(400).json({ error: 'Comment is required' });
+      }
+
+      const commentRecord = await storage.createClauseComment({
+        prenupClauseId: clauseId,
+        userId,
+        comment,
+      });
+
+      res.json(commentRecord);
+    } catch (error) {
+      console.error('Error creating comment:', error);
+      res.status(500).json({ error: 'Failed to create comment' });
+    }
+  });
+
+  app.get('/api/clauses/:id/comments', isAuthenticated, async (req, res) => {
+    try {
+      const clauseId = req.params.id;
+      const comments = await storage.getClauseComments(clauseId);
+      res.json(comments);
+    } catch (error) {
+      console.error('Error fetching comments:', error);
+      res.status(500).json({ error: 'Failed to fetch comments' });
+    }
+  });
+
+  app.get('/api/clauses/:id/flags', isAuthenticated, async (req, res) => {
+    try {
+      const clauseId = req.params.id;
+      const flags = await storage.getClauseFlags(clauseId);
+      res.json(flags);
+    } catch (error) {
+      console.error('Error fetching flags:', error);
+      res.status(500).json({ error: 'Failed to fetch flags' });
+    }
+  });
+
+  app.get('/api/clauses/:id/questions', isAuthenticated, async (req, res) => {
+    try {
+      const clauseId = req.params.id;
+      const questions = await storage.getClauseQuestions(clauseId);
+      res.json(questions);
+    } catch (error) {
+      console.error('Error fetching questions:', error);
+      res.status(500).json({ error: 'Failed to fetch questions' });
+    }
+  });
+
   app.post("/api/generate", async (req, res) => {
     try {
       const intake = insertIntakeSchema.parse(req.body);
