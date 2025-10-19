@@ -29,7 +29,7 @@ export default function SecondMarriagePrenup() {
         "url": "https://drafter.replit.app/logo.png"
       }
     },
-    "datePublished": "2025-10-18",
+    "datePublished": "2025-05-15",
     "dateModified": "2025-10-19"
   };
 
@@ -94,7 +94,7 @@ export default function SecondMarriagePrenup() {
                 <span>Prenups 101</span>
                 <span>•</span>
                 <div className="flex items-center gap-2">
-                  <time dateTime="2025-10-18">Published: October 18, 2025</time>
+                  <time dateTime="2025-05-15">Published: May 15, 2025</time>
                   <span>•</span>
                   <time dateTime="2025-10-19" className="font-medium">Last Updated: October 19, 2025</time>
                 </div>
