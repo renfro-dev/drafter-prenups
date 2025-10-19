@@ -1,6 +1,6 @@
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Heart, Users, Shield, FileText, AlertCircle } from "lucide-react";
 import { SEOHead } from "@/components/seo-head";
@@ -30,7 +30,7 @@ export default function SecondMarriagePrenup() {
       }
     },
     "datePublished": "2025-10-18",
-    "dateModified": "2025-10-18"
+    "dateModified": "2025-10-19"
   };
 
   const faqSchema = {
@@ -42,7 +42,7 @@ export default function SecondMarriagePrenup() {
         "name": "Why is a prenup more important for second marriages?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Prenups are especially important for second marriages because you typically enter with more complex financial situations: existing assets accumulated before this marriage, children from previous relationships with inheritance rights to protect, ongoing support obligations from prior marriages, established estate plans that need coordination, and lessons learned from previous divorces. A prenup ensures your children's inheritance is protected, clarifies how existing assets will be treated, and prevents complications with blended family dynamics."
+          "text": "Second marriages involve more complex finances: existing assets, children with inheritance rights, ongoing support obligations, and established estate plans. A prenup protects your children's inheritance, clarifies asset treatment, and prevents blended family complications. In California's community property state, this protection is especially crucial."
         }
       },
       {
@@ -50,7 +50,7 @@ export default function SecondMarriagePrenup() {
         "name": "Can a prenup protect my children's inheritance in a second marriage?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Yes, a prenup is one of the most effective tools for protecting your children's inheritance rights in a second marriage. You can designate specific assets as separate property that will pass to your children regardless of divorce or death, coordinate your prenup with your estate plan to ensure assets go to your kids, protect life insurance policies and retirement accounts for your children's benefit, and prevent your new spouse from claiming rights to property you intend for your children. Without a prenup, state law may give your new spouse rights to assets you want your children to inherit."
+          "text": "Yes, prenups effectively protect children's inheritance. You can designate assets as separate property passing to children, coordinate with estate plans, protect life insurance and retirement accounts, and prevent new spouse claims on children's inheritance. Under California Family Code, without a prenup, state law may give your new spouse rights to intended children's assets."
         }
       },
       {
@@ -58,7 +58,7 @@ export default function SecondMarriagePrenup() {
         "name": "How does alimony from a previous marriage affect a prenup?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Existing alimony obligations should be fully disclosed in your prenup and addressed specifically. Your prenup can clarify that alimony payments to a former spouse are separate debt not shared by your new spouse, prevent your new spouse from claiming support that would compete with existing obligations, protect income or assets designated for alimony payments, and establish how alimony affects your marital budget and finances. If you're receiving alimony, the prenup can protect those payments from being considered marital property."
+          "text": "Alimony obligations must be fully disclosed and addressed in your prenup. Clarify that alimony payments are separate debt, prevent competing support claims, protect designated income or assets, and establish how alimony affects marital finances. If receiving alimony, protect those payments from marital property classification."
         }
       },
       {
@@ -66,7 +66,7 @@ export default function SecondMarriagePrenup() {
         "name": "Should blended families always get prenups?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "While not legally required, prenups are highly recommended for virtually all blended families. They prevent conflicts between your new spouse and children from previous relationships, clarify financial responsibilities for stepchildren versus biological children, protect each party's ability to support their own children, coordinate with existing custody and support arrangements, and reduce the likelihood of contentious disputes if the second marriage ends. Financial clarity from the start helps blended families focus on building relationships rather than worrying about money conflicts."
+          "text": "Highly recommended for virtually all blended families. Prenups prevent spouse-children conflicts, clarify stepchildren versus biological children financial responsibilities, protect ability to support own children, coordinate with custody arrangements, and reduce disputes if marriage ends. Financial clarity helps families focus on relationships, not money conflicts."
         }
       }
     ]
@@ -93,7 +93,11 @@ export default function SecondMarriagePrenup() {
               <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
                 <span>Prenups 101</span>
                 <span>•</span>
-                <time dateTime="2025-10-18">October 18, 2025</time>
+                <div className="flex items-center gap-2">
+                  <time dateTime="2025-10-18">Published: October 18, 2025</time>
+                  <span>•</span>
+                  <time dateTime="2025-10-19" className="font-medium">Last Updated: October 19, 2025</time>
+                </div>
                 <span>•</span>
                 <span>11 min read</span>
               </div>
@@ -114,14 +118,14 @@ export default function SecondMarriagePrenup() {
                 According to the U.S. Census Bureau, approximately 40% of marriages are second or higher-order marriages for at least one partner. These unions face unique challenges: blended families, existing financial obligations, and the emotional weight of past relationships. A well-crafted prenuptial agreement isn't just recommended for second marriages—<strong>it's essential</strong>.
               </p>
 
-              <Card className="my-8 bg-primary/5 border-primary/20">
+              <Card className="my-8 bg-primary/5 border-primary/20" data-testid="card-quick-answer">
                 <CardContent className="p-6">
                   <div className="flex gap-4">
                     <Heart className="h-6 w-6 text-primary flex-shrink-0 mt-1" />
                     <div>
-                      <h3 className="font-semibold text-lg mb-2">Why Second Marriage Prenups Matter More</h3>
+                      <h3 className="font-semibold text-lg mb-2">Quick Answer</h3>
                       <p className="text-sm">
-                        Unlike first marriages where couples often start with similar financial positions and no children, second marriages typically involve protecting children's inheritance rights, coordinating with existing estate plans, managing ongoing support obligations, and clarifying responsibilities for a blended family. A prenup provides the financial clarity that allows your new marriage to thrive.
+                        Second marriages need prenups more than first marriages because you're protecting children's inheritance, coordinating estate plans, and managing prior support obligations. In California, community property laws make prenups essential for blended families in Los Angeles, San Francisco, and throughout the state.
                       </p>
                     </div>
                   </div>
@@ -129,7 +133,7 @@ export default function SecondMarriagePrenup() {
               </Card>
 
               <h2 className="text-3xl font-bold mt-12 mb-6">
-                Key Differences: First vs. Second Marriage Prenups
+                What Makes Second Marriage Prenups Different?
               </h2>
 
               <p>
@@ -601,36 +605,62 @@ export default function SecondMarriagePrenup() {
 
           <Separator className="my-12" />
 
-          <div className="mt-12">
-            <h3 className="text-2xl font-bold mb-6">Related Articles</h3>
+          <section className="mt-12" data-testid="section-related-articles">
+            <h2 className="text-2xl font-bold mb-6">Related Articles</h2>
             <div className="grid md:grid-cols-2 gap-6">
-              <Link href="/blog/prenup-timeline">
-                <Card className="hover-elevate cursor-pointer h-full">
-                  <CardContent className="p-6">
-                    <h4 className="font-semibold text-lg mb-2">
-                      When Should You Get a Prenup? Timeline and Best Practices
-                    </h4>
-                    <p className="text-sm text-muted-foreground">
-                      Complete guide to prenup timing with month-by-month timeline and expert recommendations.
-                    </p>
-                  </CardContent>
-                </Card>
-              </Link>
+              <Card className="hover-elevate">
+                <CardHeader>
+                  <CardTitle className="text-lg">
+                    <Link href="/blog/do-i-need-prenup" className="hover:text-primary">
+                      Do I Need a Prenup? Complete Guide to Deciding
+                    </Link>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="text-sm text-muted-foreground">
+                  Determine if a prenup is right based on assets, income, and family circumstances.
+                </CardContent>
+              </Card>
 
-              <Link href="/states/california/prenuptial-agreement">
-                <Card className="hover-elevate cursor-pointer h-full">
-                  <CardContent className="p-6">
-                    <h4 className="font-semibold text-lg mb-2">
-                      Complete Guide to California Prenuptial Agreements
-                    </h4>
-                    <p className="text-sm text-muted-foreground">
-                      Everything you need to know about prenups in California's community property system.
-                    </p>
-                  </CardContent>
-                </Card>
-              </Link>
+              <Card className="hover-elevate">
+                <CardHeader>
+                  <CardTitle className="text-lg">
+                    <Link href="/blog/prenup-cost" className="hover:text-primary">
+                      How Much Does a Prenup Cost? Complete Price Guide
+                    </Link>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="text-sm text-muted-foreground">
+                  Compare costs from $49 AI services to $10,000+ attorney fees and find the best value.
+                </CardContent>
+              </Card>
+
+              <Card className="hover-elevate">
+                <CardHeader>
+                  <CardTitle className="text-lg">
+                    <Link href="/blog/prenup-timeline" className="hover:text-primary">
+                      When Should You Get a Prenup? Timeline and Best Practices
+                    </Link>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="text-sm text-muted-foreground">
+                  Follow the ideal 6-month prenup timeline to ensure legal validity.
+                </CardContent>
+              </Card>
+
+              <Card className="hover-elevate">
+                <CardHeader>
+                  <CardTitle className="text-lg">
+                    <Link href="/blog/prenup-vs-postnup" className="hover:text-primary">
+                      Prenup vs Postnup: Which Is Right for You?
+                    </Link>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="text-sm text-muted-foreground">
+                  Compare prenups and postnups to choose the right agreement for your situation.
+                </CardContent>
+              </Card>
             </div>
-          </div>
+          </section>
         </div>
       </div>
     </>

@@ -1,6 +1,6 @@
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Shield, Heart, TrendingUp, Users, AlertTriangle, CheckCircle2 } from "lucide-react";
 import { SEOHead } from "@/components/seo-head";
@@ -30,7 +30,7 @@ export default function DoINeedPrenup() {
       }
     },
     "datePublished": "2025-10-18",
-    "dateModified": "2025-10-18"
+    "dateModified": "2025-10-19"
   };
 
   const faqSchema = {
@@ -42,7 +42,7 @@ export default function DoINeedPrenup() {
         "name": "Do I need a prenup if we're both broke?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Even couples without significant current assets can benefit from a prenup. Prenups protect future earnings, business ventures, inheritances, and career advancement. If either partner might start a business, pursue graduate education, or receive family money, a prenup provides crucial protection. Additionally, prenups address debt allocation—protecting you from your partner's student loans or credit card debt in divorce. Finally, creating a prenup facilitates important financial conversations that strengthen relationships."
+          "text": "Yes. Prenups protect future earnings, business ventures, and inheritances regardless of current assets. If either partner might start a business, pursue graduate education, or receive family money, a prenup provides protection. Prenups also address debt allocation and facilitate important financial conversations."
         }
       },
       {
@@ -58,7 +58,7 @@ export default function DoINeedPrenup() {
         "name": "Is a prenup necessary if this is my first marriage?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "First marriages benefit from prenups just as much as second marriages. While second marriages often have obvious reasons (protecting children from prior relationships), first marriages have their own considerations: protecting pre-marital assets, shielding family businesses, preserving inheritances, defining separate property, and establishing financial expectations. Many first-time couples avoid difficult financial conversations, making a prenup even more valuable for setting clear expectations early."
+          "text": "Yes. First marriages benefit from prenups for protecting pre-marital assets, shielding family businesses, preserving inheritances, and defining separate property. Many first-time couples avoid financial conversations, making prenups valuable for setting clear expectations early."
         }
       },
       {
@@ -109,7 +109,11 @@ export default function DoINeedPrenup() {
               <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
                 <span>Prenups 101</span>
                 <span>•</span>
-                <time dateTime="2025-10-18">October 18, 2025</time>
+                <div className="flex items-center gap-2">
+                  <time dateTime="2025-10-18">Published: October 18, 2025</time>
+                  <span>•</span>
+                  <time dateTime="2025-10-19" className="font-medium">Last Updated: October 19, 2025</time>
+                </div>
                 <span>•</span>
                 <span>15 min read</span>
               </div>
@@ -134,6 +138,20 @@ export default function DoINeedPrenup() {
                 This guide helps you figure out which category you fall into.
               </p>
 
+              <Card className="my-8 bg-primary/5 border-primary/20" data-testid="card-quick-answer">
+                <CardContent className="p-6">
+                  <div className="flex gap-4">
+                    <Shield className="h-6 w-6 text-primary flex-shrink-0 mt-1" />
+                    <div>
+                      <h3 className="font-semibold text-lg mb-2">Quick Answer</h3>
+                      <p className="text-sm">
+                        You need a prenup if you own a business, have significant assets, large income disparity, previous marriages with children, or family wealth. California's community property laws make prenups especially important for business owners and high earners in cities like San Francisco, Los Angeles, and San Diego where asset growth can be substantial.
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
               <Card className="my-8 bg-primary/5 border-primary/20">
                 <CardContent className="p-6">
                   <div className="flex gap-4">
@@ -155,7 +173,7 @@ export default function DoINeedPrenup() {
               </Card>
 
               <h2 className="text-3xl font-bold mt-12 mb-6">
-                When You Absolutely Need a Prenup
+                When Do You Absolutely Need a Prenup?
               </h2>
 
               <p>
@@ -169,7 +187,7 @@ export default function DoINeedPrenup() {
               </p>
 
               <p>
-                In community property states like California, <strong>any increase in business value during marriage is community property</strong>. If your company was worth $100,000 when you married and $5 million at divorce, your spouse may be entitled to half of that $4.9 million appreciation.
+                In California's community property system, <strong>any increase in business value during marriage is community property</strong>. If your Silicon Valley startup was worth $100,000 when you married and $5 million at divorce, your spouse may be entitled to half of that $4.9 million appreciation under California Family Code provisions.
               </p>
 
               <p>
@@ -280,7 +298,7 @@ export default function DoINeedPrenup() {
               </p>
 
               <h2 className="text-3xl font-bold mt-12 mb-6">
-                When You Should Seriously Consider a Prenup
+                When Should You Seriously Consider a Prenup?
               </h2>
 
               <p>
@@ -290,7 +308,7 @@ export default function DoINeedPrenup() {
               <h3 className="text-2xl font-semibold mt-8 mb-4">1. Either Partner Has Significant Debt</h3>
 
               <p>
-                If your fiancé has $150,000 in student loans or $30,000 in credit card debt, you might assume it's "their" debt. But in community property states, debt incurred during marriage can become shared liability.
+                If your fiancé has $150,000 in student loans or $30,000 in credit card debt, you might assume it's "their" debt. But in California and other community property states, debt incurred during marriage can become shared liability.
               </p>
 
               <p>
@@ -695,6 +713,65 @@ export default function DoINeedPrenup() {
                   </AccordionContent>
                 </AccordionItem>
               </Accordion>
+
+              <Separator className="my-12" />
+
+              <section className="my-12" data-testid="section-related-articles">
+                <h2 className="text-2xl font-bold mb-6">Related Articles</h2>
+                <div className="grid md:grid-cols-2 gap-6">
+                  <Card className="hover-elevate">
+                    <CardHeader>
+                      <CardTitle className="text-lg">
+                        <Link href="/blog/prenup-cost" className="hover:text-primary">
+                          How Much Does a Prenup Cost? Complete Price Guide
+                        </Link>
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="text-sm text-muted-foreground">
+                      Compare costs from $49 AI services to $10,000+ attorney fees and find the best value for your situation.
+                    </CardContent>
+                  </Card>
+
+                  <Card className="hover-elevate">
+                    <CardHeader>
+                      <CardTitle className="text-lg">
+                        <Link href="/blog/second-marriage-prenup" className="hover:text-primary">
+                          Prenup for Second Marriage: What's Different?
+                        </Link>
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="text-sm text-muted-foreground">
+                      Protect children's inheritance and navigate complex financial situations in remarriage.
+                    </CardContent>
+                  </Card>
+
+                  <Card className="hover-elevate">
+                    <CardHeader>
+                      <CardTitle className="text-lg">
+                        <Link href="/blog/prenup-vs-postnup" className="hover:text-primary">
+                          Prenup vs Postnup: Key Differences and Which to Choose
+                        </Link>
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="text-sm text-muted-foreground">
+                      Compare prenuptial and postnuptial agreements to determine which fits your timing and needs.
+                    </CardContent>
+                  </Card>
+
+                  <Card className="hover-elevate">
+                    <CardHeader>
+                      <CardTitle className="text-lg">
+                        <Link href="/blog/prenup-mistakes" className="hover:text-primary">
+                          5 Common Prenup Mistakes That Could Invalidate Your Agreement
+                        </Link>
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="text-sm text-muted-foreground">
+                      Learn how to avoid the most common errors that can make your prenup unenforceable.
+                    </CardContent>
+                  </Card>
+                </div>
+              </section>
             </div>
           </article>
         </div>

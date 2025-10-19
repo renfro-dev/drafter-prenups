@@ -1,6 +1,6 @@
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Calendar, CheckCircle2, Clock, AlertCircle, FileText, Users } from "lucide-react";
 import { SEOHead } from "@/components/seo-head";
@@ -30,7 +30,7 @@ export default function PrenupTimeline() {
       }
     },
     "datePublished": "2025-10-18",
-    "dateModified": "2025-10-18"
+    "dateModified": "2025-10-19"
   };
 
   const faqSchema = {
@@ -66,7 +66,7 @@ export default function PrenupTimeline() {
         "name": "How long does it take to draft a prenuptial agreement?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "With traditional attorneys, the drafting process typically takes 4-8 weeks from initial consultation to final execution. This includes time for attorney review, financial disclosure, negotiation, and revisions. Using modern AI-powered services like Drafter, you can generate a comprehensive, state-specific prenup in just 10 minutes. However, regardless of how quickly you generate the document, you should still allow several months for review by independent counsel and thoughtful consideration before signing."
+          "text": "With traditional attorneys, drafting takes 4-8 weeks from initial consultation to final execution for financial disclosure, negotiation, and revisions. AI services like Drafter generate comprehensive, state-specific prenups in 10 minutes. Regardless of generation speed, allow several months for independent counsel review and thoughtful consideration before signing."
         }
       },
       {
@@ -80,12 +80,58 @@ export default function PrenupTimeline() {
     ]
   };
 
+  const howToSchema = {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    "name": "How to Get a Prenup: Complete Timeline",
+    "description": "Step-by-step guide to getting a prenuptial agreement with proper timing and execution",
+    "totalTime": "P6M",
+    "step": [
+      {
+        "@type": "HowToStep",
+        "position": 1,
+        "name": "6 Months Before: Initial Discussion & Planning",
+        "text": "Have honest discussion about whether you want a prenup. Discuss high-level goals (asset protection, debt allocation, business interests). Research state law and requirements. Decide whether to use attorneys or AI service. Begin gathering financial documents."
+      },
+      {
+        "@type": "HowToStep",
+        "position": 2,
+        "name": "5 Months Before: Hire Attorneys or Generate Draft",
+        "text": "Each party retains independent legal counsel or generates initial draft using AI service like Drafter. Hold initial consultations to discuss goals and circumstances. Outline specific provisions you want included."
+      },
+      {
+        "@type": "HowToStep",
+        "position": 3,
+        "name": "4 Months Before: Full Financial Disclosure",
+        "text": "Exchange detailed financial statements. Provide supporting documentation (bank statements, tax returns, appraisals). Disclose all assets, debts, income, and financial obligations. Get business valuations if either party owns a company. Acknowledge receipt of each other's disclosures in writing."
+      },
+      {
+        "@type": "HowToStep",
+        "position": 4,
+        "name": "3 Months Before: Review & Negotiation",
+        "text": "Review first draft with your attorney. Identify provisions you want to change or add. Negotiate terms through attorneys or directly if using AI service. Ensure both parties understand every provision. Ask questions about anything unclear."
+      },
+      {
+        "@type": "HowToStep",
+        "position": 5,
+        "name": "2 Months Before: Finalize Agreement",
+        "text": "Incorporate negotiated changes into final draft. Both parties review and approve final version. Prepare execution copies (multiple originals). Schedule signing ceremony with notary/witnesses. Verify all state-specific execution requirements are met."
+      },
+      {
+        "@type": "HowToStep",
+        "position": 6,
+        "name": "6-8 Weeks Before: Sign the Prenup",
+        "text": "Both parties sign in presence of notary and/or witnesses as required. Ensure all signatures, initials, and dates are completed. Attach financial disclosure exhibits. Each party receives a fully executed original. File copies in safe place (fireproof safe, attorney's office, etc.). Update estate planning documents to coordinate with prenup."
+      }
+    ]
+  };
+
   return (
     <>
       <SEOHead
         title="When Should You Get a Prenup? Timeline and Best Practices | Drafter"
         description="Complete guide to prenup timing with month-by-month timeline from 6 months before wedding to signing. Learn when to start, how long it takes, and what to do at each stage."
-        schema={[articleSchema, faqSchema]}
+        schema={[articleSchema, faqSchema, howToSchema]}
       />
       
       <div className="min-h-screen bg-background">
@@ -101,7 +147,11 @@ export default function PrenupTimeline() {
               <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
                 <span>Prenups 101</span>
                 <span>•</span>
-                <time dateTime="2025-10-18">October 18, 2025</time>
+                <div className="flex items-center gap-2">
+                  <time dateTime="2025-10-18">Published: October 18, 2025</time>
+                  <span>•</span>
+                  <time dateTime="2025-10-19" className="font-medium">Last Updated: October 19, 2025</time>
+                </div>
                 <span>•</span>
                 <span>14 min read</span>
               </div>
@@ -126,14 +176,14 @@ export default function PrenupTimeline() {
                 This comprehensive guide breaks down the ideal prenup timeline, state-specific requirements, and best practices for each stage of the process.
               </p>
 
-              <Card className="my-8 bg-primary/5 border-primary/20">
+              <Card className="my-8 bg-primary/5 border-primary/20" data-testid="card-quick-answer">
                 <CardContent className="p-6">
                   <div className="flex gap-4">
                     <Clock className="h-6 w-6 text-primary flex-shrink-0 mt-1" />
                     <div>
-                      <h3 className="font-semibold text-lg mb-2">The Quick Answer</h3>
+                      <h3 className="font-semibold text-lg mb-2">Quick Answer</h3>
                       <p className="text-sm">
-                        <strong>Ideal timing:</strong> Start prenup discussions 6 months before your wedding. Sign the final agreement at least 6-8 weeks before the big day. Minimum timing: 30 days before (though some states require less). Maximum timing: There's no "too early" once you're engaged and planning a wedding.
+                        Start prenup discussions 6 months before your wedding and sign at least 6-8 weeks before the ceremony. California requires a minimum 7-day waiting period under California Family Code. Most Los Angeles and San Francisco attorneys recommend 3-6 months to avoid duress claims and ensure proper review.
                       </p>
                     </div>
                   </div>
@@ -141,7 +191,7 @@ export default function PrenupTimeline() {
               </Card>
 
               <h2 className="text-3xl font-bold mt-12 mb-6">
-                Why Timing Matters: The Legal Perspective
+                Why Does Timing Matter for Prenups?
               </h2>
 
               <p>
@@ -787,36 +837,49 @@ export default function PrenupTimeline() {
 
           <Separator className="my-12" />
 
-          <div className="mt-12">
-            <h3 className="text-2xl font-bold mb-6">Related Articles</h3>
+          <section className="mt-12" data-testid="section-related-articles">
+            <h2 className="text-2xl font-bold mb-6">Related Articles</h2>
             <div className="grid md:grid-cols-2 gap-6">
-              <Link href="/blog/prenup-mistakes">
-                <Card className="hover-elevate cursor-pointer h-full">
-                  <CardContent className="p-6">
-                    <h4 className="font-semibold text-lg mb-2">
+              <Card className="hover-elevate">
+                <CardHeader>
+                  <CardTitle className="text-lg">
+                    <Link href="/blog/prenup-mistakes" className="hover:text-primary">
                       5 Common Prenup Mistakes That Could Invalidate Your Agreement
-                    </h4>
-                    <p className="text-sm text-muted-foreground">
-                      Learn about critical mistakes that can render your prenup unenforceable and how to avoid them.
-                    </p>
-                  </CardContent>
-                </Card>
-              </Link>
+                    </Link>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="text-sm text-muted-foreground">
+                  Learn critical errors that can invalidate your prenup and how to avoid them.
+                </CardContent>
+              </Card>
 
-              <Link href="/states/california/prenuptial-agreement">
-                <Card className="hover-elevate cursor-pointer h-full">
-                  <CardContent className="p-6">
-                    <h4 className="font-semibold text-lg mb-2">
-                      Complete Guide to California Prenuptial Agreements
-                    </h4>
-                    <p className="text-sm text-muted-foreground">
-                      Everything you need to know about prenups in California's community property system.
-                    </p>
-                  </CardContent>
-                </Card>
-              </Link>
+              <Card className="hover-elevate">
+                <CardHeader>
+                  <CardTitle className="text-lg">
+                    <Link href="/blog/prenup-cost" className="hover:text-primary">
+                      How Much Does a Prenup Cost? Complete Price Guide
+                    </Link>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="text-sm text-muted-foreground">
+                  Compare costs from $49 AI services to $10,000+ attorney fees and find the best value.
+                </CardContent>
+              </Card>
+
+              <Card className="hover-elevate">
+                <CardHeader>
+                  <CardTitle className="text-lg">
+                    <Link href="/blog/do-i-need-prenup" className="hover:text-primary">
+                      Do I Need a Prenup? Complete Guide to Deciding
+                    </Link>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="text-sm text-muted-foreground">
+                  Determine if a prenup is right based on assets, income, and family circumstances.
+                </CardContent>
+              </Card>
             </div>
-          </div>
+          </section>
         </div>
       </div>
     </>

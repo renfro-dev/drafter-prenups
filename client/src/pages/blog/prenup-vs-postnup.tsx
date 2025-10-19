@@ -1,6 +1,6 @@
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Scale, Calendar, Shield, CheckCircle2, XCircle } from "lucide-react";
 import { SEOHead } from "@/components/seo-head";
@@ -30,7 +30,7 @@ export default function PrenupVsPostnup() {
       }
     },
     "datePublished": "2025-10-18",
-    "dateModified": "2025-10-18"
+    "dateModified": "2025-10-19"
   };
 
   const faqSchema = {
@@ -42,7 +42,7 @@ export default function PrenupVsPostnup() {
         "name": "What's the main difference between a prenup and a postnup?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "The primary difference is timing: a prenuptial agreement is signed before marriage, while a postnuptial agreement is signed after you're already married. This timing difference affects enforceability, with prenups generally considered more enforceable because there's less opportunity for one spouse to have unfair leverage over the other. Prenups also require specific considerations like adequate time to review before the wedding, while postnups face additional scrutiny because the parties are already in a marital relationship with fiduciary duties to each other."
+          "text": "Timing is the key difference: prenups are signed before marriage, postnups after. Prenups are generally more enforceable because both parties have equal bargaining power. Postnups face additional scrutiny since spouses have fiduciary duties to each other during marriage."
         }
       },
       {
@@ -50,7 +50,7 @@ export default function PrenupVsPostnup() {
         "name": "Is a postnup as legally binding as a prenup?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Postnups can be just as legally binding as prenups if executed properly, but they face heightened scrutiny from courts. Because spouses have fiduciary duties to each other during marriage, judges examine postnups more carefully to ensure neither party was coerced or taken advantage of. Both parties must have independent legal counsel, provide full financial disclosure, and demonstrate the agreement is fair and voluntary. Some states (like California) have specific statutes validating postnups, while others have less clear legal frameworks, making enforceability more uncertain."
+          "text": "Yes, if executed properly. Postnups face heightened court scrutiny due to spousal fiduciary duties. Both parties need independent counsel, full financial disclosure, and demonstration of fairness. California has specific statutes validating postnups, while other states have less clear frameworks affecting enforceability."
         }
       },
       {
@@ -58,7 +58,7 @@ export default function PrenupVsPostnup() {
         "name": "Can you get a postnup if you didn't get a prenup?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Yes, you can absolutely get a postnuptial agreement even if you didn't sign a prenup before marriage. Common reasons couples get postnups include: didn't have time for a prenup before the wedding, received an inheritance or started a business after marriage, experienced a near-divorce and want to reconcile with clearer terms, had children and want to protect their inheritance, or one spouse stayed home and wants security before leaving their career. A postnup serves the same protective functions as a prenup, just signed at a different time."
+          "text": "Yes, absolutely. Common reasons couples get postnups: insufficient time for prenup before wedding, received inheritance or started business after marriage, near-divorce requiring clearer terms, protecting children's inheritance, or one spouse needs security before leaving career. Postnups serve the same protective functions as prenups."
         }
       },
       {
@@ -66,7 +66,7 @@ export default function PrenupVsPostnup() {
         "name": "Which is easier to enforce in court: prenup or postnup?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Prenuptial agreements are generally easier to enforce than postnuptial agreements. Prenups benefit from clear power dynamics (both parties are independent and can choose not to marry), straightforward timing (before wedding), and decades of legal precedent. Postnups face challenges including fiduciary duty scrutiny (spouses must deal fairly with each other), potential duress (one spouse may threaten divorce to force signing), and less established legal framework in some states. However, a properly executed postnup with independent counsel, full disclosure, and demonstrable fairness can be just as enforceable as a prenup."
+          "text": "Prenups are generally easier to enforce. They benefit from clear power dynamics, straightforward timing, and established legal precedent. Postnups face fiduciary duty scrutiny, potential duress concerns, and less established frameworks in some states. However, properly executed postnups with independent counsel and full disclosure can be equally enforceable."
         }
       }
     ]
@@ -93,7 +93,11 @@ export default function PrenupVsPostnup() {
               <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
                 <span>Prenups 101</span>
                 <span>•</span>
-                <time dateTime="2025-10-18">October 18, 2025</time>
+                <div className="flex items-center gap-2">
+                  <time dateTime="2025-10-18">Published: October 18, 2025</time>
+                  <span>•</span>
+                  <time dateTime="2025-10-19" className="font-medium">Last Updated: October 19, 2025</time>
+                </div>
                 <span>•</span>
                 <span>10 min read</span>
               </div>
@@ -114,14 +118,14 @@ export default function PrenupVsPostnup() {
                 While both agreements serve similar purposes, the timing—and the legal implications that come with it—make a significant difference in how courts treat these contracts. Understanding the distinctions will help you make the right choice for your situation.
               </p>
 
-              <Card className="my-8 bg-primary/5 border-primary/20">
+              <Card className="my-8 bg-primary/5 border-primary/20" data-testid="card-quick-answer">
                 <CardContent className="p-6">
                   <div className="flex gap-4">
                     <Scale className="h-6 w-6 text-primary flex-shrink-0 mt-1" />
                     <div>
-                      <h3 className="font-semibold text-lg mb-2">The Quick Answer</h3>
+                      <h3 className="font-semibold text-lg mb-2">Quick Answer</h3>
                       <p className="text-sm">
-                        <strong>Prenups are generally stronger and easier to enforce</strong> because they're signed before marriage when both parties have equal bargaining power. <strong>Postnups can be equally effective</strong> but face additional legal scrutiny. If you're not yet married, get a prenup. If you're already married, a postnup is your best option for financial protection.
+                        Prenups are generally stronger and easier to enforce because they're signed before marriage with equal bargaining power. Postnups face additional scrutiny under California's community property laws but can be equally effective. In California, both require independent counsel and full financial disclosure under California Family Code.
                       </p>
                     </div>
                   </div>
@@ -557,36 +561,49 @@ export default function PrenupVsPostnup() {
 
           <Separator className="my-12" />
 
-          <div className="mt-12">
-            <h3 className="text-2xl font-bold mb-6">Related Articles</h3>
+          <section className="mt-12" data-testid="section-related-articles">
+            <h2 className="text-2xl font-bold mb-6">Related Articles</h2>
             <div className="grid md:grid-cols-2 gap-6">
-              <Link href="/blog/prenup-mistakes">
-                <Card className="hover-elevate cursor-pointer h-full">
-                  <CardContent className="p-6">
-                    <h4 className="font-semibold text-lg mb-2">
-                      5 Common Prenup Mistakes That Could Invalidate Your Agreement
-                    </h4>
-                    <p className="text-sm text-muted-foreground">
-                      Learn about critical mistakes that can render your prenup unenforceable.
-                    </p>
-                  </CardContent>
-                </Card>
-              </Link>
+              <Card className="hover-elevate">
+                <CardHeader>
+                  <CardTitle className="text-lg">
+                    <Link href="/blog/do-i-need-prenup" className="hover:text-primary">
+                      Do I Need a Prenup? Complete Guide to Deciding
+                    </Link>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="text-sm text-muted-foreground">
+                  Determine if a prenup is right based on assets, income, and family circumstances.
+                </CardContent>
+              </Card>
 
-              <Link href="/blog/second-marriage-prenup">
-                <Card className="hover-elevate cursor-pointer h-full">
-                  <CardContent className="p-6">
-                    <h4 className="font-semibold text-lg mb-2">
-                      Prenup for Second Marriage: What's Different?
-                    </h4>
-                    <p className="text-sm text-muted-foreground">
-                      Essential guide for protecting children's inheritance and navigating blended families.
-                    </p>
-                  </CardContent>
-                </Card>
-              </Link>
+              <Card className="hover-elevate">
+                <CardHeader>
+                  <CardTitle className="text-lg">
+                    <Link href="/blog/prenup-mistakes" className="hover:text-primary">
+                      5 Common Prenup Mistakes That Could Invalidate Your Agreement
+                    </Link>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="text-sm text-muted-foreground">
+                  Avoid critical errors that can invalidate your prenup.
+                </CardContent>
+              </Card>
+
+              <Card className="hover-elevate">
+                <CardHeader>
+                  <CardTitle className="text-lg">
+                    <Link href="/blog/prenup-timeline" className="hover:text-primary">
+                      When Should You Get a Prenup? Timeline and Best Practices
+                    </Link>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="text-sm text-muted-foreground">
+                  Follow the ideal 6-month prenup timeline to ensure legal validity.
+                </CardContent>
+              </Card>
             </div>
-          </div>
+          </section>
         </div>
       </div>
     </>

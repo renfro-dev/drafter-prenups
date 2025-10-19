@@ -1,6 +1,6 @@
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { AlertTriangle, CheckCircle2, FileText, Shield, Clock, Users } from "lucide-react";
 import { SEOHead } from "@/components/seo-head";
@@ -30,7 +30,7 @@ export default function PrenupMistakes() {
       }
     },
     "datePublished": "2025-10-18",
-    "dateModified": "2025-10-18"
+    "dateModified": "2025-10-19"
   };
 
   const faqSchema = {
@@ -74,7 +74,7 @@ export default function PrenupMistakes() {
         "name": "Can a prenup be too one-sided?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Yes, if a prenuptial agreement is extremely unfair or unconscionable, a court may refuse to enforce it. While prenups don't have to be perfectly equal, they cannot be so lopsided that one party is left destitute or without reasonable support. Factors courts consider include whether both parties understood the agreement, had time to review it, were represented by counsel, and whether the terms are fundamentally fair. An unconscionable prenup can be invalidated entirely or in part."
+          "text": "Yes. If a prenup is extremely unfair or unconscionable, courts may refuse to enforce it. While prenups don't need perfect equality, they cannot leave one party destitute. Courts consider whether both parties understood the agreement, had adequate review time, were represented by counsel, and whether terms are fundamentally fair."
         }
       }
     ]
@@ -101,7 +101,11 @@ export default function PrenupMistakes() {
               <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
                 <span>Prenups 101</span>
                 <span>•</span>
-                <time dateTime="2025-10-18">October 18, 2025</time>
+                <div className="flex items-center gap-2">
+                  <time dateTime="2025-10-18">Published: October 18, 2025</time>
+                  <span>•</span>
+                  <time dateTime="2025-10-19" className="font-medium">Last Updated: October 19, 2025</time>
+                </div>
                 <span>•</span>
                 <span>12 min read</span>
               </div>
@@ -126,6 +130,20 @@ export default function PrenupMistakes() {
                 Whether you're working with an attorney or using an AI-powered service like <Link href="/">Drafter</Link>, understanding these common pitfalls can mean the difference between a bulletproof agreement and an expensive piece of paper.
               </p>
 
+              <Card className="my-8 bg-primary/5 border-primary/20" data-testid="card-quick-answer">
+                <CardContent className="p-6">
+                  <div className="flex gap-4">
+                    <AlertTriangle className="h-6 w-6 text-primary flex-shrink-0 mt-1" />
+                    <div>
+                      <h3 className="font-semibold text-lg mb-2">Quick Answer</h3>
+                      <p className="text-sm">
+                        The five critical mistakes that invalidate prenups are: signing too close to the wedding (California requires 7+ days), incomplete financial disclosure, missing independent legal counsel, unconscionable terms, and improper execution. Avoid these errors to ensure your prenup holds up in court.
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
               <Card className="my-8 border-destructive/50 bg-destructive/5">
                 <CardContent className="p-6">
                   <div className="flex gap-4">
@@ -142,7 +160,7 @@ export default function PrenupMistakes() {
 
               <h2 className="text-3xl font-bold mt-12 mb-6 flex items-center gap-3">
                 <Clock className="h-8 w-8 text-primary" />
-                Mistake #1: Signing Too Close to the Wedding Date
+                Mistake #1: How Close to the Wedding Is Too Close?
               </h2>
 
               <p>
@@ -162,7 +180,7 @@ export default function PrenupMistakes() {
               <h3 className="text-2xl font-semibold mt-8 mb-4">State-Specific Requirements</h3>
 
               <ul>
-                <li><strong>California:</strong> Requires at least 7 days between receiving the prenup and signing it. However, legal experts recommend 30+ days to avoid any appearance of duress.</li>
+                <li><strong>California:</strong> Under California Family Code, the state requires at least 7 days between receiving the prenup and signing it. However, attorneys in Los Angeles and San Francisco recommend 30+ days to avoid any appearance of duress.</li>
                 <li><strong>Florida:</strong> No specific waiting period, but courts look unfavorably on agreements signed within 30 days of the wedding.</li>
                 <li><strong>New York:</strong> While no statutory requirement exists, signing within 1-2 weeks of the wedding is considered a red flag.</li>
                 <li><strong>Texas:</strong> No waiting period required, but inadequate time to review can be used as evidence of duress.</li>
@@ -673,36 +691,49 @@ export default function PrenupMistakes() {
 
           <Separator className="my-12" />
 
-          <div className="mt-12">
-            <h3 className="text-2xl font-bold mb-6">Related Articles</h3>
+          <section className="mt-12" data-testid="section-related-articles">
+            <h2 className="text-2xl font-bold mb-6">Related Articles</h2>
             <div className="grid md:grid-cols-2 gap-6">
-              <Link href="/blog/prenup-timeline">
-                <Card className="hover-elevate cursor-pointer h-full">
-                  <CardContent className="p-6">
-                    <h4 className="font-semibold text-lg mb-2">
-                      When Should You Get a Prenup? Timeline and Best Practices
-                    </h4>
-                    <p className="text-sm text-muted-foreground">
-                      Learn the ideal timeline for getting a prenup and best practices for each stage of the process.
-                    </p>
-                  </CardContent>
-                </Card>
-              </Link>
+              <Card className="hover-elevate">
+                <CardHeader>
+                  <CardTitle className="text-lg">
+                    <Link href="/blog/prenup-cost" className="hover:text-primary">
+                      How Much Does a Prenup Cost? Complete Price Guide
+                    </Link>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="text-sm text-muted-foreground">
+                  Understand prenup costs from $49 AI services to $10,000+ attorney fees.
+                </CardContent>
+              </Card>
 
-              <Link href="/states/california/prenuptial-agreement">
-                <Card className="hover-elevate cursor-pointer h-full">
-                  <CardContent className="p-6">
-                    <h4 className="font-semibold text-lg mb-2">
-                      Complete Guide to California Prenuptial Agreements
-                    </h4>
-                    <p className="text-sm text-muted-foreground">
-                      Everything you need to know about prenups in California's community property system.
-                    </p>
-                  </CardContent>
-                </Card>
-              </Link>
+              <Card className="hover-elevate">
+                <CardHeader>
+                  <CardTitle className="text-lg">
+                    <Link href="/blog/prenup-timeline" className="hover:text-primary">
+                      When Should You Get a Prenup? Timeline and Best Practices
+                    </Link>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="text-sm text-muted-foreground">
+                  Follow the ideal 6-month prenup timeline to ensure legal validity and avoid last-minute pressure.
+                </CardContent>
+              </Card>
+
+              <Card className="hover-elevate">
+                <CardHeader>
+                  <CardTitle className="text-lg">
+                    <Link href="/blog/do-i-need-prenup" className="hover:text-primary">
+                      Do I Need a Prenup? Complete Guide to Deciding
+                    </Link>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="text-sm text-muted-foreground">
+                  Determine if a prenup is right based on assets, income, business ownership, and family circumstances.
+                </CardContent>
+              </Card>
             </div>
-          </div>
+          </section>
         </div>
       </div>
     </>

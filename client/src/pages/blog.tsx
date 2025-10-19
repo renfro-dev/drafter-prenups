@@ -7,6 +7,16 @@ import { Calendar, Clock, ArrowRight } from "lucide-react";
 
 const blogArticles = [
   {
+    id: "prenup-complete-guide",
+    title: "Complete Guide to Prenuptial Agreements in 2025",
+    excerpt: "Comprehensive guide covering everything you need to know about prenups: California law, costs, timing, common mistakes, and modern AI-powered drafting options.",
+    category: "Prenups 101",
+    readTime: "28 min read",
+    publishDate: "October 19, 2025",
+    slug: "/blog/prenup-complete-guide",
+    featured: true
+  },
+  {
     id: "california-prenup-guide",
     title: "The Complete Guide to California Prenuptial Agreements in 2024",
     excerpt: "Everything you need to know about prenups in California, from community property laws to what can and cannot be included in your agreement.",

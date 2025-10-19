@@ -1,6 +1,6 @@
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { DollarSign, CheckCircle2, AlertCircle, TrendingDown, Scale } from "lucide-react";
 import { SEOHead } from "@/components/seo-head";
@@ -30,7 +30,7 @@ export default function PrenupCost() {
       }
     },
     "datePublished": "2025-10-18",
-    "dateModified": "2025-10-18"
+    "dateModified": "2025-10-19"
   };
 
   const faqSchema = {
@@ -109,7 +109,11 @@ export default function PrenupCost() {
               <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
                 <span>Prenups 101</span>
                 <span>•</span>
-                <time dateTime="2025-10-18">October 18, 2025</time>
+                <div className="flex items-center gap-2">
+                  <time dateTime="2025-10-18">Published: October 18, 2025</time>
+                  <span>•</span>
+                  <time dateTime="2025-10-19" className="font-medium">Last Updated: October 19, 2025</time>
+                </div>
                 <span>•</span>
                 <span>12 min read</span>
               </div>
@@ -134,6 +138,20 @@ export default function PrenupCost() {
                 This comprehensive guide breaks down exactly what you'll pay, what affects the cost, and how to get the best value for your money.
               </p>
 
+              <Card className="my-8 bg-primary/5 border-primary/20" data-testid="card-quick-answer">
+                <CardContent className="p-6">
+                  <div className="flex gap-4">
+                    <DollarSign className="h-6 w-6 text-primary flex-shrink-0 mt-1" />
+                    <div>
+                      <h3 className="font-semibold text-lg mb-2">Quick Answer</h3>
+                      <p className="text-sm">
+                        Prenup costs range from $49 for AI-powered services like Drafter to $10,000+ for complex attorney-drafted agreements. Most couples pay $1,500-$3,000 for traditional prenups. In California's community property state, costs vary by city—Los Angeles and San Francisco attorneys charge $400-$800/hour, while smaller cities charge less.
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
               <Card className="my-8 bg-primary/5 border-primary/20">
                 <CardContent className="p-6">
                   <div className="flex gap-4">
@@ -152,7 +170,7 @@ export default function PrenupCost() {
               </Card>
 
               <h2 className="text-3xl font-bold mt-12 mb-6">
-                Traditional Attorney Costs: The Full Breakdown
+                How Much Do Traditional Attorneys Charge for Prenups?
               </h2>
 
               <p>
@@ -176,8 +194,8 @@ export default function PrenupCost() {
               </p>
 
               <ul>
-                <li><strong>Geographic location:</strong> NYC/LA/SF attorneys charge $400-$800/hour. Small town attorneys may charge $150-$300/hour.</li>
-                <li><strong>Attorney experience:</strong> Senior partners at prestigious firms command higher rates than junior associates.</li>
+                <li><strong>Geographic location:</strong> California cities like Los Angeles, San Francisco, and San Diego have attorneys charging $400-$800/hour, while smaller markets charge $150-$300/hour.</li>
+                <li><strong>Attorney experience:</strong> Senior partners at prestigious California family law firms command higher rates than junior associates.</li>
                 <li><strong>Complexity:</strong> Simple agreements might take 3-5 hours. Complex estates with businesses and trusts can take 15-20+ hours.</li>
               </ul>
 
@@ -297,7 +315,7 @@ export default function PrenupCost() {
               </p>
 
               <h2 className="text-3xl font-bold mt-12 mb-6">
-                Hidden Costs to Budget For
+                What Hidden Costs Should You Budget For?
               </h2>
 
               <p>
@@ -345,10 +363,10 @@ export default function PrenupCost() {
               <div className="bg-muted/50 border border-border rounded-lg p-6 my-8">
                 <h4 className="font-semibold mb-3">High-Cost Cities (Attorney Rates: $400-$800/hour)</h4>
                 <ul className="text-sm space-y-1">
+                  <li><strong>San Francisco, CA:</strong> $3,000 - $12,000</li>
+                  <li><strong>Los Angeles, CA:</strong> $2,800 - $11,000</li>
+                  <li><strong>San Diego, CA:</strong> $2,500 - $10,000</li>
                   <li><strong>New York City:</strong> $3,500 - $15,000</li>
-                  <li><strong>San Francisco:</strong> $3,000 - $12,000</li>
-                  <li><strong>Los Angeles:</strong> $2,800 - $11,000</li>
-                  <li><strong>Boston:</strong> $2,500 - $10,000</li>
                   <li><strong>Washington DC:</strong> $2,700 - $12,000</li>
                 </ul>
               </div>
@@ -584,6 +602,65 @@ export default function PrenupCost() {
                   </AccordionContent>
                 </AccordionItem>
               </Accordion>
+
+              <Separator className="my-12" />
+
+              <section className="my-12" data-testid="section-related-articles">
+                <h2 className="text-2xl font-bold mb-6">Related Articles</h2>
+                <div className="grid md:grid-cols-2 gap-6">
+                  <Card className="hover-elevate">
+                    <CardHeader>
+                      <CardTitle className="text-lg">
+                        <Link href="/blog/do-i-need-prenup" className="hover:text-primary">
+                          Do I Need a Prenup? Complete Guide to Deciding
+                        </Link>
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="text-sm text-muted-foreground">
+                      Determine if a prenup is right for your situation based on assets, income, business ownership, and family circumstances.
+                    </CardContent>
+                  </Card>
+
+                  <Card className="hover-elevate">
+                    <CardHeader>
+                      <CardTitle className="text-lg">
+                        <Link href="/blog/prenup-mistakes" className="hover:text-primary">
+                          5 Common Prenup Mistakes That Could Invalidate Your Agreement
+                        </Link>
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="text-sm text-muted-foreground">
+                      Avoid costly errors like signing too close to the wedding, incomplete disclosure, and missing independent counsel.
+                    </CardContent>
+                  </Card>
+
+                  <Card className="hover-elevate">
+                    <CardHeader>
+                      <CardTitle className="text-lg">
+                        <Link href="/blog/prenup-timeline" className="hover:text-primary">
+                          When Should You Get a Prenup? Timeline and Best Practices
+                        </Link>
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="text-sm text-muted-foreground">
+                      Follow the ideal 6-month prenup timeline to ensure legal validity and avoid last-minute pressure.
+                    </CardContent>
+                  </Card>
+
+                  <Card className="hover-elevate">
+                    <CardHeader>
+                      <CardTitle className="text-lg">
+                        <Link href="/blog/second-marriage-prenup" className="hover:text-primary">
+                          Prenup for Second Marriage: What's Different?
+                        </Link>
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="text-sm text-muted-foreground">
+                      Protect children's inheritance rights and navigate complex financial situations in second marriages.
+                    </CardContent>
+                  </Card>
+                </div>
+              </section>
             </div>
           </article>
         </div>
