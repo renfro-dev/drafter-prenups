@@ -48,6 +48,7 @@ export interface IStorage {
   
   // Collaborative review methods
   createPrenupClause(clause: InsertPrenupClause): Promise<PrenupClause>;
+  getPrenupClause(id: string): Promise<PrenupClause | undefined>;
   getPrenupClauses(intakeId: string): Promise<PrenupClause[]>;
   updateClauseExplanation(id: string, explanation: string): Promise<void>;
   
@@ -202,6 +203,26 @@ export class DatabaseStorage implements IStorage {
               ${clause.plainExplanation || null}, ${clause.category || null})
       RETURNING *
     `;
+    const row = result[0];
+    return {
+      id: row.id,
+      intakeId: row.intake_id,
+      clauseNumber: row.clause_number,
+      title: row.title,
+      legalText: row.legal_text,
+      plainExplanation: row.plain_explanation,
+      category: row.category,
+      createdAt: row.created_at,
+    } as PrenupClause;
+  }
+
+  async getPrenupClause(id: string): Promise<PrenupClause | undefined> {
+    const result = await sql`
+      SELECT * FROM prenup_clauses 
+      WHERE id = ${id}
+      LIMIT 1
+    `;
+    if (!result[0]) return undefined;
     const row = result[0];
     return {
       id: row.id,

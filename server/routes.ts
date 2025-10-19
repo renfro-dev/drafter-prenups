@@ -7,7 +7,32 @@ import { generatePrenup } from "./lib/anthropic-client";
 import { generateWordDocument } from "./utils/document-generator";
 import { sendEmail, generatePrenupEmail } from "./utils/email-sender";
 import { setupAuth, isAuthenticated } from "./replitAuth";
+import { parsePrenupClauses } from "./utils/clause-parser";
 import { z } from "zod";
+
+// Helper function to verify user has access to a clause
+async function verifyClauseAccess(clauseId: string, userId: string): Promise<{ authorized: boolean; clause?: any; intake?: any; error?: string }> {
+  try {
+    const clause = await storage.getPrenupClause(clauseId);
+    
+    if (!clause) {
+      return { authorized: false, error: 'Clause not found' };
+    }
+
+    const intake = await storage.getIntake(clause.intakeId);
+    if (!intake) {
+      return { authorized: false, error: 'Prenup not found' };
+    }
+
+    if (intake.partyAUserId !== userId && intake.partyBUserId !== userId) {
+      return { authorized: false, error: 'Unauthorized access to this clause' };
+    }
+
+    return { authorized: true, clause, intake };
+  } catch (error) {
+    return { authorized: false, error: 'Failed to verify access' };
+  }
+}
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Setup Replit Auth
@@ -29,16 +54,48 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get('/api/review/:intakeId/clauses', isAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user.claims.sub;
+      const userEmail = req.user.claims.email;
       const intakeId = req.params.intakeId;
       
-      // Verify user has access to this intake
+      // Get the intake
       const intake = await storage.getIntake(intakeId);
       if (!intake) {
         return res.status(404).json({ error: 'Prenup not found' });
       }
       
-      if (intake.partyAUserId !== userId && intake.partyBUserId !== userId) {
-        return res.status(403).json({ error: 'Unauthorized access to this prenup' });
+      // Check if user is already linked to this intake
+      if (intake.partyAUserId === userId || intake.partyBUserId === userId) {
+        // User is already linked, proceed
+        const clauses = await storage.getPrenupClauses(intakeId);
+        return res.json(clauses);
+      }
+      
+      // User not linked yet - link them based on strict email matching
+      // SECURITY: Only allow linking if user's email exactly matches a party email
+      const intakeData = intake.intakeData as any;
+      const partyAEmail = intakeData?.partyAEmail || intake.email;
+      const partyBEmail = intakeData?.partyBEmail;
+      
+      let linkedAs: 'A' | 'B' | null = null;
+      
+      // Require strict email matching - no fallback to prevent unauthorized access
+      if (userEmail && partyAEmail && userEmail.toLowerCase() === partyAEmail.toLowerCase()) {
+        linkedAs = 'A';
+      } else if (userEmail && partyBEmail && userEmail.toLowerCase() === partyBEmail.toLowerCase()) {
+        linkedAs = 'B';
+      }
+      
+      if (!linkedAs) {
+        return res.status(403).json({ 
+          error: 'Unauthorized access to this prenup. Your email does not match either party on this agreement.' 
+        });
+      }
+      
+      // Link the user to the intake
+      if (linkedAs === 'A') {
+        await storage.updateIntakeUsers(intakeId, userId, intake.partyBUserId || '');
+      } else {
+        await storage.updateIntakeUsers(intakeId, intake.partyAUserId || '', userId);
       }
 
       const clauses = await storage.getPrenupClauses(intakeId);
@@ -53,14 +110,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const userId = req.user.claims.sub;
       const clauseId = req.params.id;
-      const { intakeId } = req.body;
       
-      // Get the clause and verify access
-      const clauses = await storage.getPrenupClauses(intakeId);
-      const clause = clauses.find(c => c.id === clauseId);
-      if (!clause) {
-        return res.status(404).json({ error: 'Clause not found' });
+      // Verify access
+      const access = await verifyClauseAccess(clauseId, userId);
+      if (!access.authorized) {
+        return res.status(access.error === 'Clause not found' ? 404 : 403).json({ error: access.error });
       }
+
+      const clause = access.clause;
 
       // If already has explanation, return it
       if (clause.plainExplanation) {
@@ -84,6 +141,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const userId = req.user.claims.sub;
       const clauseId = req.params.id;
       const { question } = req.body;
+
+      // Verify access
+      const access = await verifyClauseAccess(clauseId, userId);
+      if (!access.authorized) {
+        return res.status(access.error === 'Clause not found' ? 404 : 403).json({ error: access.error });
+      }
 
       if (!question) {
         return res.status(400).json({ error: 'Question is required' });
@@ -117,6 +180,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const clauseId = req.params.id;
       const { reason } = req.body;
 
+      // Verify access
+      const access = await verifyClauseAccess(clauseId, userId);
+      if (!access.authorized) {
+        return res.status(access.error === 'Clause not found' ? 404 : 403).json({ error: access.error });
+      }
+
       const flag = await storage.createClauseFlag({
         prenupClauseId: clauseId,
         userId,
@@ -137,6 +206,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const clauseId = req.params.id;
       const { comment } = req.body;
 
+      // Verify access
+      const access = await verifyClauseAccess(clauseId, userId);
+      if (!access.authorized) {
+        return res.status(access.error === 'Clause not found' ? 404 : 403).json({ error: access.error });
+      }
+
       if (!comment) {
         return res.status(400).json({ error: 'Comment is required' });
       }
@@ -154,9 +229,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get('/api/clauses/:id/comments', isAuthenticated, async (req, res) => {
+  app.get('/api/clauses/:id/comments', isAuthenticated, async (req: any, res) => {
     try {
+      const userId = req.user.claims.sub;
       const clauseId = req.params.id;
+
+      // Verify access
+      const access = await verifyClauseAccess(clauseId, userId);
+      if (!access.authorized) {
+        return res.status(access.error === 'Clause not found' ? 404 : 403).json({ error: access.error });
+      }
+
       const comments = await storage.getClauseComments(clauseId);
       res.json(comments);
     } catch (error) {
@@ -165,9 +248,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get('/api/clauses/:id/flags', isAuthenticated, async (req, res) => {
+  app.get('/api/clauses/:id/flags', isAuthenticated, async (req: any, res) => {
     try {
+      const userId = req.user.claims.sub;
       const clauseId = req.params.id;
+
+      // Verify access
+      const access = await verifyClauseAccess(clauseId, userId);
+      if (!access.authorized) {
+        return res.status(access.error === 'Clause not found' ? 404 : 403).json({ error: access.error });
+      }
+
       const flags = await storage.getClauseFlags(clauseId);
       res.json(flags);
     } catch (error) {
@@ -176,9 +267,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get('/api/clauses/:id/questions', isAuthenticated, async (req, res) => {
+  app.get('/api/clauses/:id/questions', isAuthenticated, async (req: any, res) => {
     try {
+      const userId = req.user.claims.sub;
       const clauseId = req.params.id;
+
+      // Verify access
+      const access = await verifyClauseAccess(clauseId, userId);
+      if (!access.authorized) {
+        return res.status(access.error === 'Clause not found' ? 404 : 403).json({ error: access.error });
+      }
+
       const questions = await storage.getClauseQuestions(clauseId);
       res.json(questions);
     } catch (error) {
@@ -220,6 +319,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
         const documentUrl = `data:application/vnd.openxmlformats-officedocument.wordprocessingml.document;base64,${documentBuffer.toString('base64')}`;
 
         await storage.updateIntakePrenupUrl(intakeRecord.id, documentUrl);
+
+        // Parse prenup into reviewable clauses
+        const parsedClauses = parsePrenupClauses(validatedPrenup, intakeRecord.id);
+        
+        // Save clauses to database for collaborative review
+        for (const clause of parsedClauses) {
+          await storage.createPrenupClause(clause);
+        }
 
         await storage.createGenerationLog({
           intakeId: intakeRecord.id,
