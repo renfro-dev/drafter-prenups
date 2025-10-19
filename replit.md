@@ -13,6 +13,8 @@ All project documentation has been centralized in the **`Birds Eye/`** folder fo
 **Strategic Documentation** (`Birds Eye/` folder):
 - **`replit.md`** - Complete project architecture and technical overview
 - **`Design.md`** - Design system guidelines and UI/UX principles
+- **`seo-best-practices.md`** - SEO & LLM optimization best practices for blog posts
+- **`keyword-research.md`** - Keyword strategy and research
 - **`PRD.txt`** - Product Requirements Document
 - **`privacy-policy.md`** - Privacy policy documentation
 - **`Tech.txt`** - Technical architecture details
