@@ -1,7 +1,29 @@
 import { sql } from "drizzle-orm";
-import { pgTable, text, varchar, jsonb, timestamp, boolean, integer } from "drizzle-orm/pg-core";
+import { pgTable, text, varchar, jsonb, timestamp, boolean, integer, index } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
+
+// Session storage table - Required for Replit Auth
+export const sessions = pgTable(
+  "sessions",
+  {
+    sid: varchar("sid").primaryKey(),
+    sess: jsonb("sess").notNull(),
+    expire: timestamp("expire").notNull(),
+  },
+  (table) => [index("IDX_session_expire").on(table.expire)],
+);
+
+// User storage table - Required for Replit Auth
+export const users = pgTable("users", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  email: varchar("email").unique(),
+  firstName: varchar("first_name"),
+  lastName: varchar("last_name"),
+  profileImageUrl: varchar("profile_image_url"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
 
 // Intake table - stores user prenup intake data
 export const intakes = pgTable("intakes", {
@@ -10,6 +32,8 @@ export const intakes = pgTable("intakes", {
   state: text("state").notNull().default("CA"),
   partyAName: text("party_a_name"),
   partyBName: text("party_b_name"),
+  partyAUserId: varchar("party_a_user_id").references(() => users.id),
+  partyBUserId: varchar("party_b_user_id").references(() => users.id),
   weddingDate: text("wedding_date"),
   intakeData: jsonb("intake_data").notNull(),
   maskedData: jsonb("masked_data"),
@@ -41,6 +65,47 @@ export const generationLogs = pgTable("generation_logs", {
   completionTokens: integer("completion_tokens"),
   success: boolean("success").notNull().default(false),
   errorMessage: text("error_message"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+// Prenup Clauses - parsed clauses from generated documents for collaborative review
+export const prenupClauses = pgTable("prenup_clauses", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  intakeId: varchar("intake_id").references(() => intakes.id).notNull(),
+  clauseNumber: integer("clause_number").notNull(),
+  title: text("title").notNull(),
+  legalText: text("legal_text").notNull(),
+  plainExplanation: text("plain_explanation"),
+  category: text("category"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+// Clause Comments - comments from either party on specific clauses
+export const clauseComments = pgTable("clause_comments", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  prenupClauseId: varchar("prenup_clause_id").references(() => prenupClauses.id).notNull(),
+  userId: varchar("user_id").references(() => users.id).notNull(),
+  comment: text("comment").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+// Clause Flags - flags for clauses that need discussion
+export const clauseFlags = pgTable("clause_flags", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  prenupClauseId: varchar("prenup_clause_id").references(() => prenupClauses.id).notNull(),
+  userId: varchar("user_id").references(() => users.id).notNull(),
+  reason: text("reason"),
+  resolved: boolean("resolved").notNull().default(false),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+// Clause Questions - Q&A threads with AI for specific clauses
+export const clauseQuestions = pgTable("clause_questions", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  prenupClauseId: varchar("prenup_clause_id").references(() => prenupClauses.id).notNull(),
+  userId: varchar("user_id").references(() => users.id).notNull(),
+  question: text("question").notNull(),
+  answer: text("answer"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
@@ -81,6 +146,10 @@ export const insertClauseSchema = createInsertSchema(clauses).omit({
   createdAt: true,
 });
 
+// Auth types - Required for Replit Auth
+export type UpsertUser = typeof users.$inferInsert;
+export type User = typeof users.$inferSelect;
+
 // Types
 export type Intake = typeof intakes.$inferSelect;
 export type InsertIntake = z.infer<typeof insertIntakeSchema>;
@@ -89,6 +158,16 @@ export type Debt = z.infer<typeof debtSchema>;
 export type Clause = typeof clauses.$inferSelect;
 export type InsertClause = z.infer<typeof insertClauseSchema>;
 export type GenerationLog = typeof generationLogs.$inferSelect;
+
+// Collaborative review types
+export type PrenupClause = typeof prenupClauses.$inferSelect;
+export type InsertPrenupClause = typeof prenupClauses.$inferInsert;
+export type ClauseComment = typeof clauseComments.$inferSelect;
+export type InsertClauseComment = typeof clauseComments.$inferInsert;
+export type ClauseFlag = typeof clauseFlags.$inferSelect;
+export type InsertClauseFlag = typeof clauseFlags.$inferInsert;
+export type ClauseQuestion = typeof clauseQuestions.$inferSelect;
+export type InsertClauseQuestion = typeof clauseQuestions.$inferInsert;
 
 // PII Masking types
 export interface PIIMap {
