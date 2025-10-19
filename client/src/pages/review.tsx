@@ -102,7 +102,11 @@ function ClauseCard({ clause }: { clause: PrenupClause }) {
       const response = await apiRequest('POST', `/api/clauses/${clause.id}/explain`);
       return response;
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
+      // Update the clause with the explanation
+      if (data.explanation) {
+        clause.plainExplanation = data.explanation;
+      }
       setShowExplanation(true);
       toast({ title: "Explanation generated" });
     },
@@ -155,8 +159,8 @@ function ClauseCard({ clause }: { clause: PrenupClause }) {
     <>
       <Card 
         className={`relative ${
-          isFlagged ? 'border-l-4 border-l-[hsl(var(--warning))]' : 
-          hasComments ? 'border-l-4 border-l-[hsl(var(--comment))]' : 
+          isFlagged ? 'bg-[hsl(var(--warning))]/5 border-[hsl(var(--warning))]/30' : 
+          hasComments ? 'bg-[hsl(var(--comment))]/5 border-[hsl(var(--comment))]/30' : 
           ''
         }`}
         data-testid={`card-clause-${clause.id}`}
@@ -456,6 +460,9 @@ export default function Review() {
 
   const flaggedClauses = clauses.filter((_, i) => i % 3 === 0); // Mock: every 3rd clause is flagged
   const reviewedClauses = clauses.filter((_, i) => i % 2 === 0); // Mock: every 2nd clause is reviewed
+  const progressPercentage = clauses.length > 0 
+    ? Math.round((reviewedClauses.length / clauses.length) * 100) 
+    : 0;
 
   return (
     <div className="min-h-screen bg-background" data-testid="page-review">
@@ -470,7 +477,7 @@ export default function Review() {
           </div>
           <div className="flex items-center gap-2">
             <Badge className="bg-[hsl(var(--success))]/10 text-[hsl(var(--success))] border-[hsl(var(--success))]/20" data-testid="badge-progress">
-              {Math.round((reviewedClauses.length / clauses.length) * 100)}% Reviewed
+              {progressPercentage}% Reviewed
             </Badge>
           </div>
         </div>
