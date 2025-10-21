@@ -1,4 +1,4 @@
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { CheckCircle, Mail, Shield, FileText, ArrowRight, Download, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -7,6 +7,7 @@ import { SEOHead } from "@/components/seo-head";
 
 export default function Success() {
   const [result, setResult] = useState<any>(null);
+  const [, setLocation] = useLocation();
 
   useEffect(() => {
     const stored = localStorage.getItem('prenup-result');
@@ -16,10 +17,16 @@ export default function Success() {
       console.log('[Success Page] Parsed result:', parsed);
       setResult(parsed);
       localStorage.removeItem('prenup-result');
+      
+      // Redirect to review page if we have an intakeId
+      if (parsed.intakeId) {
+        console.log('[Success Page] Redirecting to review page:', `/review/${parsed.intakeId}`);
+        setLocation(`/review/${parsed.intakeId}`);
+      }
     } else {
       console.log('[Success Page] No result in localStorage');
     }
-  }, []);
+  }, [setLocation]);
 
   const handleDownload = () => {
     if (result?.downloadUrl) {

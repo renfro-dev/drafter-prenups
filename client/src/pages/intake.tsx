@@ -68,9 +68,17 @@ export default function Intake() {
     },
     onSuccess: (response: any) => {
       console.log('[Intake] API response:', response);
-      localStorage.setItem('prenup-result', JSON.stringify(response));
-      console.log('[Intake] Saved to localStorage');
-      setLocation("/success");
+      
+      // Redirect directly to review page if we have an intakeId
+      if (response.intakeId) {
+        console.log('[Intake] Redirecting to review page:', `/review/${response.intakeId}`);
+        setLocation(`/review/${response.intakeId}`);
+      } else {
+        // Fallback to success page if no intakeId (shouldn't happen)
+        console.warn('[Intake] No intakeId in response, falling back to success page');
+        localStorage.setItem('prenup-result', JSON.stringify(response));
+        setLocation("/success");
+      }
     },
     onError: (error: Error) => {
       console.error('[Intake] Error:', error);

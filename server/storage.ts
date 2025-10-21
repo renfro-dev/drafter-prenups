@@ -30,7 +30,7 @@ export interface IStorage {
   getIntake(id: string): Promise<Intake | undefined>;
   updateIntakePrenupUrl(id: string, url: string): Promise<void>;
   updateIntakeStatus(id: string, status: string): Promise<void>;
-  updateIntakeUsers(id: string, partyAUserId: string, partyBUserId: string): Promise<void>;
+  updateIntakeUsers(id: string, partyAUserId: string | null, partyBUserId: string | null): Promise<void>;
   
   // Legal clause library methods
   getClauses(jurisdiction: string, categories?: string[]): Promise<Clause[]>;
@@ -187,7 +187,7 @@ export class DatabaseStorage implements IStorage {
     } as User;
   }
 
-  async updateIntakeUsers(id: string, partyAUserId: string, partyBUserId: string): Promise<void> {
+  async updateIntakeUsers(id: string, partyAUserId: string | null, partyBUserId: string | null): Promise<void> {
     await sql`
       UPDATE intakes 
       SET party_a_user_id = ${partyAUserId}, party_b_user_id = ${partyBUserId}

@@ -70,19 +70,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.json(clauses);
       }
       
-      // User not linked yet - link them based on strict email matching
-      // SECURITY: Only allow linking if user's email exactly matches a party email
+      // User not linked yet - link them based on email matching
+      // SECURITY: Allow linking if user's email matches:
+      // 1. The delivery email (intake.email) - the person who generated it
+      // 2. Party A or Party B email if specified in intakeData
       const intakeData = intake.intakeData as any;
-      const partyAEmail = intakeData?.partyAEmail || intake.email;
+      const deliveryEmail = intake.email;
+      const partyAEmail = intakeData?.partyAEmail;
       const partyBEmail = intakeData?.partyBEmail;
       
       let linkedAs: 'A' | 'B' | null = null;
       
-      // Require strict email matching - no fallback to prevent unauthorized access
+      // First, try to match against explicit party emails if they exist
       if (userEmail && partyAEmail && userEmail.toLowerCase() === partyAEmail.toLowerCase()) {
         linkedAs = 'A';
       } else if (userEmail && partyBEmail && userEmail.toLowerCase() === partyBEmail.toLowerCase()) {
         linkedAs = 'B';
+      }
+      // If no explicit party emails matched, allow the delivery email holder to claim as Party A
+      else if (userEmail && deliveryEmail && userEmail.toLowerCase() === deliveryEmail.toLowerCase()) {
+        linkedAs = 'A';
       }
       
       if (!linkedAs) {
@@ -93,9 +100,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // Link the user to the intake
       if (linkedAs === 'A') {
-        await storage.updateIntakeUsers(intakeId, userId, intake.partyBUserId || '');
+        await storage.updateIntakeUsers(intakeId, userId, intake.partyBUserId || null);
       } else {
-        await storage.updateIntakeUsers(intakeId, intake.partyAUserId || '', userId);
+        await storage.updateIntakeUsers(intakeId, intake.partyAUserId || null, userId);
       }
 
       const clauses = await storage.getPrenupClauses(intakeId);
