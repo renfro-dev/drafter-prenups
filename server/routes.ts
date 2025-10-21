@@ -320,12 +320,28 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
         await storage.updateIntakePrenupUrl(intakeRecord.id, documentUrl);
 
-        // Parse prenup into reviewable clauses
-        const parsedClauses = parsePrenupClauses(validatedPrenup, intakeRecord.id);
-        
-        // Save clauses to database for collaborative review
-        for (const clause of parsedClauses) {
-          await storage.createPrenupClause(clause);
+        // Parse prenup into reviewable clauses for collaborative review
+        let clausesSaved = 0;
+        try {
+          console.log('[Clause Parsing] Starting to parse prenup into reviewable clauses...');
+          const parsedClauses = parsePrenupClauses(validatedPrenup, intakeRecord.id);
+          console.log(`[Clause Parsing] Successfully parsed ${parsedClauses.length} clauses`);
+          
+          if (parsedClauses.length === 0) {
+            console.warn('[Clause Parsing] WARNING: No clauses were parsed from the prenup. Review features will not be available.');
+          }
+          
+          // Save clauses to database for collaborative review
+          for (const clause of parsedClauses) {
+            await storage.createPrenupClause(clause);
+            clausesSaved++;
+          }
+          console.log(`[Clause Parsing] Successfully saved ${clausesSaved} clauses to database`);
+        } catch (clauseError) {
+          console.error('[Clause Parsing] ERROR: Failed to parse or save clauses:', clauseError);
+          console.error(`[Clause Parsing] Clauses saved before error: ${clausesSaved}`);
+          console.error('[Clause Parsing] Prenup generation will continue, but collaborative review features will not be available');
+          // Don't throw - allow generation to succeed even if clause parsing fails
         }
 
         await storage.createGenerationLog({

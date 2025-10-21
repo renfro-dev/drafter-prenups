@@ -245,7 +245,7 @@ export default function Intake() {
                                 {...field}
                               />
                             </FormControl>
-                            <FormDescription>Format: YYYY-MM-DD</FormDescription>
+                            <FormDescription>Select your expected wedding date</FormDescription>
                             <FormMessage />
                           </FormItem>
                         )}

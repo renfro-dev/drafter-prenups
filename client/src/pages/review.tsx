@@ -502,6 +502,47 @@ export default function Review() {
     );
   }
 
+  // Show helpful message if no clauses were parsed (but no error occurred)
+  if (!isLoading && !error && clauses.length === 0) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center" data-testid="no-clauses-fallback">
+        <Card className="max-w-2xl">
+          <CardHeader>
+            <div className="flex justify-center mb-4">
+              <div className="h-16 w-16 rounded-full bg-amber-500/10 flex items-center justify-center">
+                <AlertCircle className="h-8 w-8 text-amber-500" />
+              </div>
+            </div>
+            <CardTitle className="text-center text-2xl">Collaborative Review Not Available</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <p className="text-center text-muted-foreground">
+              Your prenuptial agreement was generated successfully, but the clause-by-clause review features aren't available for this document.
+            </p>
+            <div className="bg-muted/50 rounded-lg p-4 space-y-2">
+              <p className="text-sm font-medium">What happened?</p>
+              <p className="text-sm text-muted-foreground">
+                The system wasn't able to parse your prenup into individual clauses for review. This can happen if the document format doesn't match expected patterns.
+              </p>
+            </div>
+            <div className="bg-muted/50 rounded-lg p-4 space-y-2">
+              <p className="text-sm font-medium">What can you do?</p>
+              <ul className="text-sm text-muted-foreground space-y-1 list-disc list-inside">
+                <li>You should have received your prenup document via email</li>
+                <li>You can download it directly from your confirmation page</li>
+                <li>Review the document with your partner using the Word file</li>
+                <li>Consider having an attorney review it before signing</li>
+              </ul>
+            </div>
+            <p className="text-xs text-center text-muted-foreground pt-4">
+              Prenup ID: {prenupId} • Logged in as: {user?.email}
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
   const flaggedClauses = clauses.filter((_, i) => i % 3 === 0); // Mock: every 3rd clause is flagged
   const reviewedClauses = clauses.filter((_, i) => i % 2 === 0); // Mock: every 2nd clause is reviewed
   const progressPercentage = clauses.length > 0 
