@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useParams } from "wouter";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { queryClient, apiRequest } from "@/lib/queryClient";
+import { useAuth } from "@/hooks/useAuth";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -16,7 +17,9 @@ import {
   ChevronDown, 
   ChevronUp,
   Sparkles,
-  AlertCircle
+  AlertCircle,
+  LogIn,
+  Lock
 } from "lucide-react";
 import {
   Dialog,
@@ -425,13 +428,19 @@ function ClauseCard({ clause }: { clause: PrenupClause }) {
 export default function Review() {
   const params = useParams<{ prenupId: string }>();
   const prenupId = params.prenupId;
+  const { user, isAuthenticated, isLoading: authLoading } = useAuth();
 
   const { data: clauses = [], isLoading, error } = useQuery<PrenupClause[]>({
     queryKey: ['/api/review', prenupId, 'clauses'],
-    enabled: !!prenupId,
+    enabled: !!prenupId && isAuthenticated,
   });
 
-  if (isLoading) {
+  const handleLogin = () => {
+    window.location.href = "/api/login";
+  };
+
+  // Show loading while checking authentication
+  if (authLoading || isLoading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center" data-testid="loading-review">
         <div className="text-center">
@@ -444,14 +453,49 @@ export default function Review() {
     );
   }
 
+  // Show login prompt if not authenticated
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center" data-testid="login-prompt">
+        <Card className="max-w-md">
+          <CardHeader>
+            <div className="flex justify-center mb-4">
+              <div className="h-16 w-16 rounded-full bg-primary/10 flex items-center justify-center">
+                <Lock className="h-8 w-8 text-primary" />
+              </div>
+            </div>
+            <CardTitle className="text-center text-2xl">Login Required</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <p className="text-center text-muted-foreground">
+              You need to log in to view and review your prenuptial agreement.
+            </p>
+            <Button 
+              onClick={handleLogin} 
+              className="w-full" 
+              size="lg"
+              data-testid="button-login-to-review"
+            >
+              <LogIn className="h-5 w-5 mr-2" />
+              Login with Replit
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
   if (error) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center" data-testid="error-review">
         <div className="text-center max-w-md">
           <AlertCircle className="h-12 w-12 mx-auto mb-4 text-destructive" />
           <h2 className="text-xl font-semibold mb-2">Unable to Load Prenup</h2>
-          <p className="text-muted-foreground">
+          <p className="text-muted-foreground mb-4">
             We couldn't load your prenuptial agreement. Please check that you have access to this document.
+          </p>
+          <p className="text-sm text-muted-foreground">
+            Logged in as: <span className="font-medium">{user?.email}</span>
           </p>
         </div>
       </div>
