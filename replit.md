@@ -2,12 +2,14 @@
 
 ## Overview
 
-Drafter is a web application that enables couples to generate California-compliant prenuptial agreements through an AI-powered guided intake process. The platform addresses the high cost ($3,000-$10,000) and complexity of traditional prenuptial agreements by offering an automated solution at $49.
+Drafter is a collaborative web application that enables couples to generate and review California-compliant prenuptial agreements through an AI-powered platform. The platform addresses the high cost ($3,000-$10,000) and complexity of traditional prenuptial agreements by offering an automated solution at $49 with built-in collaboration tools.
 
-The system collects user information via a multi-step form, uses advanced PII (Personally Identifiable Information) masking to protect privacy, generates attorney-ready documents using Anthropic Claude AI with jurisdiction-specific legal clauses, and delivers the final prenup as a Word document via email.
+The system collects user information via a multi-step form, uses advanced PII (Personally Identifiable Information) masking to protect privacy, generates attorney-ready documents using Anthropic Claude AI with jurisdiction-specific legal clauses, and delivers the final prenup as a Word document via email. After generation, both parties can log in to review the prenup clause-by-clause, get AI explanations, flag concerns, add comments, and ask questions.
 
 **Core Value Proposition:**
 - **Privacy-First Architecture**: PII masking ensures sensitive information never reaches the AI in raw form
+- **Collaborative Review**: Both parties can review, discuss, and understand each clause together
+- **AI-Powered Explanations**: Get plain-English explanations of complex legal language
 - **Legal Accuracy**: Uses curated California Family Code-compliant clauses
 - **Speed**: Complete prenup generation in under 10 minutes
 - **Affordability**: $49 vs $3,000-$10,000 traditional cost
@@ -28,7 +30,13 @@ Preferred communication style: Simple, everyday language.
 **UI Component System**: 
 - Shadcn/ui component library (Radix UI primitives)
 - Tailwind CSS for styling with custom design tokens
-- Professional legal tech aesthetic inspired by Stripe/Linear
+- Professional legal tech aesthetic: Navy-slate backgrounds, trust blue accents, serif fonts for legal text
+
+**Authentication**:
+- Replit Auth (OIDC) integration for secure user login
+- Global Header component with login/logout functionality
+- Protected routes with authentication checks
+- Graceful 401 handling (returns null instead of throwing errors)
 
 **Routing**: Wouter (lightweight client-side routing)
 
@@ -41,12 +49,16 @@ Preferred communication style: Simple, everyday language.
 - `/` - Homepage with feature overview, FAQ, and conversion CTAs
 - `/intake` - Multi-step intake form (4 steps: Personal Info → Assets/Debts → Preferences → Review)
 - `/success` - Document delivery confirmation with download option
+- `/review/:prenupId` - **NEW** Collaborative clause-by-clause review interface with AI explanations, flags, comments, and Q&A
 - `/states/california/*` - State-specific landing pages and guides
 - `/blog/*` - SEO-optimized educational content
 - `/privacy-policy` - Privacy policy with PII masking explanation
 
 **Design System**:
 - Light/dark mode support via CSS custom properties
+- Legal SaaS aesthetic: Navy-slate (220 20% 10%), trust blue (215 80% 55%)
+- Status colors: Success green, warning amber, comment purple
+- Serif fonts (font-serif) for legal text, sans-serif for UI
 - Consistent spacing, border radius, and color tokens
 - Accessibility-first with ARIA labels and semantic HTML
 
