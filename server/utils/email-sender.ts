@@ -1,4 +1,4 @@
-import nodemailer from 'nodemailer';
+import sgMail from '@sendgrid/mail';
 
 interface EmailOptions {
   to: string;
@@ -12,26 +12,30 @@ interface EmailOptions {
 }
 
 export async function sendEmail(options: EmailOptions): Promise<void> {
-  const port = parseInt(process.env.SMTP_PORT || '587');
-  const secure = port === 465;
+  const apiKey = process.env.SENDGRID_API_KEY;
   
-  const transporter = nodemailer.createTransport({
-    host: process.env.SMTP_HOST || 'smtp.gmail.com',
-    port,
-    secure,
-    auth: {
-      user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASS,
-    },
-  });
+  if (!apiKey) {
+    throw new Error('SENDGRID_API_KEY environment variable is not set');
+  }
 
-  await transporter.sendMail({
-    from: process.env.SMTP_FROM || process.env.SMTP_USER,
+  sgMail.setApiKey(apiKey);
+
+  const fromEmail = process.env.SENDGRID_FROM_EMAIL || 'noreply@drafter.com';
+
+  const msg = {
     to: options.to,
+    from: fromEmail,
     subject: options.subject,
     html: options.htmlBody,
-    attachments: options.attachments,
-  });
+    attachments: options.attachments?.map(att => ({
+      filename: att.filename,
+      content: att.content.toString('base64'),
+      type: att.contentType,
+      disposition: 'attachment',
+    })),
+  };
+
+  await sgMail.send(msg);
 }
 
 export function generatePrenupEmail(partyAName: string, partyBName: string): string {
