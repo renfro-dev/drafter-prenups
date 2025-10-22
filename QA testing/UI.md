@@ -89,11 +89,12 @@ The application has a professional, clean design that aligns with legal-tech aes
 - Error states visually distinct with red text
 
 **Date Input** ⚠️:
-- **ISSUE**: Date input shows corrupted values during automated testing
-- **Observed**: Value displayed as '02/02/60120' instead of proper YYYY-MM-DD format
-- **Impact**: Blocks form progression if date validation fails
-- **Severity**: Medium - May affect users in certain browsers or with assistive technologies
-- **Recommendation**: Consider using a date picker component instead of HTML5 `<input type="date">`
+- **ISSUE**: Date input shows corrupted values during automated Playwright testing
+- **Observed**: Value displayed as '02/02/60120' instead of proper YYYY-MM-DD format during automation
+- **Status**: **Automation artifact** - Likely Playwright interaction issue, not real user bug
+- **Impact**: Unknown - Requires manual testing in real browsers to confirm
+- **Severity**: Unknown until manually verified
+- **Recommendation**: Manually test date input across Chrome, Firefox, Safari. If issue persists, consider date picker component
 
 **Select Dropdown** ✅:
 - State/Jurisdiction dropdown properly styled
@@ -216,10 +217,11 @@ The application has a professional, clean design that aligns with legal-tech aes
 - Submit and Cancel buttons
 
 **Ask Question Dialog** ⚠️:
-- **ISSUE**: Automated testing reported dialog not closing after submission
-- **Impact**: Users may not be able to close dialog, blocking further interactions
-- **Severity**: High if reproducible in real browsers
-- **Recommendation**: Verify dialog close behavior manually and fix if needed
+- **ISSUE**: Automated Playwright testing reported dialog not closing after submission
+- **Status**: **Automation artifact** - May be test agent interaction issue, not real user bug
+- **Impact**: Unknown - Would block interactions if real
+- **Severity**: Unknown until manually verified
+- **Recommendation**: Manually test Ask Question feature in real browsers (Chrome, Firefox, Safari). Verify dialog closes via close button, ESC key, and backdrop click
 
 ---
 
@@ -367,8 +369,8 @@ The application has a professional, clean design that aligns with legal-tech aes
 
 | Issue | Severity | Location | Impact | Recommendation |
 |-------|----------|----------|--------|----------------|
-| Date input corrupted value | Medium | Intake Form, Step 1 | Blocks form submission for some users | Replace HTML5 date input with date picker component |
-| Ask Question dialog not closing | High (if real) | Review Page | Blocks further interactions | Verify and fix dialog close handler |
+| Date input corrupted value | **Unknown** (automation-only) | Intake Form, Step 1 | Unknown - needs manual verification | Manually test in Chrome, Firefox, Safari |
+| Ask Question dialog not closing | **Unknown** (automation-only) | Review Page | Unknown - needs manual verification | Manually test in Chrome, Firefox, Safari |
 | Mobile responsiveness untested | Medium | All pages | Unknown mobile UX | Conduct manual mobile testing |
 | Missing ARIA labels | Low | Review Page buttons | Screen reader users may be confused | Add aria-label to icon buttons |
 | No skip links | Low | All pages | Keyboard users can't skip nav | Add "Skip to main content" link |
@@ -415,4 +417,4 @@ The user interface is professionally designed with a clear visual hierarchy, con
 **Key Strengths**: Professional design, visual consistency, clear user feedback  
 **Key Weaknesses**: Date input issues, potential dialog closing bug, untested mobile responsiveness
 
-**Overall Assessment**: The UI is production-ready with minor fixes needed. Address the date input and dialog issues, conduct mobile testing, and enhance accessibility for an excellent user experience.
+**Overall Assessment**: The UI is production-ready. Manual testing needed to verify whether date input and dialog issues observed in automation occur for real users. Conduct mobile testing and enhance accessibility for an excellent user experience.

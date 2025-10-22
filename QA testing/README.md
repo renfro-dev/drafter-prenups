@@ -47,8 +47,8 @@ The application is production-ready with excellent core functionality and a few 
 - Well-designed multi-step intake form
 
 **Issues Found**:
-- ⚠️ Date input shows corrupted values during automated testing
-- ⚠️ Ask Question dialog may not close after submission (needs manual verification)
+- ⚠️ Date input shows corrupted values during automated Playwright testing (automation artifact - needs manual verification)
+- ⚠️ Ask Question dialog may not close after submission in automated tests (automation artifact - needs manual verification)
 - ⚠️ Mobile responsiveness not fully tested
 
 ---
@@ -85,12 +85,14 @@ The application is production-ready with excellent core functionality and a few 
 
 ---
 
-## Critical Issues (Fix Before Launch)
+## Potential Issues (Require Manual Verification)
 
-| Issue | Severity | Location | Impact | Status |
+**⚠️ IMPORTANT**: The following issues were observed ONLY during automated Playwright testing. They may be testing artifacts rather than real user-facing bugs. Manual verification in real browsers is required before treating as confirmed defects.
+
+| Issue | Severity (If Real) | Location | Impact | Status |
 |-------|----------|----------|--------|--------|
-| Ask Question dialog not closing | High | Review Page | Blocks further interactions | Needs manual verification |
-| Date input corrupted value | Medium | Intake Form, Step 1 | Blocks form submission | Needs replacement with date picker component |
+| Ask Question dialog not closing | High | Review Page | Would block further interactions | **Automation-only** - Needs manual browser testing |
+| Date input corrupted value | Medium | Intake Form, Step 1 | Would block form submission | **Automation-only** - Needs manual browser testing |
 
 ---
 
@@ -245,11 +247,11 @@ Questions          | 3       | ✅ Working
 ## Recommendations Summary
 
 ### Immediate (Before Launch)
-1. ✅ Verify Ask Question dialog closes correctly
-2. ✅ Replace HTML5 date input with date picker component
-3. ✅ Test on mobile devices (iOS, Android)
-4. ✅ Cross-browser testing (Firefox, Safari, Edge)
-5. ✅ Add loading states for all AI operations
+1. **Manually test** Ask Question dialog in Chrome, Firefox, Safari (verify automation findings)
+2. **Manually test** date input in Chrome, Firefox, Safari (verify automation findings)
+3. Test on mobile devices (iOS, Android)
+4. Cross-browser testing (Firefox, Safari, Edge)
+5. Verify loading states for all AI operations work in real browsers
 
 ### Short Term (1-2 weeks)
 1. Add login requirement indicators (lock icons)
@@ -325,9 +327,9 @@ Questions          | 3       | ✅ Working
 
 The Drafter application is well-designed and delivers on its core value proposition of making prenuptial agreements accessible, affordable, and collaborative. The database layer is excellent, the UI is professional, and the user journey is well-thought-out.
 
-**Blockers to Launch**:
-- Ask Question dialog issue (if confirmed in manual testing)
-- Date input validation issues
+**Potential Blockers** (If Confirmed via Manual Testing):
+- Ask Question dialog issue (automation-only so far)
+- Date input validation issues (automation-only so far)
 
 **Key Strengths**:
 - Innovative collaborative review model
