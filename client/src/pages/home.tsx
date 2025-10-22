@@ -184,7 +184,7 @@ export default function Home() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
             <div className="flex items-center space-x-2">
-              <Shield className="h-7 w-7 text-primary" />
+              <img src={drafterLogo} alt="Drafter Logo" className="h-7 w-7 object-contain" />
               <span className="text-xl font-bold tracking-tight">Drafter</span>
             </div>
             <div className="flex items-center space-x-4">
