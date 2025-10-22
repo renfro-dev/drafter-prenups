@@ -266,27 +266,33 @@ export class DatabaseStorage implements IStorage {
   }
 
   async createClauseComment(comment: InsertClauseComment): Promise<ClauseComment> {
+    console.log('[Storage] Creating comment:', { prenupClauseId: comment.prenupClauseId, userId: comment.userId });
     const result = await sql`
       INSERT INTO clause_comments (prenup_clause_id, user_id, comment)
       VALUES (${comment.prenupClauseId}, ${comment.userId}, ${comment.comment})
       RETURNING *
     `;
+    console.log('[Storage] Comment insert result:', result.length, 'rows');
     const row = result[0];
-    return {
+    const commentRecord = {
       id: row.id,
       prenupClauseId: row.prenup_clause_id,
       userId: row.user_id,
       comment: row.comment,
       createdAt: row.created_at,
     } as ClauseComment;
+    console.log('[Storage] Returning comment:', commentRecord.id);
+    return commentRecord;
   }
 
   async getClauseComments(prenupClauseId: string): Promise<ClauseComment[]> {
+    console.log('[Storage] Getting comments for clause:', prenupClauseId);
     const result = await sql`
       SELECT * FROM clause_comments 
       WHERE prenup_clause_id = ${prenupClauseId}
       ORDER BY created_at
     `;
+    console.log('[Storage] Found', result.length, 'comments');
     return result.map(row => ({
       id: row.id,
       prenupClauseId: row.prenup_clause_id,

@@ -209,21 +209,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const clauseId = req.params.id;
       const { comment } = req.body;
 
+      console.log('[Comment] POST /api/clauses/:id/comment', { clauseId, userId, comment: comment?.substring(0, 50) });
+
       // Verify access
       const access = await verifyClauseAccess(clauseId, userId);
       if (!access.authorized) {
+        console.log('[Comment] Access denied:', access.error);
         return res.status(access.error === 'Clause not found' ? 404 : 403).json({ error: access.error });
       }
 
       if (!comment) {
+        console.log('[Comment] Comment is required');
         return res.status(400).json({ error: 'Comment is required' });
       }
 
+      console.log('[Comment] Creating comment...');
       const commentRecord = await storage.createClauseComment({
         prenupClauseId: clauseId,
         userId,
         comment,
       });
+      console.log('[Comment] Comment created:', commentRecord.id);
 
       res.json(commentRecord);
     } catch (error) {
@@ -237,13 +243,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const userId = req.user.claims.sub;
       const clauseId = req.params.id;
 
+      console.log('[Comment] GET /api/clauses/:id/comments', { clauseId, userId });
+
       // Verify access
       const access = await verifyClauseAccess(clauseId, userId);
       if (!access.authorized) {
+        console.log('[Comment] GET Access denied:', access.error);
         return res.status(access.error === 'Clause not found' ? 404 : 403).json({ error: access.error });
       }
 
       const comments = await storage.getClauseComments(clauseId);
+      console.log('[Comment] GET Retrieved', comments.length, 'comments');
       res.json(comments);
     } catch (error) {
       console.error('Error fetching comments:', error);
