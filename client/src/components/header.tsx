@@ -23,7 +23,7 @@ export function Header() {
           <img
             src={drafterLogo}
             alt="Drafter Logo"
-            className="h-24 w-24 object-contain"
+            className="h-10 w-10 object-contain"
             data-testid="logo-image"
           />
           Drafter
