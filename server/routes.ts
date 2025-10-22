@@ -456,6 +456,94 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Test email endpoint (development only)
+  app.post('/api/test-email', async (req, res) => {
+    try {
+      const { to } = req.body;
+      
+      if (!to) {
+        return res.status(400).json({ error: 'Email recipient required' });
+      }
+
+      const testHtmlBody = `
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 30px;
+      border-radius: 8px;
+      text-align: center;
+    }
+    .content {
+      background: #f9fafb;
+      padding: 30px;
+      border-radius: 8px;
+      margin-top: 20px;
+    }
+    .success-badge {
+      display: inline-block;
+      background: #10b981;
+      color: white;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-weight: bold;
+      margin: 10px 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>✅ SendGrid Test Email</h1>
+  </div>
+  <div class="content">
+    <div class="success-badge">Configuration Verified</div>
+    <p>Hi there!</p>
+    <p>This is a test email from your Drafter application to verify that SendGrid is configured correctly.</p>
+    <p><strong>Test Details:</strong></p>
+    <ul>
+      <li>Sent at: ${new Date().toLocaleString()}</li>
+      <li>From: Drafter Platform</li>
+      <li>Method: SendGrid Web API</li>
+    </ul>
+    <p>If you're reading this, your email delivery is working perfectly! 🎉</p>
+    <p>Best regards,<br>The Drafter Team</p>
+  </div>
+</body>
+</html>
+      `.trim();
+
+      await sendEmail({
+        to,
+        subject: '✅ Drafter - SendGrid Test Email',
+        htmlBody: testHtmlBody,
+      });
+
+      res.json({ 
+        success: true, 
+        message: `Test email sent successfully to ${to}`,
+        timestamp: new Date().toISOString()
+      });
+    } catch (error: any) {
+      console.error('Test email failed:', error);
+      res.status(500).json({ 
+        error: 'Failed to send test email',
+        details: error.message,
+        response: error.response?.body
+      });
+    }
+  });
+
   // SEO: Sitemap.xml
   app.get("/sitemap.xml", (req, res) => {
     const baseUrl = process.env.NODE_ENV === 'production' 
