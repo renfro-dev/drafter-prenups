@@ -753,7 +753,7 @@ export default function Home() {
             <div className="grid md:grid-cols-4 gap-8 mb-8">
               <div className="space-y-4">
                 <div className="flex items-center space-x-2">
-                  <Shield className="h-6 w-6 text-primary" />
+                  <img src={drafterLogo} alt="Drafter Logo" className="h-6 w-6 object-contain" />
                   <span className="text-lg font-bold">Drafter</span>
                 </div>
                 <p className="text-sm text-muted-foreground">
