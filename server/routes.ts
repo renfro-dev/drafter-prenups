@@ -54,11 +54,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get('/api/review/:intakeId/clauses', async (req: any, res) => {
     try {
       const intakeId = req.params.intakeId;
+      if (process.env.NODE_ENV === 'development') {
+        console.log('[Review] GET /api/review/:intakeId/clauses', { intakeId, authenticated: !!req.user });
+      }
       
       // Get the intake
       const intake = await storage.getIntake(intakeId);
       if (!intake) {
+        if (process.env.NODE_ENV === 'development') {
+          console.log('[Review] Prenup not found:', intakeId);
+        }
         return res.status(404).json({ error: 'Prenup not found' });
+      }
+      if (process.env.NODE_ENV === 'development') {
+        console.log('[Review] Intake found:', { id: intake.id, status: intake.status });
       }
       
       // If user is authenticated, try to link them to the intake
@@ -102,6 +111,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       // Return clauses regardless of authentication status
       const clauses = await storage.getPrenupClauses(intakeId);
+      if (process.env.NODE_ENV === 'development') {
+        console.log('[Review] Returning clauses:', clauses.length);
+      }
       res.json(clauses);
     } catch (error) {
       console.error('Error fetching prenup clauses:', error);
