@@ -32,11 +32,16 @@ Preferred communication style: Simple, everyday language.
 - Tailwind CSS for styling with custom design tokens
 - Professional legal tech aesthetic: Navy-slate backgrounds, trust blue accents, serif fonts for legal text
 
-**Authentication**:
+**Authentication & Access Control**:
 - Replit Auth (OIDC) integration for secure user login
 - Global Header component with login/logout functionality
-- Protected routes with authentication checks
+- **UUID-Based Access Model**:
+  - Viewing prenups: NO authentication required (UUID in URL acts as access token)
+  - Collaborative features (Explain, Flag, Comment, Ask): Authentication required
+  - Any authenticated user with the UUID link can use collaborative features
+  - No email matching required - supports users with multiple email accounts
 - Graceful 401 handling (returns null instead of throwing errors)
+- Login prompts appear when unauthenticated users try to use collaborative features
 
 **Routing**: Wouter (lightweight client-side routing)
 
