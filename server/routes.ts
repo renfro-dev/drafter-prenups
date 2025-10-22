@@ -11,6 +11,8 @@ import { parsePrenupClauses } from "./utils/clause-parser";
 import { z } from "zod";
 
 // Helper function to verify user has access to a clause
+// ACCESS CONTROL: UUID in URL acts as access token
+// Any authenticated user with the link can use collaborative features
 async function verifyClauseAccess(clauseId: string, userId: string): Promise<{ authorized: boolean; clause?: any; intake?: any; error?: string }> {
   try {
     const clause = await storage.getPrenupClause(clauseId);
@@ -24,10 +26,7 @@ async function verifyClauseAccess(clauseId: string, userId: string): Promise<{ a
       return { authorized: false, error: 'Prenup not found' };
     }
 
-    if (intake.partyAUserId !== userId && intake.partyBUserId !== userId) {
-      return { authorized: false, error: 'Unauthorized access to this clause' };
-    }
-
+    // UUID in URL acts as access token - if you're authenticated and have the link, you can collaborate
     return { authorized: true, clause, intake };
   } catch (error) {
     return { authorized: false, error: 'Failed to verify access' };
@@ -51,10 +50,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Collaborative review endpoints
-  app.get('/api/review/:intakeId/clauses', isAuthenticated, async (req: any, res) => {
+  // View prenup clauses - NO AUTH REQUIRED (UUID acts as access token)
+  app.get('/api/review/:intakeId/clauses', async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
-      const userEmail = req.user.claims.email;
       const intakeId = req.params.intakeId;
       
       // Get the intake
@@ -63,48 +61,46 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ error: 'Prenup not found' });
       }
       
-      // Check if user is already linked to this intake
-      if (intake.partyAUserId === userId || intake.partyBUserId === userId) {
-        // User is already linked, proceed
-        const clauses = await storage.getPrenupClauses(intakeId);
-        return res.json(clauses);
-      }
-      
-      // User not linked yet - link them based on email matching
-      // SECURITY: Allow linking if user's email matches:
-      // 1. The delivery email (intake.email) - the person who generated it
-      // 2. Party A or Party B email if specified in intakeData
-      const intakeData = intake.intakeData as any;
-      const deliveryEmail = intake.email;
-      const partyAEmail = intakeData?.partyAEmail;
-      const partyBEmail = intakeData?.partyBEmail;
-      
-      let linkedAs: 'A' | 'B' | null = null;
-      
-      // First, try to match against explicit party emails if they exist
-      if (userEmail && partyAEmail && userEmail.toLowerCase() === partyAEmail.toLowerCase()) {
-        linkedAs = 'A';
-      } else if (userEmail && partyBEmail && userEmail.toLowerCase() === partyBEmail.toLowerCase()) {
-        linkedAs = 'B';
-      }
-      // If no explicit party emails matched, allow the delivery email holder to claim as Party A
-      else if (userEmail && deliveryEmail && userEmail.toLowerCase() === deliveryEmail.toLowerCase()) {
-        linkedAs = 'A';
-      }
-      
-      if (!linkedAs) {
-        return res.status(403).json({ 
-          error: 'Unauthorized access to this prenup. Your email does not match either party on this agreement.' 
-        });
-      }
-      
-      // Link the user to the intake
-      if (linkedAs === 'A') {
-        await storage.updateIntakeUsers(intakeId, userId, intake.partyBUserId || null);
-      } else {
-        await storage.updateIntakeUsers(intakeId, intake.partyAUserId || null, userId);
+      // If user is authenticated, try to link them to the intake
+      if (req.user?.claims) {
+        const userId = req.user.claims.sub;
+        const userEmail = req.user.claims.email;
+        
+        // Check if user is already linked to this intake
+        const isAlreadyLinked = intake.partyAUserId === userId || intake.partyBUserId === userId;
+        
+        if (!isAlreadyLinked) {
+          // User not linked yet - try to link them based on email matching
+          const intakeData = intake.intakeData as any;
+          const deliveryEmail = intake.email;
+          const partyAEmail = intakeData?.partyAEmail;
+          const partyBEmail = intakeData?.partyBEmail;
+          
+          let linkedAs: 'A' | 'B' | null = null;
+          
+          // First, try to match against explicit party emails if they exist
+          if (userEmail && partyAEmail && userEmail.toLowerCase() === partyAEmail.toLowerCase()) {
+            linkedAs = 'A';
+          } else if (userEmail && partyBEmail && userEmail.toLowerCase() === partyBEmail.toLowerCase()) {
+            linkedAs = 'B';
+          }
+          // If no explicit party emails matched, allow the delivery email holder to claim as Party A
+          else if (userEmail && deliveryEmail && userEmail.toLowerCase() === deliveryEmail.toLowerCase()) {
+            linkedAs = 'A';
+          }
+          
+          // Link the user to the intake if we found a match
+          if (linkedAs) {
+            if (linkedAs === 'A') {
+              await storage.updateIntakeUsers(intakeId, userId, intake.partyBUserId || null);
+            } else {
+              await storage.updateIntakeUsers(intakeId, intake.partyAUserId || null, userId);
+            }
+          }
+        }
       }
 
+      // Return clauses regardless of authentication status
       const clauses = await storage.getPrenupClauses(intakeId);
       res.json(clauses);
     } catch (error) {

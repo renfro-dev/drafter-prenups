@@ -163,12 +163,15 @@ export class DatabaseStorage implements IStorage {
   }
 
   async upsertUser(userData: UpsertUser): Promise<User> {
+    // Handle conflicts on email to support:
+    // 1. Same user logging in again (email match)
+    // 2. Different OIDC sub but same email (update existing record, keep ID stable)
+    // NOTE: We keep the user ID stable to avoid breaking foreign key references
     const result = await sql`
       INSERT INTO users (id, email, first_name, last_name, profile_image_url)
       VALUES (${userData.id}, ${userData.email}, ${userData.firstName || null}, 
               ${userData.lastName || null}, ${userData.profileImageUrl || null})
-      ON CONFLICT (id) DO UPDATE SET
-        email = EXCLUDED.email,
+      ON CONFLICT (email) DO UPDATE SET
         first_name = EXCLUDED.first_name,
         last_name = EXCLUDED.last_name,
         profile_image_url = EXCLUDED.profile_image_url,

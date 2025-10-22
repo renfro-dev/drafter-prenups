@@ -74,7 +74,7 @@ interface ClauseQuestion {
   createdAt: Date;
 }
 
-function ClauseCard({ clause }: { clause: PrenupClause }) {
+function ClauseCard({ clause, isAuthenticated }: { clause: PrenupClause; isAuthenticated: boolean }) {
   const { toast } = useToast();
   const [showExplanation, setShowExplanation] = useState(false);
   const [flagDialogOpen, setFlagDialogOpen] = useState(false);
@@ -83,20 +83,24 @@ function ClauseCard({ clause }: { clause: PrenupClause }) {
   const [flagReason, setFlagReason] = useState("");
   const [commentText, setCommentText] = useState("");
   const [questionText, setQuestionText] = useState("");
+  const [loginPromptOpen, setLoginPromptOpen] = useState(false);
 
-  // Fetch comments
+  // Fetch comments (only if authenticated)
   const { data: comments = [] } = useQuery<ClauseComment[]>({
     queryKey: ['/api/clauses', clause.id, 'comments'],
+    enabled: isAuthenticated,
   });
 
-  // Fetch flags
+  // Fetch flags (only if authenticated)
   const { data: flags = [] } = useQuery<ClauseFlag[]>({
     queryKey: ['/api/clauses', clause.id, 'flags'],
+    enabled: isAuthenticated,
   });
 
-  // Fetch questions
+  // Fetch questions (only if authenticated)
   const { data: questions = [] } = useQuery<ClauseQuestion[]>({
     queryKey: ['/api/clauses', clause.id, 'questions'],
+    enabled: isAuthenticated,
   });
 
   // Get explanation mutation
@@ -218,7 +222,7 @@ function ClauseCard({ clause }: { clause: PrenupClause }) {
             <Button
               variant="outline"
               size="sm"
-              onClick={() => explainMutation.mutate()}
+              onClick={() => isAuthenticated ? explainMutation.mutate() : setLoginPromptOpen(true)}
               disabled={explainMutation.isPending}
               className="w-full"
               data-testid={`button-explain-${clause.id}`}
@@ -299,7 +303,7 @@ function ClauseCard({ clause }: { clause: PrenupClause }) {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => setFlagDialogOpen(true)}
+                onClick={() => isAuthenticated ? setFlagDialogOpen(true) : setLoginPromptOpen(true)}
                 className={isFlagged ? "border-[hsl(var(--warning))] text-[hsl(var(--warning))]" : ""}
                 data-testid={`button-flag-${clause.id}`}
               >
@@ -309,7 +313,7 @@ function ClauseCard({ clause }: { clause: PrenupClause }) {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => setCommentDialogOpen(true)}
+                onClick={() => isAuthenticated ? setCommentDialogOpen(true) : setLoginPromptOpen(true)}
                 data-testid={`button-comment-${clause.id}`}
               >
                 <MessageSquare className="h-4 w-4 mr-2" />
@@ -318,7 +322,7 @@ function ClauseCard({ clause }: { clause: PrenupClause }) {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => setQuestionDialogOpen(true)}
+                onClick={() => isAuthenticated ? setQuestionDialogOpen(true) : setLoginPromptOpen(true)}
                 data-testid={`button-ask-${clause.id}`}
               >
                 <HelpCircle className="h-4 w-4 mr-2" />
@@ -421,6 +425,33 @@ function ClauseCard({ clause }: { clause: PrenupClause }) {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* Login Prompt Dialog */}
+      <Dialog open={loginPromptOpen} onOpenChange={setLoginPromptOpen}>
+        <DialogContent data-testid="dialog-login-prompt">
+          <DialogHeader>
+            <div className="flex justify-center mb-4">
+              <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center">
+                <LogIn className="h-6 w-6 text-primary" />
+              </div>
+            </div>
+            <DialogTitle className="text-center">Login to Collaborate</DialogTitle>
+            <DialogDescription className="text-center">
+              You need to log in to use collaborative features like explanations, comments, flags, and questions.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="sm:justify-center">
+            <Button 
+              onClick={() => window.location.href = "/api/login"}
+              className="w-full sm:w-auto"
+              data-testid="button-login-from-dialog"
+            >
+              <LogIn className="h-4 w-4 mr-2" />
+              Login with Replit
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }
@@ -432,15 +463,15 @@ export default function Review() {
 
   const { data: clauses = [], isLoading, error } = useQuery<PrenupClause[]>({
     queryKey: ['/api/review', prenupId, 'clauses'],
-    enabled: !!prenupId && isAuthenticated,
+    enabled: !!prenupId,
   });
 
   const handleLogin = () => {
     window.location.href = "/api/login";
   };
 
-  // Show loading while checking authentication
-  if (authLoading || isLoading) {
+  // Show loading while fetching prenup
+  if (isLoading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center" data-testid="loading-review">
         <div className="text-center">
@@ -449,38 +480,6 @@ export default function Review() {
           </div>
           <p className="text-lg text-muted-foreground">Loading your prenup...</p>
         </div>
-      </div>
-    );
-  }
-
-  // Show login prompt if not authenticated
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center" data-testid="login-prompt">
-        <Card className="max-w-md">
-          <CardHeader>
-            <div className="flex justify-center mb-4">
-              <div className="h-16 w-16 rounded-full bg-primary/10 flex items-center justify-center">
-                <Lock className="h-8 w-8 text-primary" />
-              </div>
-            </div>
-            <CardTitle className="text-center text-2xl">Login Required</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <p className="text-center text-muted-foreground">
-              You need to log in to view and review your prenuptial agreement.
-            </p>
-            <Button 
-              onClick={handleLogin} 
-              className="w-full" 
-              size="lg"
-              data-testid="button-login-to-review"
-            >
-              <LogIn className="h-5 w-5 mr-2" />
-              Login with Replit
-            </Button>
-          </CardContent>
-        </Card>
       </div>
     );
   }
@@ -618,7 +617,7 @@ export default function Review() {
           </div>
 
           {clauses.map((clause) => (
-            <ClauseCard key={clause.id} clause={clause} />
+            <ClauseCard key={clause.id} clause={clause} isAuthenticated={isAuthenticated} />
           ))}
         </div>
       </div>
