@@ -39,7 +39,8 @@ export function getSession() {
     saveUninitialized: false,
     cookie: {
       httpOnly: true,
-      secure: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
       maxAge: sessionTtl,
     },
   });
@@ -79,9 +80,12 @@ export async function setupAuth(app: Express) {
     tokens: client.TokenEndpointResponse & client.TokenEndpointResponseHelpers,
     verified: passport.AuthenticateCallback
   ) => {
+    const claims = tokens.claims();
+    console.log('[Auth] Verify function called for user:', claims?.email);
     const user = {};
     updateUserSession(user, tokens);
-    await upsertUser(tokens.claims());
+    await upsertUser(claims);
+    console.log('[Auth] User upserted successfully:', claims?.sub);
     verified(null, user);
   };
 
@@ -124,15 +128,25 @@ export async function setupAuth(app: Express) {
   });
 
   app.get("/api/callback", (req, res, next) => {
+    console.log('[Auth] Callback received');
     passport.authenticate(`replitauth:${req.hostname}`, (err: any, user: any) => {
-      if (err || !user) {
+      if (err) {
+        console.error('[Auth] Authentication error:', err);
+        return res.redirect("/api/login");
+      }
+      if (!user) {
+        console.error('[Auth] No user returned from authentication');
         return res.redirect("/api/login");
       }
       
+      console.log('[Auth] User authenticated, logging in...');
       req.logIn(user, (err) => {
         if (err) {
+          console.error('[Auth] Login error:', err);
           return next(err);
         }
+        
+        console.log('[Auth] User logged in successfully, session ID:', req.sessionID);
         
         // Extract returnTo from state parameter
         let returnTo = "/";
@@ -150,6 +164,7 @@ export async function setupAuth(app: Express) {
           }
         }
         
+        console.log('[Auth] Redirecting to:', returnTo);
         return res.redirect(returnTo);
       });
     })(req, res, next);
@@ -169,8 +184,16 @@ export async function setupAuth(app: Express) {
 
 export const isAuthenticated: RequestHandler = async (req, res, next) => {
   const user = req.user as any;
+  
+  console.log('[Auth] isAuthenticated check:', {
+    isAuthenticated: req.isAuthenticated(),
+    hasUser: !!user,
+    sessionID: req.sessionID,
+    userClaims: user?.claims?.email
+  });
 
-  if (!req.isAuthenticated() || !user.expires_at) {
+  if (!req.isAuthenticated() || !user?.expires_at) {
+    console.log('[Auth] Authentication failed: not authenticated or no expiry');
     return res.status(401).json({ message: "Unauthorized" });
   }
 
