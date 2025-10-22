@@ -2,7 +2,6 @@ import { Link } from "wouter";
 import { Shield, Clock, DollarSign, FileCheck, Lock, ChevronRight, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import drafterLogo from "@assets/drafter-logo.png";
 import {
   Accordion,
   AccordionContent,
@@ -184,7 +183,7 @@ export default function Home() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
             <div className="flex items-center space-x-2">
-              <img src={drafterLogo} alt="Drafter Logo" className="h-10 w-10 object-contain" />
+              <Shield className="h-7 w-7 text-primary" />
               <span className="text-xl font-bold tracking-tight">Drafter</span>
             </div>
             <div className="flex items-center space-x-4">
@@ -214,7 +213,6 @@ export default function Home() {
           <div className="container relative mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-32">
             <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
               <div className="space-y-8">
-                <img src={drafterLogo} alt="Drafter" className="h-32 w-32 object-contain" />
                 <div className="inline-flex items-center space-x-2 rounded-full bg-primary/10 px-4 py-2 text-sm font-medium text-primary">
                   <Shield className="h-4 w-4" />
                   <span>AI-Powered Legal Technology</span>
@@ -754,7 +752,7 @@ export default function Home() {
             <div className="grid md:grid-cols-4 gap-8 mb-8">
               <div className="space-y-4">
                 <div className="flex items-center space-x-2">
-                  <img src={drafterLogo} alt="Drafter Logo" className="h-10 w-10 object-contain" />
+                  <Shield className="h-6 w-6 text-primary" />
                   <span className="text-lg font-bold">Drafter</span>
                 </div>
                 <p className="text-sm text-muted-foreground">

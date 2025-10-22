@@ -2,8 +2,7 @@ import { Link } from "wouter";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { LogIn, LogOut, User } from "lucide-react";
-import drafterLogo from "@assets/drafter-logo.png";
+import { LogIn, LogOut, User, Shield } from "lucide-react";
 
 export function Header() {
   const { user, isAuthenticated, isLoading } = useAuth();
@@ -20,12 +19,7 @@ export function Header() {
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center justify-between px-6">
         <Link href="/" className="flex items-center gap-2 text-xl font-semibold hover-elevate rounded-md px-3 py-2" data-testid="link-home">
-          <img
-            src={drafterLogo}
-            alt="Drafter Logo"
-            className="h-10 w-10 object-contain"
-            data-testid="logo-image"
-          />
+          <Shield className="h-5 w-5 text-primary" />
           Drafter
         </Link>
 
