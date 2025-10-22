@@ -442,7 +442,10 @@ function ClauseCard({ clause, isAuthenticated }: { clause: PrenupClause; isAuthe
           </DialogHeader>
           <DialogFooter className="sm:justify-center">
             <Button 
-              onClick={() => window.location.href = "/api/login"}
+              onClick={() => {
+                const returnTo = encodeURIComponent(window.location.pathname);
+                window.location.href = `/api/login?returnTo=${returnTo}`;
+              }}
               className="w-full sm:w-auto"
               data-testid="button-login-from-dialog"
             >
@@ -467,7 +470,8 @@ export default function Review() {
   });
 
   const handleLogin = () => {
-    window.location.href = "/api/login";
+    const returnTo = encodeURIComponent(window.location.pathname);
+    window.location.href = `/api/login?returnTo=${returnTo}`;
   };
 
   // Show loading while fetching prenup

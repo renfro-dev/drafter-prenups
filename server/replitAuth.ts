@@ -103,16 +103,55 @@ export async function setupAuth(app: Express) {
   passport.deserializeUser((user: Express.User, cb) => cb(null, user));
 
   app.get("/api/login", (req, res, next) => {
+    let state = undefined;
+    
+    // Validate and encode returnTo URL as state parameter
+    if (req.query.returnTo) {
+      const returnTo = decodeURIComponent(req.query.returnTo as string);
+      // Only allow relative paths starting with "/" to prevent open redirect
+      // Also reject protocol-relative URLs starting with "//"
+      if (returnTo.startsWith('/') && !returnTo.startsWith('//')) {
+        // Encode returnTo as base64 for the state parameter
+        state = Buffer.from(JSON.stringify({ returnTo })).toString('base64');
+      }
+    }
+    
     passport.authenticate(`replitauth:${req.hostname}`, {
       prompt: "login consent",
       scope: ["openid", "email", "profile", "offline_access"],
+      state,
     })(req, res, next);
   });
 
   app.get("/api/callback", (req, res, next) => {
-    passport.authenticate(`replitauth:${req.hostname}`, {
-      successReturnToOrRedirect: "/",
-      failureRedirect: "/api/login",
+    passport.authenticate(`replitauth:${req.hostname}`, (err: any, user: any) => {
+      if (err || !user) {
+        return res.redirect("/api/login");
+      }
+      
+      req.logIn(user, (err) => {
+        if (err) {
+          return next(err);
+        }
+        
+        // Extract returnTo from state parameter
+        let returnTo = "/";
+        if (req.query.state) {
+          try {
+            const stateData = JSON.parse(Buffer.from(req.query.state as string, 'base64').toString());
+            if (stateData.returnTo) {
+              // Validate again to prevent tampering
+              if (stateData.returnTo.startsWith('/') && !stateData.returnTo.startsWith('//')) {
+                returnTo = stateData.returnTo;
+              }
+            }
+          } catch (e) {
+            // Failed to parse state - use default "/"
+          }
+        }
+        
+        return res.redirect(returnTo);
+      });
     })(req, res, next);
   });
 
