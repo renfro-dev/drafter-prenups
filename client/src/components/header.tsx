@@ -3,7 +3,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { LogIn, LogOut, User } from "lucide-react";
-import drafterLogo from "@assets/DRAFTER LOGO-01_1761091127053.png";
+import drafterLogo from "@assets/drafter-logo.png";
 
 export function Header() {
   const { user, isAuthenticated, isLoading } = useAuth();
