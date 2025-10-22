@@ -184,7 +184,7 @@ export default function Home() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
             <div className="flex items-center space-x-2">
-              <img src={drafterLogo} alt="Drafter Logo" className="h-7 w-7 object-contain" />
+              <img src={drafterLogo} alt="Drafter Logo" className="h-20 w-20 object-contain" />
               <span className="text-xl font-bold tracking-tight">Drafter</span>
             </div>
             <div className="flex items-center space-x-4">
@@ -753,7 +753,7 @@ export default function Home() {
             <div className="grid md:grid-cols-4 gap-8 mb-8">
               <div className="space-y-4">
                 <div className="flex items-center space-x-2">
-                  <img src={drafterLogo} alt="Drafter Logo" className="h-6 w-6 object-contain" />
+                  <img src={drafterLogo} alt="Drafter Logo" className="h-18 w-18 object-contain" />
                   <span className="text-lg font-bold">Drafter</span>
                 </div>
                 <p className="text-sm text-muted-foreground">
