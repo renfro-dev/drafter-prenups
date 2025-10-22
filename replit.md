@@ -40,6 +40,12 @@ Preferred communication style: Simple, everyday language.
   - Collaborative features (Explain, Flag, Comment, Ask): Authentication required
   - Any authenticated user with the UUID link can use collaborative features
   - No email matching required - supports users with multiple email accounts
+- **Login Redirect Preservation** (OAuth State Parameter):
+  - Frontend sends `returnTo` query parameter to `/api/login`
+  - Backend validates and encodes returnTo as base64 JSON in OAuth `state` parameter
+  - State parameter survives OAuth redirects (doesn't depend on session persistence)
+  - After authentication, user returns to original page (e.g., clause review)
+  - Security: Only allows relative paths (prevents open redirect attacks)
 - Graceful 401 handling (returns null instead of throwing errors)
 - Login prompts appear when unauthenticated users try to use collaborative features
 
