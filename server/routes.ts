@@ -7,6 +7,7 @@ import { generatePrenup } from "./lib/anthropic-client";
 import { generateWordDocument } from "./utils/document-generator";
 import { sendEmail, generatePrenupEmail } from "./utils/email-sender";
 import { setupAuth, isAuthenticated } from "./replitAuth";
+import { ensureCanonicalUser } from "./middleware/authenticated-user";
 import { parsePrenupClauses } from "./utils/clause-parser";
 import { z } from "zod";
 
@@ -38,11 +39,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   await setupAuth(app);
 
   // Auth route
-  app.get('/api/auth/user', isAuthenticated, async (req: any, res) => {
+  app.get('/api/auth/user', isAuthenticated, ensureCanonicalUser, async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
-      const user = await storage.getUser(userId);
-      res.json(user);
+      // Return the canonical user attached by middleware
+      res.json(req.authUser);
     } catch (error) {
       console.error("Error fetching user:", error);
       res.status(500).json({ message: "Failed to fetch user" });
@@ -131,9 +131,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post('/api/clauses/:id/explain', isAuthenticated, async (req: any, res) => {
+  app.post('/api/clauses/:id/explain', isAuthenticated, ensureCanonicalUser, async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.authUser!.id;
       const clauseId = req.params.id;
       
       // Verify access
@@ -161,9 +161,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post('/api/clauses/:id/question', isAuthenticated, async (req: any, res) => {
+  app.post('/api/clauses/:id/question', isAuthenticated, ensureCanonicalUser, async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.authUser!.id;
       const clauseId = req.params.id;
       const { question } = req.body;
 
@@ -199,9 +199,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post('/api/clauses/:id/flag', isAuthenticated, async (req: any, res) => {
+  app.post('/api/clauses/:id/flag', isAuthenticated, ensureCanonicalUser, async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.authUser!.id;
       const clauseId = req.params.id;
       const { reason } = req.body;
 
@@ -225,9 +225,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post('/api/clauses/:id/comment', isAuthenticated, async (req: any, res) => {
+  app.post('/api/clauses/:id/comment', isAuthenticated, ensureCanonicalUser, async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.authUser!.id;
       const clauseId = req.params.id;
       const { comment } = req.body;
 
@@ -260,9 +260,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get('/api/clauses/:id/comments', isAuthenticated, async (req: any, res) => {
+  app.get('/api/clauses/:id/comments', isAuthenticated, ensureCanonicalUser, async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.authUser!.id;
       const clauseId = req.params.id;
 
       console.log('[Comment] GET /api/clauses/:id/comments', { clauseId, userId });
@@ -283,9 +283,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get('/api/clauses/:id/flags', isAuthenticated, async (req: any, res) => {
+  app.get('/api/clauses/:id/flags', isAuthenticated, ensureCanonicalUser, async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.authUser!.id;
       const clauseId = req.params.id;
 
       // Verify access
@@ -302,9 +302,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get('/api/clauses/:id/questions', isAuthenticated, async (req: any, res) => {
+  app.get('/api/clauses/:id/questions', isAuthenticated, ensureCanonicalUser, async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.authUser!.id;
       const clauseId = req.params.id;
 
       // Verify access
