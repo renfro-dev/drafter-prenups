@@ -179,36 +179,8 @@ export default function Home() {
         schema={schema}
       />
     <div className="min-h-screen bg-background">
-      <header className="fixed top-0 left-0 right-0 z-50 border-b bg-background/95 backdrop-blur-xl">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex h-16 items-center justify-between">
-            <div className="flex items-center space-x-2">
-              <Shield className="h-7 w-7 text-primary" />
-              <span className="text-xl font-bold tracking-tight">Drafter</span>
-            </div>
-            <div className="flex items-center space-x-4">
-              <Link href="/privacy-policy" data-testid="link-privacy-policy">
-                <Button variant="ghost" size="sm" className="text-sm">
-                  Data Privacy Policy
-                </Button>
-              </Link>
-              <div className="hidden md:flex items-center space-x-2 text-sm text-muted-foreground">
-                <Lock className="h-4 w-4" />
-                <span>Private & Secure</span>
-              </div>
-              <Link href="/intake" data-testid="link-start-prenup">
-                <Button size="default" data-testid="button-get-started">
-                  Get Started
-                  <ChevronRight className="ml-1 h-4 w-4" />
-                </Button>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </header>
-
-      <main className="pt-16">
-        <section className="relative min-h-[600px] lg:min-h-screen flex items-start overflow-hidden">
+      <main>
+        <section className="relative flex items-start overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-background" />
           <div className="container relative mx-auto px-4 sm:px-6 lg:px-8 py-2 lg:py-3">
             <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
