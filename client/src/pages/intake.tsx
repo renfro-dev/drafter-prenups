@@ -32,6 +32,7 @@ import { useMutation } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { SEOHead } from "@/components/seo-head";
+import { useAuth } from "@/hooks/useAuth";
 
 const STEPS = [
   { id: 1, title: "Personal Info", description: "Basic information about you and your partner" },
@@ -41,9 +42,35 @@ const STEPS = [
 ];
 
 export default function Intake() {
+  const { user, isLoading: authLoading, isAuthenticated } = useAuth();
   const [currentStep, setCurrentStep] = useState(1);
   const [, setLocation] = useLocation();
   const { toast } = useToast();
+
+  // Redirect to login if not authenticated
+  if (authLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-slate-900 to-slate-800">
+        <div className="text-center">
+          <Loader2 className="w-8 h-8 animate-spin text-blue-500 mx-auto mb-4" />
+          <p className="text-slate-300">Checking authentication...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    // Redirect to login with return URL
+    window.location.href = `/api/login?returnTo=${encodeURIComponent('/intake')}`;
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-slate-900 to-slate-800">
+        <div className="text-center">
+          <Loader2 className="w-8 h-8 animate-spin text-blue-500 mx-auto mb-4" />
+          <p className="text-slate-300">Redirecting to login...</p>
+        </div>
+      </div>
+    );
+  }
 
   const form = useForm<InsertIntake>({
     resolver: zodResolver(insertIntakeSchema),
