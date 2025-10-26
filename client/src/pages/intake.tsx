@@ -47,27 +47,7 @@ export default function Intake() {
   const [, setLocation] = useLocation();
   const { toast } = useToast();
 
-  // Redirect to login if not authenticated (using useEffect to prevent infinite loops)
-  useEffect(() => {
-    if (!authLoading && !isAuthenticated) {
-      window.location.href = `/api/login?returnTo=${encodeURIComponent('/intake')}`;
-    }
-  }, [authLoading, isAuthenticated]);
-
-  // Show loading state while checking authentication
-  if (authLoading || !isAuthenticated) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-slate-900 to-slate-800">
-        <div className="text-center">
-          <Loader2 className="w-8 h-8 animate-spin text-blue-500 mx-auto mb-4" />
-          <p className="text-slate-300">
-            {authLoading ? 'Checking authentication...' : 'Redirecting to login...'}
-          </p>
-        </div>
-      </div>
-    );
-  }
-
+  // Initialize form hook (must be at top level, before any conditional returns)
   const form = useForm<InsertIntake>({
     resolver: zodResolver(insertIntakeSchema),
     defaultValues: {
@@ -154,6 +134,27 @@ export default function Intake() {
       }
     }
   };
+
+  // Redirect to login if not authenticated (using useEffect to prevent infinite loops)
+  useEffect(() => {
+    if (!authLoading && !isAuthenticated) {
+      window.location.href = `/api/login?returnTo=${encodeURIComponent('/intake')}`;
+    }
+  }, [authLoading, isAuthenticated]);
+
+  // Show loading state while checking authentication
+  if (authLoading || !isAuthenticated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-slate-900 to-slate-800">
+        <div className="text-center">
+          <Loader2 className="w-8 h-8 animate-spin text-blue-500 mx-auto mb-4" />
+          <p className="text-slate-300">
+            {authLoading ? 'Checking authentication...' : 'Redirecting to login...'}
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>
