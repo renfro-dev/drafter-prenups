@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Link, useLocation } from "wouter";
@@ -47,26 +47,22 @@ export default function Intake() {
   const [, setLocation] = useLocation();
   const { toast } = useToast();
 
-  // Redirect to login if not authenticated
-  if (authLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-slate-900 to-slate-800">
-        <div className="text-center">
-          <Loader2 className="w-8 h-8 animate-spin text-blue-500 mx-auto mb-4" />
-          <p className="text-slate-300">Checking authentication...</p>
-        </div>
-      </div>
-    );
-  }
+  // Redirect to login if not authenticated (using useEffect to prevent infinite loops)
+  useEffect(() => {
+    if (!authLoading && !isAuthenticated) {
+      window.location.href = `/api/login?returnTo=${encodeURIComponent('/intake')}`;
+    }
+  }, [authLoading, isAuthenticated]);
 
-  if (!isAuthenticated) {
-    // Redirect to login with return URL
-    window.location.href = `/api/login?returnTo=${encodeURIComponent('/intake')}`;
+  // Show loading state while checking authentication
+  if (authLoading || !isAuthenticated) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-slate-900 to-slate-800">
         <div className="text-center">
           <Loader2 className="w-8 h-8 animate-spin text-blue-500 mx-auto mb-4" />
-          <p className="text-slate-300">Redirecting to login...</p>
+          <p className="text-slate-300">
+            {authLoading ? 'Checking authentication...' : 'Redirecting to login...'}
+          </p>
         </div>
       </div>
     );
