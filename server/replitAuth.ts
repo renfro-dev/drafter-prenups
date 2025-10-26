@@ -111,9 +111,8 @@ export async function setupAuth(app: Express) {
   passport.deserializeUser((user: Express.User, cb) => cb(null, user));
 
   app.get("/api/login", (req, res, next) => {
-    let state = undefined;
-    
-    // Validate and encode returnTo URL as state parameter
+    // Store returnTo in session instead of OAuth state parameter
+    // This is more reliable as the session persists across OAuth redirects
     if (req.query.returnTo) {
       const returnTo = decodeURIComponent(req.query.returnTo as string);
       if (process.env.NODE_ENV === 'development') {
@@ -122,10 +121,9 @@ export async function setupAuth(app: Express) {
       // Only allow relative paths starting with "/" to prevent open redirect
       // Also reject protocol-relative URLs starting with "//"
       if (returnTo.startsWith('/') && !returnTo.startsWith('//')) {
-        // Encode returnTo as base64 for the state parameter
-        state = Buffer.from(JSON.stringify({ returnTo })).toString('base64');
+        (req.session as any).returnTo = returnTo;
         if (process.env.NODE_ENV === 'development') {
-          console.log('[Auth] State parameter created:', state);
+          console.log('[Auth] Stored returnTo in session:', returnTo);
         }
       }
     }
@@ -133,13 +131,12 @@ export async function setupAuth(app: Express) {
     passport.authenticate(`replitauth:${req.hostname}`, {
       prompt: "login consent",
       scope: ["openid", "email", "profile", "offline_access"],
-      state,
     })(req, res, next);
   });
 
   app.get("/api/callback", (req, res, next) => {
     if (process.env.NODE_ENV === 'development') {
-      console.log('[Auth] Callback received, query params:', JSON.stringify(req.query));
+      console.log('[Auth] Callback received');
     }
     passport.authenticate(`replitauth:${req.hostname}`, (err: any, user: any) => {
       if (err) {
@@ -164,19 +161,18 @@ export async function setupAuth(app: Express) {
           console.log('[Auth] User logged in successfully');
         }
         
-        // Extract returnTo from state parameter
+        // Retrieve returnTo from session
         let returnTo = "/";
-        if (req.query.state) {
-          try {
-            const stateData = JSON.parse(Buffer.from(req.query.state as string, 'base64').toString());
-            if (stateData.returnTo) {
-              // Validate again to prevent tampering
-              if (stateData.returnTo.startsWith('/') && !stateData.returnTo.startsWith('//')) {
-                returnTo = stateData.returnTo;
-              }
-            }
-          } catch (e) {
-            // Failed to parse state - use default "/"
+        if ((req.session as any).returnTo) {
+          const storedReturnTo = (req.session as any).returnTo;
+          // Validate again to prevent tampering
+          if (storedReturnTo.startsWith('/') && !storedReturnTo.startsWith('//')) {
+            returnTo = storedReturnTo;
+          }
+          // Clear from session after use
+          delete (req.session as any).returnTo;
+          if (process.env.NODE_ENV === 'development') {
+            console.log('[Auth] Retrieved returnTo from session:', returnTo);
           }
         }
         
