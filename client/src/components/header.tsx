@@ -2,7 +2,7 @@ import { Link } from "wouter";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { LogIn, LogOut, User, Shield } from "lucide-react";
+import { LogIn, LogOut, User, Shield, FileText } from "lucide-react";
 
 export function Header() {
   const { user, isAuthenticated, isLoading } = useAuth();
@@ -28,6 +28,16 @@ export function Header() {
             <Badge variant="outline" className="text-xs">Loading...</Badge>
           ) : isAuthenticated && user ? (
             <>
+              <Link href="/my-prenups">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  data-testid="button-my-prenups"
+                >
+                  <FileText className="h-4 w-4 mr-2" />
+                  My Prenups
+                </Button>
+              </Link>
               <div className="flex items-center gap-2">
                 <User className="h-4 w-4 text-muted-foreground" />
                 <span className="text-sm text-muted-foreground" data-testid="text-user-email">
