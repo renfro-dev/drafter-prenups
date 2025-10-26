@@ -116,11 +116,17 @@ export async function setupAuth(app: Express) {
     // Validate and encode returnTo URL as state parameter
     if (req.query.returnTo) {
       const returnTo = decodeURIComponent(req.query.returnTo as string);
+      if (process.env.NODE_ENV === 'development') {
+        console.log('[Auth] Login request with returnTo:', returnTo);
+      }
       // Only allow relative paths starting with "/" to prevent open redirect
       // Also reject protocol-relative URLs starting with "//"
       if (returnTo.startsWith('/') && !returnTo.startsWith('//')) {
         // Encode returnTo as base64 for the state parameter
         state = Buffer.from(JSON.stringify({ returnTo })).toString('base64');
+        if (process.env.NODE_ENV === 'development') {
+          console.log('[Auth] State parameter created:', state);
+        }
       }
     }
     
@@ -133,7 +139,7 @@ export async function setupAuth(app: Express) {
 
   app.get("/api/callback", (req, res, next) => {
     if (process.env.NODE_ENV === 'development') {
-      console.log('[Auth] Callback received');
+      console.log('[Auth] Callback received, query params:', JSON.stringify(req.query));
     }
     passport.authenticate(`replitauth:${req.hostname}`, (err: any, user: any) => {
       if (err) {
