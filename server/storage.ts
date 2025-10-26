@@ -26,7 +26,7 @@ export interface IStorage {
   upsertUser(user: UpsertUser): Promise<User>;
   
   // Intake methods
-  createIntake(intake: InsertIntake, maskedData: any, piiMap: PIIMap): Promise<Intake>;
+  createIntake(intake: InsertIntake, maskedData: any, piiMap: PIIMap, userId?: string): Promise<Intake>;
   getIntake(id: string): Promise<Intake | undefined>;
   updateIntakePrenupUrl(id: string, url: string): Promise<void>;
   updateIntakeStatus(id: string, status: string): Promise<void>;
@@ -65,11 +65,11 @@ export interface IStorage {
 }
 
 export class DatabaseStorage implements IStorage {
-  async createIntake(intake: InsertIntake, maskedData: any, piiMap: PIIMap): Promise<Intake> {
+  async createIntake(intake: InsertIntake, maskedData: any, piiMap: PIIMap, userId?: string): Promise<Intake> {
     const result = await sql`
-      INSERT INTO intakes (email, state, party_a_name, party_b_name, wedding_date, intake_data, masked_data, pii_map, status)
+      INSERT INTO intakes (email, state, party_a_name, party_b_name, party_a_user_id, wedding_date, intake_data, masked_data, pii_map, status)
       VALUES (${intake.email}, ${intake.state}, ${intake.partyAName}, ${intake.partyBName}, 
-              ${intake.weddingDate}, ${JSON.stringify(intake)}, ${JSON.stringify(maskedData)}, 
+              ${userId || null}, ${intake.weddingDate}, ${JSON.stringify(intake)}, ${JSON.stringify(maskedData)}, 
               ${JSON.stringify(piiMap)}, 'pending')
       RETURNING *
     `;

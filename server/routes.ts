@@ -311,13 +311,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post("/api/generate", async (req, res) => {
+  app.post("/api/generate", isAuthenticated, async (req: any, res) => {
     try {
       const intake = insertIntakeSchema.parse(req.body);
 
       const { maskedData, piiMap } = maskPII(intake);
 
-      const intakeRecord = await storage.createIntake(intake, maskedData, piiMap);
+      // Get authenticated user ID
+      const userId = req.user.claims.sub;
+
+      const intakeRecord = await storage.createIntake(intake, maskedData, piiMap, userId);
 
       try {
         await storage.updateIntakeStatus(intakeRecord.id, 'processing');
