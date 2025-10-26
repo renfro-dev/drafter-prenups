@@ -448,6 +448,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Get user's prenups
+  app.get("/api/my-prenups", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const intakes = await storage.getUserIntakes(userId);
+      res.json(intakes);
+    } catch (error) {
+      console.error('Error fetching user prenups:', error);
+      res.status(500).json({ error: 'Failed to fetch prenups' });
+    }
+  });
+
   app.get("/api/clauses", async (req, res) => {
     try {
       const jurisdiction = (req.query.jurisdiction as string) || 'CA';

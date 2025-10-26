@@ -28,6 +28,7 @@ export interface IStorage {
   // Intake methods
   createIntake(intake: InsertIntake, maskedData: any, piiMap: PIIMap, userId?: string): Promise<Intake>;
   getIntake(id: string): Promise<Intake | undefined>;
+  getUserIntakes(userId: string): Promise<Intake[]>;
   updateIntakePrenupUrl(id: string, url: string): Promise<void>;
   updateIntakeStatus(id: string, status: string): Promise<void>;
   updateIntakeUsers(id: string, partyAUserId: string | null, partyBUserId: string | null): Promise<void>;
@@ -79,6 +80,15 @@ export class DatabaseStorage implements IStorage {
   async getIntake(id: string): Promise<Intake | undefined> {
     const result = await sql`SELECT * FROM intakes WHERE id = ${id}`;
     return result[0] as Intake | undefined;
+  }
+
+  async getUserIntakes(userId: string): Promise<Intake[]> {
+    const result = await sql`
+      SELECT * FROM intakes 
+      WHERE party_a_user_id = ${userId} OR party_b_user_id = ${userId}
+      ORDER BY created_at DESC
+    `;
+    return result as Intake[];
   }
 
   async updateIntakePrenupUrl(id: string, url: string): Promise<void> {
