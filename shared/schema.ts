@@ -40,6 +40,13 @@ export const intakes = pgTable("intakes", {
   piiMap: jsonb("pii_map"),
   prenupDocUrl: text("prenup_doc_url"),
   status: text("status").notNull().default("pending"),
+  paid: boolean("paid").notNull().default(false),
+  paymentAmount: integer("payment_amount"),
+  paymentDate: timestamp("payment_date"),
+  stripePaymentIntentId: text("stripe_payment_intent_id"),
+  promoCodeUsed: text("promo_code_used"),
+  reviewCompleted: boolean("review_completed").notNull().default(false),
+  reviewCompletedDate: timestamp("review_completed_date"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
@@ -107,6 +114,14 @@ export const clauseQuestions = pgTable("clause_questions", {
   question: text("question").notNull(),
   answer: text("answer"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+// Clause Reviews - track which clauses users have reviewed
+export const clauseReviews = pgTable("clause_reviews", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  prenupClauseId: varchar("prenup_clause_id").references(() => prenupClauses.id).notNull(),
+  userId: varchar("user_id").references(() => users.id).notNull(),
+  reviewedAt: timestamp("reviewed_at").defaultNow().notNull(),
 });
 
 // Asset schema
