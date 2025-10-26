@@ -117,6 +117,7 @@ export async function setupAuth(app: Express) {
       const returnTo = decodeURIComponent(req.query.returnTo as string);
       if (process.env.NODE_ENV === 'development') {
         console.log('[Auth] Login request with returnTo:', returnTo);
+        console.log('[Auth] Session ID before save:', req.sessionID);
       }
       // Only allow relative paths starting with "/" to prevent open redirect
       // Also reject protocol-relative URLs starting with "//"
@@ -124,11 +125,14 @@ export async function setupAuth(app: Express) {
         (req.session as any).returnTo = returnTo;
         if (process.env.NODE_ENV === 'development') {
           console.log('[Auth] Stored returnTo in session:', returnTo);
+          console.log('[Auth] Full session data:', JSON.stringify(req.session));
         }
         // Explicitly save session before OAuth redirect to ensure persistence
         req.session.save((err) => {
           if (err) {
             console.error('[Auth] Session save error:', err);
+          } else if (process.env.NODE_ENV === 'development') {
+            console.log('[Auth] Session saved successfully, ID:', req.sessionID);
           }
           passport.authenticate(`replitauth:${req.hostname}`, {
             prompt: "login consent",
@@ -149,6 +153,8 @@ export async function setupAuth(app: Express) {
   app.get("/api/callback", (req, res, next) => {
     if (process.env.NODE_ENV === 'development') {
       console.log('[Auth] Callback received');
+      console.log('[Auth] Session ID in callback:', req.sessionID);
+      console.log('[Auth] Full session data in callback:', JSON.stringify(req.session));
     }
     passport.authenticate(`replitauth:${req.hostname}`, (err: any, user: any) => {
       if (err) {
