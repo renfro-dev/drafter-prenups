@@ -182,7 +182,7 @@ export default function Home() {
       <main>
         <section className="relative flex items-start overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-background" />
-          <div className="container relative mx-auto px-4 sm:px-6 lg:px-8 py-2 lg:py-3">
+          <div className="container relative mx-auto px-4 sm:px-6 lg:px-8 py-24">
             <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 lg:gap-16 items-start">
               <div className="space-y-8">
                 <div className="inline-flex items-center space-x-2 rounded-full bg-primary/10 px-4 py-2 text-sm font-medium text-primary">
