@@ -183,7 +183,7 @@ export default function Home() {
         <section className="relative flex items-start overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-background" />
           <div className="container relative mx-auto px-4 sm:px-6 lg:px-8 py-2 lg:py-3">
-            <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+            <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 lg:gap-16 items-start">
               <div className="space-y-8">
                 <div className="inline-flex items-center space-x-2 rounded-full bg-primary/10 px-4 py-2 text-sm font-medium text-primary">
                   <Shield className="h-4 w-4" />
@@ -262,7 +262,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="py-20 md:py-24 bg-muted/30" data-testid="section-how-it-works">
+        <section className="py-12 md:py-16 bg-muted/30" data-testid="section-how-it-works">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="max-w-7xl mx-auto">
               <div className="text-center mb-16">
