@@ -104,6 +104,14 @@ function ClauseCard({ clause, isAuthenticated }: { clause: PrenupClause; isAuthe
     enabled: isAuthenticated,
   });
 
+  // Fetch review status (only if authenticated)
+  const { data: reviewStatus } = useQuery<{ reviewed: boolean }>({
+    queryKey: ['/api/clauses', clause.id, 'review-status'],
+    enabled: isAuthenticated,
+  });
+
+  const isReviewed = reviewStatus?.reviewed || false;
+
   // Get explanation mutation
   const explainMutation = useMutation({
     mutationFn: async () => {
@@ -159,6 +167,21 @@ function ClauseCard({ clause, isAuthenticated }: { clause: PrenupClause; isAuthe
     },
   });
 
+  // Mark as reviewed mutation
+  const markReviewedMutation = useMutation({
+    mutationFn: async () => {
+      return await apiRequest('POST', `/api/clauses/${clause.id}/mark-reviewed`, {});
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/clauses', clause.id, 'review-status'] });
+      // Invalidate progress with predicate to match any progress query
+      queryClient.invalidateQueries({ 
+        predicate: (query) => query.queryKey[0] === '/api/review' && query.queryKey[2] === 'progress' 
+      });
+      toast({ title: "Clause marked as reviewed" });
+    },
+  });
+
   const isFlagged = flags.some(f => !f.resolved);
   const hasComments = comments.length > 0;
   const hasQuestions = questions.length > 0;
@@ -186,11 +209,30 @@ function ClauseCard({ clause, isAuthenticated }: { clause: PrenupClause; isAuthe
                     Flagged
                   </Badge>
                 )}
+                {isReviewed && (
+                  <Badge variant="outline" className="text-xs bg-[hsl(var(--success))]/10 text-[hsl(var(--success))]" data-testid={`badge-reviewed-${clause.id}`}>
+                    <CheckCircle2 className="h-3 w-3 mr-1" />
+                    Reviewed
+                  </Badge>
+                )}
               </div>
               <CardTitle className="text-lg font-medium" data-testid={`text-clause-title-${clause.id}`}>
                 <HighlightMaskedPII text={clause.title} />
               </CardTitle>
             </div>
+            {isAuthenticated && (
+              <Button
+                variant={isReviewed ? "outline" : "default"}
+                size="sm"
+                onClick={() => markReviewedMutation.mutate()}
+                disabled={isReviewed || markReviewedMutation.isPending}
+                className={isReviewed ? "border-[hsl(var(--success))] text-[hsl(var(--success))]" : ""}
+                data-testid={`button-mark-reviewed-${clause.id}`}
+              >
+                <CheckCircle2 className="h-4 w-4 mr-2" />
+                {isReviewed ? "Reviewed" : "Mark as Reviewed"}
+              </Button>
+            )}
           </div>
         </CardHeader>
 
@@ -470,6 +512,12 @@ export default function Review() {
     enabled: !!prenupId,
   });
 
+  // Fetch review progress
+  const { data: progress } = useQuery<{ total: number; reviewed: number }>({
+    queryKey: ['/api/review', prenupId, 'progress'],
+    enabled: !!prenupId,
+  });
+
   const handleLogin = () => {
     const returnTo = encodeURIComponent(window.location.pathname);
     window.location.href = `/api/login?returnTo=${returnTo}`;
@@ -547,10 +595,11 @@ export default function Review() {
     );
   }
 
-  // TODO: Replace with actual flag/review tracking from API
-  const flaggedClauses = []; // Will be populated from actual flags
-  const reviewedClauses = []; // Will be populated from actual reviews
-  const progressPercentage = 0; // Will be calculated from actual review progress
+  // Calculate review progress
+  const totalClauses = progress?.total || clauses.length;
+  const reviewedCount = progress?.reviewed || 0;
+  const progressPercentage = totalClauses > 0 ? Math.round((reviewedCount / totalClauses) * 100) : 0;
+  const allClausesReviewed = reviewedCount > 0 && reviewedCount === totalClauses;
 
   return (
     <div className="min-h-screen bg-background" data-testid="page-review">
@@ -562,11 +611,16 @@ export default function Review() {
             <Badge variant="outline" className="text-xs" data-testid="badge-clause-count">
               {clauses.length} Clauses
             </Badge>
-          </div>
-          <div className="flex items-center gap-2">
-            <Badge className="bg-[hsl(var(--success))]/10 text-[hsl(var(--success))] border-[hsl(var(--success))]/20" data-testid="badge-progress">
-              {progressPercentage}% Reviewed
-            </Badge>
+            {isAuthenticated && reviewedCount > 0 && (
+              <Badge 
+                variant="outline" 
+                className={`text-xs ${allClausesReviewed ? 'bg-[hsl(var(--success))]/10 text-[hsl(var(--success))]' : ''}`}
+                data-testid="badge-review-progress"
+              >
+                <CheckCircle2 className="h-3 w-3 mr-1" />
+                {reviewedCount} of {totalClauses} Reviewed
+              </Badge>
+            )}
           </div>
         </div>
       </header>

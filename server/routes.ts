@@ -365,6 +365,80 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Mark clause as reviewed
+  app.post('/api/clauses/:id/mark-reviewed', isAuthenticated, ensureCanonicalUser, async (req: any, res) => {
+    try {
+      const userId = req.authUser!.id;
+      const clauseId = req.params.id;
+
+      // Verify access
+      const access = await verifyClauseAccess(clauseId, userId);
+      if (!access.authorized) {
+        return res.status(access.error === 'Clause not found' ? 404 : 403).json({ error: access.error });
+      }
+
+      const review = await storage.createClauseReview({
+        prenupClauseId: clauseId,
+        userId,
+      });
+
+      // Check if all clauses are now reviewed and update intake if so
+      // TODO: Enhance this to require BOTH party_a and party_b to review all clauses
+      // Currently tracks global progress (any authenticated user can mark as reviewed)
+      const clause = access.clause;
+      const intakeId = clause.intakeId;
+      const progress = await storage.getReviewProgress(intakeId);
+      
+      if (progress.total > 0 && progress.reviewed === progress.total) {
+        await storage.updateIntakeReviewCompleted(intakeId, true);
+      }
+
+      res.json(review);
+    } catch (error) {
+      console.error('Error marking clause as reviewed:', error);
+      res.status(500).json({ error: 'Failed to mark clause as reviewed' });
+    }
+  });
+
+  // Get review status for a specific clause
+  app.get('/api/clauses/:id/review-status', isAuthenticated, ensureCanonicalUser, async (req: any, res) => {
+    try {
+      const userId = req.authUser!.id;
+      const clauseId = req.params.id;
+
+      // Verify access
+      const access = await verifyClauseAccess(clauseId, userId);
+      if (!access.authorized) {
+        return res.status(access.error === 'Clause not found' ? 404 : 403).json({ error: access.error });
+      }
+
+      const review = await storage.getClauseReview(clauseId, userId);
+      res.json({ reviewed: !!review });
+    } catch (error) {
+      console.error('Error fetching review status:', error);
+      res.status(500).json({ error: 'Failed to fetch review status' });
+    }
+  });
+
+  // Get review progress for an intake
+  app.get('/api/review/:intakeId/progress', async (req: any, res) => {
+    try {
+      const intakeId = req.params.intakeId;
+
+      // Verify intake exists
+      const intake = await storage.getIntake(intakeId);
+      if (!intake) {
+        return res.status(404).json({ error: 'Prenup not found' });
+      }
+
+      const progress = await storage.getReviewProgress(intakeId);
+      res.json(progress);
+    } catch (error) {
+      console.error('Error fetching review progress:', error);
+      res.status(500).json({ error: 'Failed to fetch review progress' });
+    }
+  });
+
   app.post("/api/generate", async (req, res) => {
     try {
       const intake = insertIntakeSchema.parse(req.body);

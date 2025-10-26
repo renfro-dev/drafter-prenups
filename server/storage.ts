@@ -15,6 +15,8 @@ import {
   type InsertClauseFlag,
   type ClauseQuestion,
   type InsertClauseQuestion,
+  type ClauseReview,
+  type InsertClauseReview,
 } from "@shared/schema";
 import { neon } from "@neondatabase/serverless";
 
@@ -30,6 +32,7 @@ export interface IStorage {
   getIntake(id: string): Promise<Intake | undefined>;
   updateIntakePrenupUrl(id: string, url: string): Promise<void>;
   updateIntakeStatus(id: string, status: string): Promise<void>;
+  updateIntakeReviewCompleted(id: string, completed: boolean): Promise<void>;
   updateIntakeUsers(id: string, partyAUserId: string | null, partyBUserId: string | null): Promise<void>;
   
   // Legal clause library methods
@@ -62,6 +65,11 @@ export interface IStorage {
   createClauseQuestion(question: InsertClauseQuestion): Promise<ClauseQuestion>;
   updateClauseAnswer(id: string, answer: string): Promise<void>;
   getClauseQuestions(prenupClauseId: string): Promise<ClauseQuestion[]>;
+  
+  createClauseReview(review: InsertClauseReview): Promise<ClauseReview>;
+  getClauseReview(prenupClauseId: string, userId: string): Promise<ClauseReview | undefined>;
+  getUserReviewedClauses(userId: string, intakeId: string): Promise<string[]>;
+  getReviewProgress(intakeId: string): Promise<{ total: number; reviewed: number }>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -87,6 +95,14 @@ export class DatabaseStorage implements IStorage {
 
   async updateIntakeStatus(id: string, status: string): Promise<void> {
     await sql`UPDATE intakes SET status = ${status} WHERE id = ${id}`;
+  }
+
+  async updateIntakeReviewCompleted(id: string, completed: boolean): Promise<void> {
+    if (completed) {
+      await sql`UPDATE intakes SET review_completed = TRUE, review_completed_date = NOW() WHERE id = ${id}`;
+    } else {
+      await sql`UPDATE intakes SET review_completed = FALSE, review_completed_date = NULL WHERE id = ${id}`;
+    }
   }
 
   async getClauses(jurisdiction: string, categories?: string[]): Promise<Clause[]> {
@@ -382,6 +398,82 @@ export class DatabaseStorage implements IStorage {
       answer: row.answer,
       createdAt: row.created_at,
     })) as ClauseQuestion[];
+  }
+
+  async createClauseReview(review: InsertClauseReview): Promise<ClauseReview> {
+    const result = await sql`
+      INSERT INTO clause_reviews (prenup_clause_id, user_id)
+      VALUES (${review.prenupClauseId}, ${review.userId})
+      ON CONFLICT (prenup_clause_id, user_id) DO NOTHING
+      RETURNING *
+    `;
+    if (result.length === 0) {
+      // Already reviewed, fetch existing review
+      const existing = await sql`
+        SELECT * FROM clause_reviews 
+        WHERE prenup_clause_id = ${review.prenupClauseId} AND user_id = ${review.userId}
+      `;
+      const row = existing[0];
+      return {
+        id: row.id,
+        prenupClauseId: row.prenup_clause_id,
+        userId: row.user_id,
+        reviewedAt: row.reviewed_at,
+      } as ClauseReview;
+    }
+    const row = result[0];
+    return {
+      id: row.id,
+      prenupClauseId: row.prenup_clause_id,
+      userId: row.user_id,
+      reviewedAt: row.reviewed_at,
+    } as ClauseReview;
+  }
+
+  async getClauseReview(prenupClauseId: string, userId: string): Promise<ClauseReview | undefined> {
+    const result = await sql`
+      SELECT * FROM clause_reviews 
+      WHERE prenup_clause_id = ${prenupClauseId} AND user_id = ${userId}
+    `;
+    if (result.length === 0) {
+      return undefined;
+    }
+    const row = result[0];
+    return {
+      id: row.id,
+      prenupClauseId: row.prenup_clause_id,
+      userId: row.user_id,
+      reviewedAt: row.reviewed_at,
+    } as ClauseReview;
+  }
+
+  async getUserReviewedClauses(userId: string, intakeId: string): Promise<string[]> {
+    const result = await sql`
+      SELECT cr.prenup_clause_id 
+      FROM clause_reviews cr
+      JOIN prenup_clauses pc ON cr.prenup_clause_id = pc.id
+      WHERE cr.user_id = ${userId} AND pc.intake_id = ${intakeId}
+    `;
+    return result.map(row => row.prenup_clause_id as string);
+  }
+
+  async getReviewProgress(intakeId: string): Promise<{ total: number; reviewed: number }> {
+    // Get total clauses for this prenup
+    const totalResult = await sql`
+      SELECT COUNT(*) as count FROM prenup_clauses WHERE intake_id = ${intakeId}
+    `;
+    const total = parseInt(totalResult[0].count as string);
+
+    // Get count of unique clause reviews (distinct clause_id)
+    const reviewedResult = await sql`
+      SELECT COUNT(DISTINCT cr.prenup_clause_id) as count
+      FROM clause_reviews cr
+      JOIN prenup_clauses pc ON cr.prenup_clause_id = pc.id
+      WHERE pc.intake_id = ${intakeId}
+    `;
+    const reviewed = parseInt(reviewedResult[0].count as string);
+
+    return { total, reviewed };
   }
 }
 

@@ -183,6 +183,8 @@ export type ClauseFlag = typeof clauseFlags.$inferSelect;
 export type InsertClauseFlag = typeof clauseFlags.$inferInsert;
 export type ClauseQuestion = typeof clauseQuestions.$inferSelect;
 export type InsertClauseQuestion = typeof clauseQuestions.$inferInsert;
+export type ClauseReview = typeof clauseReviews.$inferSelect;
+export type InsertClauseReview = typeof clauseReviews.$inferInsert;
 
 // PII Masking types
 export interface PIIMap {
