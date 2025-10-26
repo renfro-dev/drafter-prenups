@@ -8,6 +8,8 @@ export function useAuth() {
     queryKey: ["/api/auth/user"],
     queryFn: getQueryFn({ on401: "returnNull" }),
     retry: false,
+    staleTime: 0, // Always fetch fresh auth state
+    refetchOnMount: 'always', // Always refetch when component mounts
   });
 
   return {
