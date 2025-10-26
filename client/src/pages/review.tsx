@@ -9,6 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { HighlightMaskedPII } from "@/components/HighlightMaskedPII";
 import { 
   Flag, 
   MessageSquare, 
@@ -187,7 +188,7 @@ function ClauseCard({ clause, isAuthenticated }: { clause: PrenupClause; isAuthe
                 )}
               </div>
               <CardTitle className="text-lg font-medium" data-testid={`text-clause-title-${clause.id}`}>
-                {clause.title}
+                <HighlightMaskedPII text={clause.title} />
               </CardTitle>
             </div>
           </div>
@@ -203,7 +204,7 @@ function ClauseCard({ clause, isAuthenticated }: { clause: PrenupClause; isAuthe
               className="font-serif text-base leading-relaxed text-secondary-foreground"
               data-testid={`text-legal-${clause.id}`}
             >
-              {clause.legalText}
+              <HighlightMaskedPII text={clause.legalText} />
             </div>
           </div>
 
@@ -215,7 +216,7 @@ function ClauseCard({ clause, isAuthenticated }: { clause: PrenupClause; isAuthe
                 <h4 className="text-xs font-medium uppercase tracking-wide">Plain English</h4>
               </div>
               <p className="text-sm leading-relaxed text-muted-foreground" data-testid={`text-explanation-${clause.id}`}>
-                {clause.plainExplanation || "Generating explanation..."}
+                <HighlightMaskedPII text={clause.plainExplanation || "Generating explanation..."} />
               </p>
             </div>
           ) : (
