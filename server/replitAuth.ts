@@ -125,9 +125,21 @@ export async function setupAuth(app: Express) {
         if (process.env.NODE_ENV === 'development') {
           console.log('[Auth] Stored returnTo in session:', returnTo);
         }
+        // Explicitly save session before OAuth redirect to ensure persistence
+        req.session.save((err) => {
+          if (err) {
+            console.error('[Auth] Session save error:', err);
+          }
+          passport.authenticate(`replitauth:${req.hostname}`, {
+            prompt: "login consent",
+            scope: ["openid", "email", "profile", "offline_access"],
+          })(req, res, next);
+        });
+        return;
       }
     }
     
+    // No returnTo parameter, proceed with normal auth
     passport.authenticate(`replitauth:${req.hostname}`, {
       prompt: "login consent",
       scope: ["openid", "email", "profile", "offline_access"],
