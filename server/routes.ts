@@ -72,8 +72,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // If user is authenticated, try to link them to the intake
       if (req.user?.claims) {
-        const userId = req.user.claims.sub;
         const userEmail = req.user.claims.email;
+        
+        // Ensure user exists in database first and get the actual database ID
+        const user = await storage.upsertUser({
+          id: req.user.claims.sub,
+          email: userEmail,
+          firstName: req.user.claims.first_name,
+          lastName: req.user.claims.last_name,
+          profileImageUrl: req.user.claims.profile_image_url,
+        });
+        
+        const userId = user.id; // Use the actual database ID, not claims.sub
         
         // Check if user is already linked to this intake
         const isAlreadyLinked = intake.partyAUserId === userId || intake.partyBUserId === userId;
