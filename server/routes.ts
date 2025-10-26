@@ -385,39 +385,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
           success: true,
         });
 
-        const partyAName = piiMap.names[Object.keys(piiMap.names).find(k => k.startsWith('PARTY_A_')) || ''] || 'Party A';
-        const partyBName = piiMap.names[Object.keys(piiMap.names).find(k => k.startsWith('PARTY_B_')) || ''] || 'Party B';
+        // Set status to completed_no_payment (user will pay after review)
+        await storage.updateIntakeStatus(intakeRecord.id, 'completed_no_payment');
 
-        let emailDelivered = false;
-        try {
-          await sendEmail({
-            to: intake.email,
-            subject: 'Your Prenuptial Agreement is Ready - Drafter',
-            htmlBody: generatePrenupEmail(partyAName, partyBName),
-            attachments: [
-              {
-                filename: `Prenuptial-Agreement-${partyAName.replace(/\s+/g, '-')}-${partyBName.replace(/\s+/g, '-')}.docx`,
-                content: documentBuffer,
-                contentType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-              },
-            ],
-          });
-          
-          emailDelivered = true;
-          await storage.updateIntakeStatus(intakeRecord.id, 'completed');
-        } catch (emailError) {
-          console.error('Email delivery failed:', emailError);
-          await storage.updateIntakeStatus(intakeRecord.id, 'completed_no_email');
-        }
-
+        // Return intakeId for redirect to review page
         res.json({
           success: true,
           intakeId: intakeRecord.id,
-          emailDelivered,
-          downloadUrl: emailDelivered ? undefined : documentUrl,
-          message: emailDelivered 
-            ? 'Prenup generated successfully. Check your email for the document.'
-            : 'Prenup generated successfully. Email delivery failed - you can download the document below.',
+          message: 'Prenup generated successfully. Review your agreement clause-by-clause.',
         });
 
       } catch (error) {

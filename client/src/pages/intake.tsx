@@ -37,7 +37,7 @@ const STEPS = [
   { id: 1, title: "Personal Info", description: "Basic information about you and your partner" },
   { id: 2, title: "Assets & Debts", description: "Financial details for disclosure" },
   { id: 3, title: "Preferences", description: "Additional agreement terms" },
-  { id: 4, title: "Review & Submit", description: "Confirm and generate your prenup" },
+  { id: 4, title: "Review Information", description: "Confirm your information" },
 ];
 
 export default function Intake() {
@@ -136,7 +136,7 @@ export default function Intake() {
     <>
       <SEOHead
         title="Create Your Prenup - Free California Prenuptial Agreement Form | Drafter"
-        description="Start creating your California prenup with our private AI-powered intake form. 10 minutes to complete, $49 total cost. Attorney-ready prenuptial agreements with PII masking."
+        description="Start creating your California prenup with our private AI-powered intake form. Review clause-by-clause before you pay. Attorney-ready prenuptial agreements with PII masking."
       />
     <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
@@ -432,9 +432,9 @@ export default function Intake() {
               {currentStep === 4 && (
                 <Card data-testid="form-step-4">
                   <CardHeader>
-                    <CardTitle>Review & Submit</CardTitle>
+                    <CardTitle>Review Information</CardTitle>
                     <CardDescription>
-                      Review your information and provide email for delivery
+                      Review your information and enter your email address
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-6">
