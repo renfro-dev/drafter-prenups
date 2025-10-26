@@ -8,7 +8,6 @@ import Home from "@/pages/home";
 import Intake from "@/pages/intake";
 import Success from "@/pages/success";
 import Review from "@/pages/review";
-import MyPrenups from "@/pages/my-prenups";
 import PrivacyPolicy from "@/pages/privacy-policy";
 import CaliforniaLanding from "@/pages/california-landing";
 import CaliforniaPrenup from "@/pages/california-prenup";
@@ -27,7 +26,6 @@ function Router() {
     <Switch>
       <Route path="/" component={Home} />
       <Route path="/intake" component={Intake} />
-      <Route path="/my-prenups" component={MyPrenups} />
       <Route path="/success" component={Success} />
       <Route path="/review/:prenupId" component={Review} />
       <Route path="/privacy-policy" component={PrivacyPolicy} />

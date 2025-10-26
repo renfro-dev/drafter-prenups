@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Link, useLocation } from "wouter";
@@ -32,7 +32,6 @@ import { useMutation } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { SEOHead } from "@/components/seo-head";
-import { useAuth } from "@/hooks/useAuth";
 
 const STEPS = [
   { id: 1, title: "Personal Info", description: "Basic information about you and your partner" },
@@ -42,12 +41,10 @@ const STEPS = [
 ];
 
 export default function Intake() {
-  const { user, isLoading: authLoading, isAuthenticated } = useAuth();
   const [currentStep, setCurrentStep] = useState(1);
   const [, setLocation] = useLocation();
   const { toast } = useToast();
 
-  // Initialize form hook (must be at top level, before any conditional returns)
   const form = useForm<InsertIntake>({
     resolver: zodResolver(insertIntakeSchema),
     defaultValues: {
@@ -134,27 +131,6 @@ export default function Intake() {
       }
     }
   };
-
-  // Redirect to login if not authenticated (using useEffect to prevent infinite loops)
-  useEffect(() => {
-    if (!authLoading && !isAuthenticated) {
-      window.location.href = `/api/login?returnTo=${encodeURIComponent('/intake')}`;
-    }
-  }, [authLoading, isAuthenticated]);
-
-  // Show loading state while checking authentication
-  if (authLoading || !isAuthenticated) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-slate-900 to-slate-800">
-        <div className="text-center">
-          <Loader2 className="w-8 h-8 animate-spin text-blue-500 mx-auto mb-4" />
-          <p className="text-slate-300">
-            {authLoading ? 'Checking authentication...' : 'Redirecting to login...'}
-          </p>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <>

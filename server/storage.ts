@@ -26,9 +26,8 @@ export interface IStorage {
   upsertUser(user: UpsertUser): Promise<User>;
   
   // Intake methods
-  createIntake(intake: InsertIntake, maskedData: any, piiMap: PIIMap, userId?: string): Promise<Intake>;
+  createIntake(intake: InsertIntake, maskedData: any, piiMap: PIIMap): Promise<Intake>;
   getIntake(id: string): Promise<Intake | undefined>;
-  getUserIntakes(userId: string): Promise<Intake[]>;
   updateIntakePrenupUrl(id: string, url: string): Promise<void>;
   updateIntakeStatus(id: string, status: string): Promise<void>;
   updateIntakeUsers(id: string, partyAUserId: string | null, partyBUserId: string | null): Promise<void>;
@@ -66,11 +65,11 @@ export interface IStorage {
 }
 
 export class DatabaseStorage implements IStorage {
-  async createIntake(intake: InsertIntake, maskedData: any, piiMap: PIIMap, userId?: string): Promise<Intake> {
+  async createIntake(intake: InsertIntake, maskedData: any, piiMap: PIIMap): Promise<Intake> {
     const result = await sql`
-      INSERT INTO intakes (email, state, party_a_name, party_b_name, party_a_user_id, wedding_date, intake_data, masked_data, pii_map, status)
+      INSERT INTO intakes (email, state, party_a_name, party_b_name, wedding_date, intake_data, masked_data, pii_map, status)
       VALUES (${intake.email}, ${intake.state}, ${intake.partyAName}, ${intake.partyBName}, 
-              ${userId || null}, ${intake.weddingDate}, ${JSON.stringify(intake)}, ${JSON.stringify(maskedData)}, 
+              ${intake.weddingDate}, ${JSON.stringify(intake)}, ${JSON.stringify(maskedData)}, 
               ${JSON.stringify(piiMap)}, 'pending')
       RETURNING *
     `;
@@ -80,15 +79,6 @@ export class DatabaseStorage implements IStorage {
   async getIntake(id: string): Promise<Intake | undefined> {
     const result = await sql`SELECT * FROM intakes WHERE id = ${id}`;
     return result[0] as Intake | undefined;
-  }
-
-  async getUserIntakes(userId: string): Promise<Intake[]> {
-    const result = await sql`
-      SELECT * FROM intakes 
-      WHERE party_a_user_id = ${userId} OR party_b_user_id = ${userId}
-      ORDER BY created_at DESC
-    `;
-    return result as Intake[];
   }
 
   async updateIntakePrenupUrl(id: string, url: string): Promise<void> {

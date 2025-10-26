@@ -311,16 +311,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post("/api/generate", isAuthenticated, async (req: any, res) => {
+  app.post("/api/generate", async (req, res) => {
     try {
       const intake = insertIntakeSchema.parse(req.body);
 
       const { maskedData, piiMap } = maskPII(intake);
 
-      // Get authenticated user ID
-      const userId = req.user.claims.sub;
-
-      const intakeRecord = await storage.createIntake(intake, maskedData, piiMap, userId);
+      const intakeRecord = await storage.createIntake(intake, maskedData, piiMap);
 
       try {
         await storage.updateIntakeStatus(intakeRecord.id, 'processing');
@@ -445,18 +442,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error('Error fetching intake:', error);
       res.status(500).json({ error: 'Failed to fetch intake' });
-    }
-  });
-
-  // Get user's prenups
-  app.get("/api/my-prenups", isAuthenticated, async (req: any, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const intakes = await storage.getUserIntakes(userId);
-      res.json(intakes);
-    } catch (error) {
-      console.error('Error fetching user prenups:', error);
-      res.status(500).json({ error: 'Failed to fetch prenups' });
     }
   });
 
