@@ -139,23 +139,6 @@ export default function Intake() {
         description="Start creating your California prenup with our private AI-powered intake form. 10 minutes to complete, $49 total cost. Attorney-ready prenuptial agreements with PII masking."
       />
     <div className="min-h-screen bg-background">
-      <header className="border-b bg-background">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex h-16 items-center justify-between">
-            <Link href="/" data-testid="link-home">
-              <div className="flex items-center space-x-2 cursor-pointer">
-                <Shield className="h-6 w-6 text-primary" />
-                <span className="text-lg font-bold">Drafter</span>
-              </div>
-            </Link>
-            <div className="flex items-center space-x-2 text-sm text-muted-foreground">
-              <Shield className="h-4 w-4" />
-              <span>Secure & Private</span>
-            </div>
-          </div>
-        </div>
-      </header>
-
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
         <div className="max-w-4xl mx-auto">
           <div className="mb-8">
