@@ -105,3 +105,56 @@ export function unmaskText(text: string, piiMap: PIIMap): string {
 
   return unmasked;
 }
+
+/**
+ * Masks PII tokens in text for display to unauthenticated users
+ * Replaces PII tokens with encrypted markers to incentivize authentication
+ */
+export function maskTextForDisplay(text: string, piiMap: PIIMap): string {
+  // Type guard: return original text if input is invalid
+  if (!text || typeof text !== 'string') {
+    return text || '';
+  }
+  
+  // Type guard: return original text if piiMap is invalid
+  if (!piiMap || typeof piiMap !== 'object') {
+    console.warn('[maskTextForDisplay] Invalid piiMap provided, returning original text');
+    return text;
+  }
+
+  let masked = text;
+
+  // Replace name tokens with [ENCRYPTED]
+  if (piiMap.names && typeof piiMap.names === 'object') {
+    Object.keys(piiMap.names).forEach((token) => {
+      const regex = new RegExp(token, 'g');
+      masked = masked.replace(regex, '[ENCRYPTED]');
+    });
+  }
+
+  // Replace description tokens with [ENCRYPTED]
+  if (piiMap.descriptions && typeof piiMap.descriptions === 'object') {
+    Object.keys(piiMap.descriptions).forEach((token) => {
+      const regex = new RegExp(token, 'g');
+      masked = masked.replace(regex, '[ENCRYPTED]');
+    });
+  }
+
+  // Replace value tokens with $***,***
+  if (piiMap.values && typeof piiMap.values === 'object') {
+    Object.keys(piiMap.values).forEach((token) => {
+      const regex = new RegExp(token, 'g');
+      masked = masked.replace(regex, '$***,***');
+    });
+  }
+
+  // Replace date tokens with [ENCRYPTED]
+  if (piiMap.dates && typeof piiMap.dates === 'object') {
+    Object.keys(piiMap.dates).forEach((token) => {
+      const regex = new RegExp(token, 'g');
+      masked = masked.replace(regex, '[ENCRYPTED]');
+    });
+  }
+
+  return masked;
+}

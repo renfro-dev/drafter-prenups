@@ -2,7 +2,7 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertIntakeSchema, generatedPrenupSchema } from "@shared/schema";
-import { maskPII, unmaskText } from "./utils/pii-masking";
+import { maskPII, unmaskText, maskTextForDisplay } from "./utils/pii-masking";
 import { generatePrenup } from "./lib/anthropic-client";
 import { generateWordDocument } from "./utils/document-generator";
 import { sendEmail, generatePrenupEmail } from "./utils/email-sender";
@@ -119,12 +119,56 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }
       }
 
-      // Return clauses regardless of authentication status
+      // Return clauses with PII masking based on authentication status
       const clauses = await storage.getPrenupClauses(intakeId);
-      if (process.env.NODE_ENV === 'development') {
-        console.log('[Review] Returning clauses:', clauses.length);
+      
+      // Require pii_map for security - don't expose raw data
+      if (!intake.piiMap) {
+        console.error('[Review] ERROR: No pii_map found for intake, cannot safely return clauses');
+        return res.status(500).json({ 
+          error: 'Prenup data not available for review. Please regenerate your prenup.' 
+        });
       }
-      res.json(clauses);
+      
+      const piiMap = intake.piiMap as any;
+      
+      // If user is not authenticated, mask ALL PII-bearing fields
+      if (!req.user?.claims) {
+        const maskedClauses = clauses.map(clause => ({
+          ...clause,
+          title: maskTextForDisplay(clause.title, piiMap),
+          legalText: maskTextForDisplay(clause.legalText, piiMap),
+          plainExplanation: clause.plainExplanation 
+            ? maskTextForDisplay(clause.plainExplanation, piiMap) 
+            : null,
+          category: clause.category 
+            ? maskTextForDisplay(clause.category, piiMap) 
+            : null,
+        }));
+        
+        if (process.env.NODE_ENV === 'development') {
+          console.log('[Review] Returning masked clauses for unauthenticated user:', maskedClauses.length);
+        }
+        return res.json(maskedClauses);
+      }
+      
+      // If authenticated, unmask ALL PII-bearing fields for personalized view
+      const unmaskedClauses = clauses.map(clause => ({
+        ...clause,
+        title: unmaskText(clause.title, piiMap),
+        legalText: unmaskText(clause.legalText, piiMap),
+        plainExplanation: clause.plainExplanation 
+          ? unmaskText(clause.plainExplanation, piiMap) 
+          : null,
+        category: clause.category 
+          ? unmaskText(clause.category, piiMap) 
+          : null,
+      }));
+      
+      if (process.env.NODE_ENV === 'development') {
+        console.log('[Review] Returning unmasked clauses for authenticated user:', unmaskedClauses.length);
+      }
+      res.json(unmaskedClauses);
     } catch (error) {
       console.error('Error fetching prenup clauses:', error);
       res.status(500).json({ error: 'Failed to fetch clauses' });

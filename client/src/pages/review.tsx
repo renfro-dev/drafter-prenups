@@ -546,11 +546,10 @@ export default function Review() {
     );
   }
 
-  const flaggedClauses = clauses.filter((_, i) => i % 3 === 0); // Mock: every 3rd clause is flagged
-  const reviewedClauses = clauses.filter((_, i) => i % 2 === 0); // Mock: every 2nd clause is reviewed
-  const progressPercentage = clauses.length > 0 
-    ? Math.round((reviewedClauses.length / clauses.length) * 100) 
-    : 0;
+  // TODO: Replace with actual flag/review tracking from API
+  const flaggedClauses = []; // Will be populated from actual flags
+  const reviewedClauses = []; // Will be populated from actual reviews
+  const progressPercentage = 0; // Will be calculated from actual review progress
 
   return (
     <div className="min-h-screen bg-background" data-testid="page-review">
@@ -570,6 +569,45 @@ export default function Review() {
           </div>
         </div>
       </header>
+
+      {/* Authentication Gate Banner */}
+      {!isAuthenticated && (
+        <div className="border-b bg-primary/5 border-primary/20" data-testid="auth-gate-banner">
+          <div className="container max-w-5xl py-4 px-6">
+            <div className="flex items-center justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <div className="flex items-center justify-center h-10 w-10 rounded-full bg-primary/10">
+                  <Lock className="h-5 w-5 text-primary" />
+                </div>
+                <div>
+                  <h3 className="text-sm font-semibold">🔒 Privacy Protection Active</h3>
+                  <p className="text-xs text-muted-foreground">
+                    Personal information is encrypted to protect your privacy. Sign in to view your personalized prenup and unlock collaborative features.
+                  </p>
+                </div>
+              </div>
+              <div className="flex gap-2 shrink-0">
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={() => window.location.href = `/api/login?returnTo=${encodeURIComponent(window.location.pathname)}`}
+                  data-testid="button-sign-in"
+                >
+                  <LogIn className="h-4 w-4 mr-2" />
+                  Sign In
+                </Button>
+                <Button 
+                  size="sm"
+                  onClick={() => window.location.href = `/api/login?returnTo=${encodeURIComponent(window.location.pathname)}`}
+                  data-testid="button-create-account"
+                >
+                  Create Account
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="container max-w-5xl py-8 px-6">
         {/* Summary Cards */}
