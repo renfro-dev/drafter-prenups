@@ -132,6 +132,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Require pii_map for security - don't expose raw data
       if (!intake.piiMap) {
         console.error('[Review] ERROR: No pii_map found for intake, cannot safely return clauses');
+        console.error('[Review] Intake object keys:', Object.keys(intake));
+        console.error('[Review] Intake piiMap value:', intake.piiMap);
+        console.error('[Review] Intake pii_map value (snake_case):', (intake as any).pii_map);
         return res.status(500).json({
           error: 'Prenup data not available for review. Please regenerate your prenup.'
         });
