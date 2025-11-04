@@ -121,15 +121,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       // Return clauses with PII masking based on authentication status
       const clauses = await storage.getPrenupClauses(intakeId);
-      
+
+      // Handle case where no clauses were parsed/saved
+      if (clauses.length === 0) {
+        console.warn('[Review] No clauses found for intake:', intakeId);
+        console.warn('[Review] This likely means clause parsing failed during generation');
+        return res.json([]); // Return empty array to allow graceful handling
+      }
+
       // Require pii_map for security - don't expose raw data
       if (!intake.piiMap) {
         console.error('[Review] ERROR: No pii_map found for intake, cannot safely return clauses');
-        return res.status(500).json({ 
-          error: 'Prenup data not available for review. Please regenerate your prenup.' 
+        return res.status(500).json({
+          error: 'Prenup data not available for review. Please regenerate your prenup.'
         });
       }
-      
+
       const piiMap = intake.piiMap as any;
       
       // If user is not authenticated, mask ALL PII-bearing fields
@@ -477,13 +484,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
         let clausesSaved = 0;
         try {
           console.log('[Clause Parsing] Starting to parse prenup into reviewable clauses...');
+
+          // Validate prenup structure before parsing
+          if (!validatedPrenup.sections || validatedPrenup.sections.length === 0) {
+            console.error('[Clause Parsing] ERROR: validatedPrenup has no sections');
+            console.error('[Clause Parsing] Prenup structure:', JSON.stringify(validatedPrenup, null, 2));
+            throw new Error('Generated prenup has no sections - cannot parse clauses');
+          }
+
+          console.log(`[Clause Parsing] Prenup has ${validatedPrenup.sections.length} sections`);
           const parsedClauses = parsePrenupClauses(validatedPrenup, intakeRecord.id);
           console.log(`[Clause Parsing] Successfully parsed ${parsedClauses.length} clauses`);
-          
+
           if (parsedClauses.length === 0) {
             console.warn('[Clause Parsing] WARNING: No clauses were parsed from the prenup. Review features will not be available.');
           }
-          
+
           // Save clauses to database for collaborative review
           for (const clause of parsedClauses) {
             await storage.createPrenupClause(clause);
@@ -492,7 +508,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
           console.log(`[Clause Parsing] Successfully saved ${clausesSaved} clauses to database`);
         } catch (clauseError) {
           console.error('[Clause Parsing] ERROR: Failed to parse or save clauses:', clauseError);
+          console.error('[Clause Parsing] Error details:', {
+            message: (clauseError as Error).message,
+            stack: (clauseError as Error).stack,
+          });
           console.error(`[Clause Parsing] Clauses saved before error: ${clausesSaved}`);
+          console.error('[Clause Parsing] Prenup structure:', JSON.stringify(validatedPrenup, null, 2));
           console.error('[Clause Parsing] Prenup generation will continue, but collaborative review features will not be available');
           // Don't throw - allow generation to succeed even if clause parsing fails
         }

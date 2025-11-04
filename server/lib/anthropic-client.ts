@@ -71,15 +71,40 @@ Generate the complete prenup agreement in JSON format.`;
     throw new Error('No text response from Claude');
   }
 
-  const jsonMatch = textContent.text.match(/\{[\s\S]*\}/);
-  if (!jsonMatch) {
+  // Extract JSON more safely - find first { and last }
+  const text = textContent.text;
+  const firstBrace = text.indexOf('{');
+  const lastBrace = text.lastIndexOf('}');
+
+  if (firstBrace === -1 || lastBrace === -1 || firstBrace >= lastBrace) {
+    console.error('[AI Response] No valid JSON found in response:', text);
     throw new Error('No JSON found in response');
   }
 
-  const result = JSON.parse(jsonMatch[0]);
-  
+  const jsonStr = text.substring(firstBrace, lastBrace + 1);
+
+  let result;
+  try {
+    result = JSON.parse(jsonStr);
+  } catch (parseError) {
+    console.error('[AI Response] JSON parse error:', parseError);
+    console.error('[AI Response] Attempted to parse:', jsonStr);
+    throw new Error(`Failed to parse AI response as JSON: ${(parseError as Error).message}`);
+  }
+
+  // Validate response structure
+  if (!result.sections || !Array.isArray(result.sections)) {
+    console.error('[AI Response] Invalid response structure - missing or invalid sections array:', result);
+    throw new Error('AI response missing valid sections array');
+  }
+
+  if (result.sections.length === 0) {
+    console.error('[AI Response] AI returned empty sections array');
+    throw new Error('AI response contains no sections');
+  }
+
   return {
     jurisdiction: result.jurisdiction || 'CA',
-    sections: result.sections || [],
+    sections: result.sections,
   };
 }
