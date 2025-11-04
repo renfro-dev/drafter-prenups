@@ -8,9 +8,28 @@ export async function generateWordDocument(prenup: GeneratedPrenup, piiMap: PIIM
     text: unmaskText(section.text, piiMap),
   }));
 
-  const partyA = piiMap.names[Object.keys(piiMap.names).find(k => k.startsWith('PARTY_A_')) || ''] || 'Party A';
-  const partyB = piiMap.names[Object.keys(piiMap.names).find(k => k.startsWith('PARTY_B_')) || ''] || 'Party B';
-  const weddingDate = piiMap.dates[Object.keys(piiMap.dates)[0]] || 'TBD';
+  // Extract party names with better error handling
+  const partyAKey = Object.keys(piiMap.names).find(k => k.startsWith('PARTY_A_'));
+  const partyBKey = Object.keys(piiMap.names).find(k => k.startsWith('PARTY_B_'));
+
+  if (!partyAKey) {
+    console.warn('[Document Generator] WARNING: No PARTY_A token found in piiMap.names');
+    console.warn('[Document Generator] Available name keys:', Object.keys(piiMap.names));
+  }
+  if (!partyBKey) {
+    console.warn('[Document Generator] WARNING: No PARTY_B token found in piiMap.names');
+    console.warn('[Document Generator] Available name keys:', Object.keys(piiMap.names));
+  }
+
+  const partyA = partyAKey ? piiMap.names[partyAKey] : 'Party A';
+  const partyB = partyBKey ? piiMap.names[partyBKey] : 'Party B';
+
+  // Extract wedding date with better error handling
+  const dateKeys = Object.keys(piiMap.dates);
+  if (dateKeys.length === 0) {
+    console.warn('[Document Generator] WARNING: No date tokens found in piiMap.dates');
+  }
+  const weddingDate = dateKeys.length > 0 ? piiMap.dates[dateKeys[0]] : 'TBD';
 
   const children: Paragraph[] = [];
 

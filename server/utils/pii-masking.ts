@@ -80,26 +80,31 @@ export function maskPII(intake: InsertIntake): MaskedResult {
   return { maskedData, piiMap };
 }
 
+// Helper function to escape regex special characters in tokens
+function escapeRegex(str: string): string {
+  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
 export function unmaskText(text: string, piiMap: PIIMap): string {
   let unmasked = text;
 
   Object.entries(piiMap.names).forEach(([token, value]) => {
-    const regex = new RegExp(token, 'g');
+    const regex = new RegExp(escapeRegex(token), 'g');
     unmasked = unmasked.replace(regex, value);
   });
 
   Object.entries(piiMap.descriptions).forEach(([token, value]) => {
-    const regex = new RegExp(token, 'g');
+    const regex = new RegExp(escapeRegex(token), 'g');
     unmasked = unmasked.replace(regex, value);
   });
 
   Object.entries(piiMap.values).forEach(([token, value]) => {
-    const regex = new RegExp(token, 'g');
+    const regex = new RegExp(escapeRegex(token), 'g');
     unmasked = unmasked.replace(regex, `$${value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`);
   });
 
   Object.entries(piiMap.dates).forEach(([token, value]) => {
-    const regex = new RegExp(token, 'g');
+    const regex = new RegExp(escapeRegex(token), 'g');
     unmasked = unmasked.replace(regex, value);
   });
 
@@ -127,7 +132,7 @@ export function maskTextForDisplay(text: string, piiMap: PIIMap): string {
   // Replace name tokens with [ENCRYPTED]
   if (piiMap.names && typeof piiMap.names === 'object') {
     Object.keys(piiMap.names).forEach((token) => {
-      const regex = new RegExp(token, 'g');
+      const regex = new RegExp(escapeRegex(token), 'g');
       masked = masked.replace(regex, '[ENCRYPTED]');
     });
   }
@@ -135,7 +140,7 @@ export function maskTextForDisplay(text: string, piiMap: PIIMap): string {
   // Replace description tokens with [ENCRYPTED]
   if (piiMap.descriptions && typeof piiMap.descriptions === 'object') {
     Object.keys(piiMap.descriptions).forEach((token) => {
-      const regex = new RegExp(token, 'g');
+      const regex = new RegExp(escapeRegex(token), 'g');
       masked = masked.replace(regex, '[ENCRYPTED]');
     });
   }
@@ -143,7 +148,7 @@ export function maskTextForDisplay(text: string, piiMap: PIIMap): string {
   // Replace value tokens with $***,***
   if (piiMap.values && typeof piiMap.values === 'object') {
     Object.keys(piiMap.values).forEach((token) => {
-      const regex = new RegExp(token, 'g');
+      const regex = new RegExp(escapeRegex(token), 'g');
       masked = masked.replace(regex, '$***,***');
     });
   }
@@ -151,7 +156,7 @@ export function maskTextForDisplay(text: string, piiMap: PIIMap): string {
   // Replace date tokens with [ENCRYPTED]
   if (piiMap.dates && typeof piiMap.dates === 'object') {
     Object.keys(piiMap.dates).forEach((token) => {
-      const regex = new RegExp(token, 'g');
+      const regex = new RegExp(escapeRegex(token), 'g');
       masked = masked.replace(regex, '[ENCRYPTED]');
     });
   }
