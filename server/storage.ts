@@ -18,9 +18,11 @@ import {
   type ClauseReview,
   type InsertClauseReview,
 } from "@shared/schema";
-import { neon } from "@neondatabase/serverless";
+import postgres from "postgres";
 
-const sql = neon(process.env.DATABASE_URL!);
+const sql = postgres(process.env.DATABASE_URL!, {
+  ssl: "require",
+});
 
 export interface IStorage {
   // Auth methods - Required for Replit Auth
@@ -86,7 +88,32 @@ export class DatabaseStorage implements IStorage {
 
   async getIntake(id: string): Promise<Intake | undefined> {
     const result = await sql`SELECT * FROM intakes WHERE id = ${id}`;
-    return result[0] as Intake | undefined;
+    if (!result[0]) return undefined;
+
+    const row = result[0];
+    return {
+      id: row.id,
+      email: row.email,
+      state: row.state,
+      partyAName: row.party_a_name,
+      partyBName: row.party_b_name,
+      partyAUserId: row.party_a_user_id,
+      partyBUserId: row.party_b_user_id,
+      weddingDate: row.wedding_date,
+      intakeData: row.intake_data,
+      maskedData: row.masked_data,
+      piiMap: row.pii_map, // Map snake_case to camelCase
+      prenupDocUrl: row.prenup_doc_url,
+      status: row.status,
+      paid: row.paid,
+      paymentAmount: row.payment_amount,
+      paymentDate: row.payment_date,
+      stripePaymentIntentId: row.stripe_payment_intent_id,
+      promoCodeUsed: row.promo_code_used,
+      reviewCompleted: row.review_completed,
+      reviewCompletedDate: row.review_completed_date,
+      createdAt: row.created_at,
+    } as Intake;
   }
 
   async updateIntakePrenupUrl(id: string, url: string): Promise<void> {
