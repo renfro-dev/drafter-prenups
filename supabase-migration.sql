@@ -1,32 +1,10 @@
-import postgres from "postgres";
-import { readFileSync } from "fs";
-import { join, dirname } from "path";
-import { fileURLToPath } from "url";
+-- Supabase Migration Script
+-- This script creates all necessary tables for the Drafter_Nups application
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+-- Enable UUID extension (if not already enabled)
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
-// Lazy initialization of database connection
-let sql: ReturnType<typeof postgres>;
-
-function getDb() {
-  if (!sql) {
-    // Use direct database URL from environment
-    const dbUrl = process.env.SUPABASE_DB_URL || process.env.DATABASE_URL;
-    if (!dbUrl) {
-      throw new Error('SUPABASE_DB_URL or DATABASE_URL environment variable is required');
-    }
-
-    sql = postgres(dbUrl, {
-      ssl: "require",
-    });
-  }
-  return sql;
-}
-
-// Inline SQL for all tables - no file dependencies needed for production
-const CREATE_TABLES_SQL = `
--- Session storage table (Required for Replit Auth)
+-- Session storage table (Required for authentication)
 CREATE TABLE IF NOT EXISTS sessions (
   sid VARCHAR PRIMARY KEY,
   sess JSONB NOT NULL,
@@ -35,7 +13,7 @@ CREATE TABLE IF NOT EXISTS sessions (
 
 CREATE INDEX IF NOT EXISTS "IDX_session_expire" ON sessions(expire);
 
--- User storage table (Required for Replit Auth)
+-- User storage table (Required for authentication)
 CREATE TABLE IF NOT EXISTS users (
   id VARCHAR PRIMARY KEY DEFAULT gen_random_uuid()::text,
   email VARCHAR UNIQUE,
@@ -167,62 +145,7 @@ CREATE TABLE IF NOT EXISTS clause_reviews (
 
 CREATE INDEX IF NOT EXISTS idx_clause_reviews_clause ON clause_reviews(prenup_clause_id);
 CREATE INDEX IF NOT EXISTS idx_clause_reviews_user ON clause_reviews(user_id);
-`;
 
-export async function initializeDatabase() {
-  console.log('Initializing database...');
-
-  try {
-    // Execute all CREATE TABLE statements
-    // Remove comment lines first, then split into statements
-    const lines = CREATE_TABLES_SQL.split('\n').filter(line => !line.trim().startsWith('--'));
-    const cleanSQL = lines.join('\n');
-    
-    const statements = cleanSQL
-      .split(';')
-      .map(s => s.trim())
-      .filter(s => s.length > 0);
-
-    for (const statement of statements) {
-      await getDb().unsafe(statement);
-    }
-    console.log('✓ Database tables created');
-
-    // Check if clauses need to be seeded
-    const existingClauses = await getDb()`SELECT COUNT(*) as count FROM clauses`;
-    const clauseCount = parseInt(existingClauses[0].count as string);
-
-    if (clauseCount === 0) {
-      console.log('Seeding California clauses...');
-      
-      try {
-        const clausesJSON = readFileSync(
-          join(__dirname, '../../data/clauses/california-clauses.json'),
-          'utf-8'
-        );
-        const californiaClausesData = JSON.parse(clausesJSON);
-        
-        for (const clause of californiaClausesData) {
-          await getDb()`
-            INSERT INTO clauses (clause_id, title, category, jurisdiction, text_normalized, version)
-            VALUES (${clause.clauseId}, ${clause.title}, ${clause.category}, 
-                    ${clause.jurisdiction}, ${clause.textNormalized}, ${clause.version})
-            ON CONFLICT (clause_id) DO NOTHING
-          `;
-        }
-        
-        console.log(`✓ Seeded ${californiaClausesData.length} California clauses`);
-      } catch (clauseError) {
-        console.warn('Warning: Could not load California clauses:', clauseError);
-        console.warn('This is expected in production build. Clauses can be seeded manually.');
-      }
-    } else {
-      console.log(`✓ Database already contains ${clauseCount} clauses`);
-    }
-
-    console.log('Database initialization complete!');
-  } catch (error) {
-    console.error('Error initializing database:', error);
-    throw error;
-  }
-}
+-- Add RLS (Row Level Security) policies if needed
+-- Note: You may want to configure RLS policies in Supabase dashboard
+-- based on your security requirements
