@@ -20,9 +20,23 @@ import {
 } from "@shared/schema";
 import postgres from "postgres";
 
-const sql = postgres(process.env.DATABASE_URL!, {
-  ssl: "require",
-});
+// Lazy initialization of database connection
+let sql: ReturnType<typeof postgres>;
+
+function getDb() {
+  if (!sql) {
+    // Use direct database URL from environment
+    const dbUrl = process.env.SUPABASE_DB_URL || process.env.DATABASE_URL;
+    if (!dbUrl) {
+      throw new Error('SUPABASE_DB_URL or DATABASE_URL environment variable is required');
+    }
+
+    sql = postgres(dbUrl, {
+      ssl: "require",
+    });
+  }
+  return sql;
+}
 
 export interface IStorage {
   // Auth methods - Required for Replit Auth
@@ -76,7 +90,7 @@ export interface IStorage {
 
 export class DatabaseStorage implements IStorage {
   async createIntake(intake: InsertIntake, maskedData: any, piiMap: PIIMap): Promise<Intake> {
-    const result = await sql`
+    const result = await getDb()`
       INSERT INTO intakes (email, state, party_a_name, party_b_name, wedding_date, intake_data, masked_data, pii_map, status)
       VALUES (${intake.email}, ${intake.state}, ${intake.partyAName}, ${intake.partyBName}, 
               ${intake.weddingDate}, ${JSON.stringify(intake)}, ${JSON.stringify(maskedData)}, 
@@ -87,7 +101,7 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getIntake(id: string): Promise<Intake | undefined> {
-    const result = await sql`SELECT * FROM intakes WHERE id = ${id}`;
+    const result = await getDb()`SELECT * FROM intakes WHERE id = ${id}`;
     if (!result[0]) return undefined;
 
     const row = result[0];
@@ -100,9 +114,9 @@ export class DatabaseStorage implements IStorage {
       partyAUserId: row.party_a_user_id,
       partyBUserId: row.party_b_user_id,
       weddingDate: row.wedding_date,
-      intakeData: row.intake_data,
-      maskedData: row.masked_data,
-      piiMap: row.pii_map, // Map snake_case to camelCase
+      intakeData: typeof row.intake_data === 'string' ? JSON.parse(row.intake_data) : row.intake_data,
+      maskedData: typeof row.masked_data === 'string' ? JSON.parse(row.masked_data) : row.masked_data,
+      piiMap: typeof row.pii_map === 'string' ? JSON.parse(row.pii_map) : row.pii_map,
       prenupDocUrl: row.prenup_doc_url,
       status: row.status,
       paid: row.paid,
@@ -117,31 +131,31 @@ export class DatabaseStorage implements IStorage {
   }
 
   async updateIntakePrenupUrl(id: string, url: string): Promise<void> {
-    await sql`UPDATE intakes SET prenup_doc_url = ${url}, status = 'completed' WHERE id = ${id}`;
+    await getDb()`UPDATE intakes SET prenup_doc_url = ${url}, status = 'completed' WHERE id = ${id}`;
   }
 
   async updateIntakeStatus(id: string, status: string): Promise<void> {
-    await sql`UPDATE intakes SET status = ${status} WHERE id = ${id}`;
+    await getDb()`UPDATE intakes SET status = ${status} WHERE id = ${id}`;
   }
 
   async updateIntakeReviewCompleted(id: string, completed: boolean): Promise<void> {
     if (completed) {
-      await sql`UPDATE intakes SET review_completed = TRUE, review_completed_date = NOW() WHERE id = ${id}`;
+      await getDb()`UPDATE intakes SET review_completed = TRUE, review_completed_date = NOW() WHERE id = ${id}`;
     } else {
-      await sql`UPDATE intakes SET review_completed = FALSE, review_completed_date = NULL WHERE id = ${id}`;
+      await getDb()`UPDATE intakes SET review_completed = FALSE, review_completed_date = NULL WHERE id = ${id}`;
     }
   }
 
   async getClauses(jurisdiction: string, categories?: string[]): Promise<Clause[]> {
     let result;
     if (categories && categories.length > 0) {
-      result = await sql`
+      result = await getDb()`
         SELECT * FROM clauses 
         WHERE jurisdiction = ${jurisdiction} AND category = ANY(${categories})
         ORDER BY category, clause_id
       `;
     } else {
-      result = await sql`
+      result = await getDb()`
         SELECT * FROM clauses 
         WHERE jurisdiction = ${jurisdiction}
         ORDER BY category, clause_id
@@ -162,7 +176,7 @@ export class DatabaseStorage implements IStorage {
   }
 
   async createClause(clause: InsertClause): Promise<Clause> {
-    const result = await sql`
+    const result = await getDb()`
       INSERT INTO clauses (clause_id, title, category, jurisdiction, text_normalized, applicable_when, version)
       VALUES (${clause.clauseId}, ${clause.title}, ${clause.category}, ${clause.jurisdiction}, 
               ${clause.textNormalized}, ${clause.applicableWhen ? JSON.stringify(clause.applicableWhen) : null}, 
@@ -180,7 +194,7 @@ export class DatabaseStorage implements IStorage {
     success: boolean;
     errorMessage?: string;
   }): Promise<GenerationLog> {
-    const result = await sql`
+    const result = await getDb()`
       INSERT INTO generation_logs (intake_id, clauses_used, prompt_tokens, completion_tokens, success, error_message)
       VALUES (${log.intakeId}, ${JSON.stringify(log.clausesUsed)}, ${log.promptTokens || null}, 
               ${log.completionTokens || null}, ${log.success}, ${log.errorMessage || null})
@@ -191,7 +205,7 @@ export class DatabaseStorage implements IStorage {
 
   // Auth methods - Required for Replit Auth
   async getUser(id: string): Promise<User | undefined> {
-    const result = await sql`SELECT * FROM users WHERE id = ${id}`;
+    const result = await getDb()`SELECT * FROM users WHERE id = ${id}`;
     if (!result[0]) return undefined;
     const row = result[0];
     return {
@@ -210,7 +224,7 @@ export class DatabaseStorage implements IStorage {
     // 1. Same user logging in again (email match)
     // 2. Different OIDC sub but same email (update existing record, keep ID stable)
     // NOTE: We keep the user ID stable to avoid breaking foreign key references
-    const result = await sql`
+    const result = await getDb()`
       INSERT INTO users (id, email, first_name, last_name, profile_image_url)
       VALUES (${userData.id}, ${userData.email}, ${userData.firstName || null}, 
               ${userData.lastName || null}, ${userData.profileImageUrl || null})
@@ -234,7 +248,7 @@ export class DatabaseStorage implements IStorage {
   }
 
   async updateIntakeUsers(id: string, partyAUserId: string | null, partyBUserId: string | null): Promise<void> {
-    await sql`
+    await getDb()`
       UPDATE intakes 
       SET party_a_user_id = ${partyAUserId}, party_b_user_id = ${partyBUserId}
       WHERE id = ${id}
@@ -243,7 +257,7 @@ export class DatabaseStorage implements IStorage {
 
   // Collaborative review methods
   async createPrenupClause(clause: InsertPrenupClause): Promise<PrenupClause> {
-    const result = await sql`
+    const result = await getDb()`
       INSERT INTO prenup_clauses (intake_id, clause_number, title, legal_text, plain_explanation, category)
       VALUES (${clause.intakeId}, ${clause.clauseNumber}, ${clause.title}, ${clause.legalText}, 
               ${clause.plainExplanation || null}, ${clause.category || null})
@@ -263,7 +277,7 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getPrenupClause(id: string): Promise<PrenupClause | undefined> {
-    const result = await sql`
+    const result = await getDb()`
       SELECT * FROM prenup_clauses 
       WHERE id = ${id}
       LIMIT 1
@@ -283,7 +297,7 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getPrenupClauses(intakeId: string): Promise<PrenupClause[]> {
-    const result = await sql`
+    const result = await getDb()`
       SELECT * FROM prenup_clauses 
       WHERE intake_id = ${intakeId}
       ORDER BY clause_number
@@ -301,7 +315,7 @@ export class DatabaseStorage implements IStorage {
   }
 
   async updateClauseExplanation(id: string, explanation: string): Promise<void> {
-    await sql`
+    await getDb()`
       UPDATE prenup_clauses 
       SET plain_explanation = ${explanation}
       WHERE id = ${id}
@@ -310,7 +324,7 @@ export class DatabaseStorage implements IStorage {
 
   async createClauseComment(comment: InsertClauseComment): Promise<ClauseComment> {
     console.log('[Storage] Creating comment:', { prenupClauseId: comment.prenupClauseId, userId: comment.userId });
-    const result = await sql`
+    const result = await getDb()`
       INSERT INTO clause_comments (prenup_clause_id, user_id, comment)
       VALUES (${comment.prenupClauseId}, ${comment.userId}, ${comment.comment})
       RETURNING *
@@ -330,7 +344,7 @@ export class DatabaseStorage implements IStorage {
 
   async getClauseComments(prenupClauseId: string): Promise<ClauseComment[]> {
     console.log('[Storage] Getting comments for clause:', prenupClauseId);
-    const result = await sql`
+    const result = await getDb()`
       SELECT * FROM clause_comments 
       WHERE prenup_clause_id = ${prenupClauseId}
       ORDER BY created_at
@@ -346,7 +360,7 @@ export class DatabaseStorage implements IStorage {
   }
 
   async createClauseFlag(flag: InsertClauseFlag): Promise<ClauseFlag> {
-    const result = await sql`
+    const result = await getDb()`
       INSERT INTO clause_flags (prenup_clause_id, user_id, reason, resolved)
       VALUES (${flag.prenupClauseId}, ${flag.userId}, ${flag.reason || null}, ${flag.resolved || false})
       RETURNING *
@@ -363,7 +377,7 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getClauseFlags(prenupClauseId: string): Promise<ClauseFlag[]> {
-    const result = await sql`
+    const result = await getDb()`
       SELECT * FROM clause_flags 
       WHERE prenup_clause_id = ${prenupClauseId}
       ORDER BY created_at
@@ -379,7 +393,7 @@ export class DatabaseStorage implements IStorage {
   }
 
   async resolveClauseFlag(id: string): Promise<void> {
-    await sql`
+    await getDb()`
       UPDATE clause_flags 
       SET resolved = TRUE
       WHERE id = ${id}
@@ -387,7 +401,7 @@ export class DatabaseStorage implements IStorage {
   }
 
   async createClauseQuestion(question: InsertClauseQuestion): Promise<ClauseQuestion> {
-    const result = await sql`
+    const result = await getDb()`
       INSERT INTO clause_questions (prenup_clause_id, user_id, question, answer)
       VALUES (${question.prenupClauseId}, ${question.userId}, ${question.question}, ${question.answer || null})
       RETURNING *
@@ -404,7 +418,7 @@ export class DatabaseStorage implements IStorage {
   }
 
   async updateClauseAnswer(id: string, answer: string): Promise<void> {
-    await sql`
+    await getDb()`
       UPDATE clause_questions 
       SET answer = ${answer}
       WHERE id = ${id}
@@ -412,7 +426,7 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getClauseQuestions(prenupClauseId: string): Promise<ClauseQuestion[]> {
-    const result = await sql`
+    const result = await getDb()`
       SELECT * FROM clause_questions 
       WHERE prenup_clause_id = ${prenupClauseId}
       ORDER BY created_at
@@ -428,7 +442,7 @@ export class DatabaseStorage implements IStorage {
   }
 
   async createClauseReview(review: InsertClauseReview): Promise<ClauseReview> {
-    const result = await sql`
+    const result = await getDb()`
       INSERT INTO clause_reviews (prenup_clause_id, user_id)
       VALUES (${review.prenupClauseId}, ${review.userId})
       ON CONFLICT (prenup_clause_id, user_id) DO NOTHING
@@ -436,7 +450,7 @@ export class DatabaseStorage implements IStorage {
     `;
     if (result.length === 0) {
       // Already reviewed, fetch existing review
-      const existing = await sql`
+      const existing = await getDb()`
         SELECT * FROM clause_reviews 
         WHERE prenup_clause_id = ${review.prenupClauseId} AND user_id = ${review.userId}
       `;
@@ -458,7 +472,7 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getClauseReview(prenupClauseId: string, userId: string): Promise<ClauseReview | undefined> {
-    const result = await sql`
+    const result = await getDb()`
       SELECT * FROM clause_reviews 
       WHERE prenup_clause_id = ${prenupClauseId} AND user_id = ${userId}
     `;
@@ -475,7 +489,7 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getUserReviewedClauses(userId: string, intakeId: string): Promise<string[]> {
-    const result = await sql`
+    const result = await getDb()`
       SELECT cr.prenup_clause_id 
       FROM clause_reviews cr
       JOIN prenup_clauses pc ON cr.prenup_clause_id = pc.id
@@ -486,13 +500,13 @@ export class DatabaseStorage implements IStorage {
 
   async getReviewProgress(intakeId: string): Promise<{ total: number; reviewed: number }> {
     // Get total clauses for this prenup
-    const totalResult = await sql`
+    const totalResult = await getDb()`
       SELECT COUNT(*) as count FROM prenup_clauses WHERE intake_id = ${intakeId}
     `;
     const total = parseInt(totalResult[0].count as string);
 
     // Get count of unique clause reviews (distinct clause_id)
-    const reviewedResult = await sql`
+    const reviewedResult = await getDb()`
       SELECT COUNT(DISTINCT cr.prenup_clause_id) as count
       FROM clause_reviews cr
       JOIN prenup_clauses pc ON cr.prenup_clause_id = pc.id

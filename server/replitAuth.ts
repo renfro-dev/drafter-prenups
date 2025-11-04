@@ -8,10 +8,25 @@ import type { Express, RequestHandler } from "express";
 import memoize from "memoizee";
 import connectPg from "connect-pg-simple";
 import { storage } from "./storage";
+import { createRemoteJWKSet, jwtVerify, type JWTPayload } from "jose";
 
-if (!process.env.REPLIT_DOMAINS) {
+const AUTH_PROVIDER = process.env.AUTH_PROVIDER || "replit";
+
+// Only require Replit envs when using Replit auth
+if (AUTH_PROVIDER === "replit" && !process.env.REPLIT_DOMAINS) {
   throw new Error("Environment variable REPLIT_DOMAINS not provided");
 }
+
+// Supabase JWKS resolver (used only when AUTH_PROVIDER === 'supabase')
+const getSupabaseJwks = memoize(() => {
+  const explicitJwksUrl = process.env.SUPABASE_JWKS_URL;
+  const supabaseUrl = process.env.SUPABASE_URL;
+  const jwksUrl = explicitJwksUrl || (supabaseUrl ? `${supabaseUrl.replace(/\/$/, "")}/auth/v1/jwks` : undefined);
+  if (!jwksUrl) {
+    throw new Error("Set SUPABASE_JWKS_URL or SUPABASE_URL to verify Supabase JWTs");
+  }
+  return createRemoteJWKSet(new URL(jwksUrl));
+}, { maxAge: 60 * 60 * 1000 });
 
 const getOidcConfig = memoize(
   async () => {
@@ -26,8 +41,15 @@ const getOidcConfig = memoize(
 export function getSession() {
   const sessionTtl = 7 * 24 * 60 * 60 * 1000; // 1 week
   const pgStore = connectPg(session);
+
+  // Use direct database URL from environment
+  const dbUrl = process.env.SUPABASE_DB_URL || process.env.DATABASE_URL;
+  if (!dbUrl) {
+    throw new Error('SUPABASE_DB_URL or DATABASE_URL environment variable is required');
+  }
+
   const sessionStore = new pgStore({
-    conString: process.env.DATABASE_URL,
+    conString: dbUrl,
     createTableIfMissing: false,
     ttl: sessionTtl,
     tableName: "sessions",
@@ -68,7 +90,7 @@ async function upsertUser(
   });
 }
 
-export async function setupAuth(app: Express) {
+async function setupAuthReplit(app: Express) {
   app.set("trust proxy", 1);
   app.use(getSession());
   app.use(passport.initialize());
@@ -194,7 +216,7 @@ export async function setupAuth(app: Express) {
   });
 }
 
-export const isAuthenticated: RequestHandler = async (req, res, next) => {
+const isAuthenticatedReplit: RequestHandler = async (req, res, next) => {
   const user = req.user as any;
   
   if (process.env.NODE_ENV === 'development') {
@@ -232,3 +254,60 @@ export const isAuthenticated: RequestHandler = async (req, res, next) => {
     return;
   }
 };
+
+// Supabase Bearer JWT verification
+const isAuthenticatedSupabase: RequestHandler = async (req: any, res, next) => {
+  try {
+    const authHeader = req.headers["authorization"] || req.headers["Authorization"];
+    if (!authHeader || Array.isArray(authHeader)) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+    const match = authHeader.match(/^Bearer (.+)$/i);
+    const token = match?.[1];
+    if (!token) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    const jwks = getSupabaseJwks();
+    const { payload } = await jwtVerify(token, jwks, {
+      // Accept default algorithms per JWKS; optionally assert issuer/audience if provided
+      issuer: process.env.SUPABASE_JWT_ISSUER || undefined,
+      audience: process.env.SUPABASE_JWT_AUDIENCE || undefined,
+    });
+
+    // Attach claims in a shape compatible with ensureCanonicalUser
+    const claims: JWTPayload & {
+      email?: string;
+      user_metadata?: Record<string, any>;
+    } = payload as any;
+
+    req.user = {
+      claims: {
+        sub: claims.sub,
+        email: claims.email,
+        first_name: (claims as any).user_metadata?.first_name || (claims as any).user_metadata?.firstName,
+        last_name: (claims as any).user_metadata?.last_name || (claims as any).user_metadata?.lastName,
+        profile_image_url: (claims as any).user_metadata?.avatar_url || (claims as any).user_metadata?.picture,
+      },
+    };
+
+    return next();
+  } catch (err) {
+    if (process.env.NODE_ENV === 'development') {
+      console.error('[Auth] Supabase JWT verification failed:', err);
+    }
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+};
+
+// Public exports that switch based on AUTH_PROVIDER
+export const setupAuth = AUTH_PROVIDER === 'replit'
+  ? setupAuthReplit
+  : (async (app: Express) => {
+      app.set("trust proxy", 1);
+      return; // no-op for Supabase
+    });
+
+export const isAuthenticated: RequestHandler = AUTH_PROVIDER === 'replit'
+  ? isAuthenticatedReplit
+  : isAuthenticatedSupabase;

@@ -9,13 +9,15 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { HighlightMaskedPII } from "@/components/HighlightMaskedPII";
-import { 
-  Flag, 
-  MessageSquare, 
-  HelpCircle, 
-  CheckCircle2, 
-  ChevronDown, 
+import {
+  Flag,
+  MessageSquare,
+  HelpCircle,
+  CheckCircle2,
+  ChevronDown,
   ChevronUp,
   Sparkles,
   AlertCircle,
@@ -37,6 +39,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/lib/supabase";
 
 interface PrenupClause {
   id: string;
@@ -73,6 +76,63 @@ interface ClauseQuestion {
   question: string;
   answer: string | null;
   createdAt: Date;
+}
+
+function EmailAuthForm({ onSuccess }: { onSuccess?: () => void }) {
+  const [email, setEmail] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const { toast } = useToast();
+
+  const handleEmailAuth = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    try {
+      const { error } = await supabase.auth.signInWithOtp({
+        email,
+        options: {
+          emailRedirectTo: window.location.href,
+        },
+      });
+
+      if (error) throw error;
+
+      toast({
+        title: "Check your email",
+        description: `We sent a magic link to ${email}. Click the link to sign in.`,
+      });
+
+      onSuccess?.();
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <form onSubmit={handleEmailAuth} className="space-y-4">
+      <div className="space-y-2">
+        <Label htmlFor="email">Email</Label>
+        <Input
+          id="email"
+          type="email"
+          placeholder="you@example.com"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+          data-testid="input-auth-email"
+        />
+      </div>
+      <Button type="submit" className="w-full" disabled={isLoading} data-testid="button-send-magic-link">
+        {isLoading ? "Sending..." : "Send Magic Link"}
+      </Button>
+    </form>
+  );
 }
 
 function ClauseCard({ clause, isAuthenticated }: { clause: PrenupClause; isAuthenticated: boolean }) {
@@ -480,22 +540,10 @@ function ClauseCard({ clause, isAuthenticated }: { clause: PrenupClause; isAuthe
             </div>
             <DialogTitle className="text-center">Login to Collaborate</DialogTitle>
             <DialogDescription className="text-center">
-              You need to log in to use collaborative features like explanations, comments, flags, and questions.
+              Enter your email to sign in or create an account. You'll receive a magic link to access collaborative features.
             </DialogDescription>
           </DialogHeader>
-          <DialogFooter className="sm:justify-center">
-            <Button 
-              onClick={() => {
-                const returnTo = encodeURIComponent(window.location.pathname);
-                window.location.href = `/api/login?returnTo=${returnTo}`;
-              }}
-              className="w-full sm:w-auto"
-              data-testid="button-login-from-dialog"
-            >
-              <LogIn className="h-4 w-4 mr-2" />
-              Login with Replit
-            </Button>
-          </DialogFooter>
+          <EmailAuthForm onSuccess={() => setLoginPromptOpen(false)} />
         </DialogContent>
       </Dialog>
     </>
@@ -505,7 +553,8 @@ function ClauseCard({ clause, isAuthenticated }: { clause: PrenupClause; isAuthe
 export default function Review() {
   const params = useParams<{ prenupId: string }>();
   const prenupId = params.prenupId;
-  const { user, isAuthenticated, isLoading: authLoading } = useAuth();
+  const { user, isAuthenticated } = useAuth();
+  const [authDialogOpen, setAuthDialogOpen] = useState(false);
 
   const { data: clauses = [], isLoading, error } = useQuery<PrenupClause[]>({
     queryKey: ['/api/review', prenupId, 'clauses'],
@@ -518,10 +567,25 @@ export default function Review() {
     enabled: !!prenupId,
   });
 
-  const handleLogin = () => {
-    const returnTo = encodeURIComponent(window.location.pathname);
-    window.location.href = `/api/login?returnTo=${returnTo}`;
-  };
+  // Fetch all flags for this prenup (to show flagged count)
+  const { data: allFlags = [] } = useQuery<ClauseFlag[]>({
+    queryKey: ['/api/review', prenupId, 'all-flags'],
+    enabled: !!prenupId && isAuthenticated,
+  });
+
+  // Fetch reviewed clause IDs for this user
+  const { data: reviewedClauseIds = [] } = useQuery<string[]>({
+    queryKey: ['/api/review', prenupId, 'reviewed'],
+    enabled: !!prenupId && isAuthenticated,
+  });
+
+  // Calculate flagged and reviewed clauses
+  const flaggedClauses = clauses.filter(clause =>
+    allFlags.some(flag => flag.prenupClauseId === clause.id && !flag.resolved)
+  );
+  const reviewedClauses = clauses.filter(clause =>
+    reviewedClauseIds.includes(clause.id)
+  );
 
   // Show loading while fetching prenup
   if (isLoading) {
@@ -642,21 +706,14 @@ export default function Review() {
                 </div>
               </div>
               <div className="flex gap-2 shrink-0">
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  onClick={() => window.location.href = `/api/login?returnTo=${encodeURIComponent(window.location.pathname)}`}
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setAuthDialogOpen(true)}
                   data-testid="button-sign-in"
                 >
                   <LogIn className="h-4 w-4 mr-2" />
-                  Sign In
-                </Button>
-                <Button 
-                  size="sm"
-                  onClick={() => window.location.href = `/api/login?returnTo=${encodeURIComponent(window.location.pathname)}`}
-                  data-testid="button-create-account"
-                >
-                  Create Account
+                  Sign In / Sign Up
                 </Button>
               </div>
             </div>
@@ -718,6 +775,24 @@ export default function Review() {
           ))}
         </div>
       </div>
+
+      {/* Auth Dialog */}
+      <Dialog open={authDialogOpen} onOpenChange={setAuthDialogOpen}>
+        <DialogContent data-testid="dialog-auth">
+          <DialogHeader>
+            <div className="flex justify-center mb-4">
+              <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center">
+                <LogIn className="h-6 w-6 text-primary" />
+              </div>
+            </div>
+            <DialogTitle className="text-center">Sign In or Create Account</DialogTitle>
+            <DialogDescription className="text-center">
+              Enter your email to receive a magic link. No password needed!
+            </DialogDescription>
+          </DialogHeader>
+          <EmailAuthForm onSuccess={() => setAuthDialogOpen(false)} />
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

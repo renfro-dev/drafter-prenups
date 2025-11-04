@@ -112,6 +112,24 @@ export function unmaskText(text: string, piiMap: PIIMap): string {
 }
 
 /**
+ * Helper to validate PIIMap structure
+ */
+function isValidPIIMap(piiMap: any): piiMap is PIIMap {
+  if (!piiMap || typeof piiMap !== 'object') {
+    return false;
+  }
+
+  // Check that all required properties exist and are objects
+  const hasRequiredProps =
+    piiMap.names && typeof piiMap.names === 'object' &&
+    piiMap.values && typeof piiMap.values === 'object' &&
+    piiMap.descriptions && typeof piiMap.descriptions === 'object' &&
+    piiMap.dates && typeof piiMap.dates === 'object';
+
+  return hasRequiredProps;
+}
+
+/**
  * Masks PII tokens in text for display to unauthenticated users
  * Replaces PII tokens with encrypted markers to incentivize authentication
  */
@@ -120,10 +138,20 @@ export function maskTextForDisplay(text: string, piiMap: PIIMap): string {
   if (!text || typeof text !== 'string') {
     return text || '';
   }
-  
-  // Type guard: return original text if piiMap is invalid
-  if (!piiMap || typeof piiMap !== 'object') {
-    console.warn('[maskTextForDisplay] Invalid piiMap provided, returning original text');
+
+  // Type guard: validate piiMap structure
+  if (!isValidPIIMap(piiMap)) {
+    const piiMapAny = piiMap as any;
+    console.warn('[maskTextForDisplay] Invalid piiMap provided:', {
+      piiMapExists: !!piiMap,
+      piiMapType: typeof piiMap,
+      piiMapKeys: piiMap ? Object.keys(piiMap) : [],
+      hasNames: piiMapAny?.names !== undefined,
+      hasValues: piiMapAny?.values !== undefined,
+      hasDescriptions: piiMapAny?.descriptions !== undefined,
+      hasDates: piiMapAny?.dates !== undefined,
+    });
+    console.warn('[maskTextForDisplay] Returning original text - PII may be exposed!');
     return text;
   }
 

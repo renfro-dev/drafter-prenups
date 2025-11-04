@@ -3,16 +3,19 @@ import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { LogIn, LogOut, User, Shield, Lock, ChevronRight } from "lucide-react";
+import { supabase } from "@/lib/supabase";
+import { queryClient } from "@/lib/queryClient";
 
 export function Header() {
   const { user, isAuthenticated, isLoading } = useAuth();
 
-  const handleLogin = () => {
-    window.location.href = "/api/login";
+  const handleLogin = async () => {
+    await supabase.auth.signInWithOAuth({ provider: "google", options: { redirectTo: window.location.origin } });
   };
 
-  const handleLogout = () => {
-    window.location.href = "/api/logout";
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    queryClient.invalidateQueries({ queryKey: ["/api/auth/user"] });
   };
 
   return (
@@ -70,7 +73,7 @@ export function Header() {
               data-testid="button-login"
             >
               <LogIn className="h-4 w-4 mr-2" />
-              Login
+              Sign in
             </Button>
           )}
         </div>
