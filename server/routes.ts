@@ -850,9 +850,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // SEO: Sitemap.xml
   app.get("/sitemap.xml", (req, res) => {
-    const baseUrl = process.env.NODE_ENV === 'production' 
-      ? 'https://drafter.com' 
-      : `http://localhost:${process.env.PORT || 5000}`;
+    const proto = (req.headers['x-forwarded-proto'] as string) || req.protocol;
+    const host = (req.headers['x-forwarded-host'] as string) || req.get('host');
+    const baseUrl = proto && host
+      ? `${proto}://${host}`
+      : (process.env.NODE_ENV === 'production'
+          ? 'https://drafter.legal'
+          : `http://localhost:${process.env.PORT || 5000}`);
     
     const pages = [
       { url: '/', changefreq: 'daily', priority: '1.0' },
@@ -894,9 +898,13 @@ ${pages.map(page => `  <url>
 
   // SEO: robots.txt
   app.get("/robots.txt", (req, res) => {
-    const baseUrl = process.env.NODE_ENV === 'production' 
-      ? 'https://drafter.com' 
-      : `http://localhost:${process.env.PORT || 5000}`;
+    const proto = (req.headers['x-forwarded-proto'] as string) || req.protocol;
+    const host = (req.headers['x-forwarded-host'] as string) || req.get('host');
+    const baseUrl = proto && host
+      ? `${proto}://${host}`
+      : (process.env.NODE_ENV === 'production'
+          ? 'https://drafter.legal'
+          : `http://localhost:${process.env.PORT || 5000}`);
     
     const robots = `User-agent: *
 Allow: /
