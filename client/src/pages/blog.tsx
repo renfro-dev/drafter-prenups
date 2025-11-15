@@ -17,6 +17,56 @@ const blogArticles = [
     featured: true
   },
   {
+    id: "prenup-cost-by-city-california",
+    title: "How Much Does a Prenup Cost in California Cities? (LA, SF, SD, SJ)",
+    excerpt: "Typical prenup costs by California city and how to reduce total cost with AI drafting plus limited-scope attorney review.",
+    category: "Prenups 101",
+    readTime: "9 min read",
+    publishDate: "November 15, 2025",
+    slug: "/blog/prenup-cost-by-city-california",
+    featured: false
+  },
+  {
+    id: "prenups-for-business-owners-california",
+    title: "Prenups for Business Owners in California: Protect Your Company",
+    excerpt: "Separate property, appreciation, valuation, and buy-sell alignment — the key clauses that matter for entrepreneurs.",
+    category: "Prenups 101",
+    readTime: "10 min read",
+    publishDate: "November 15, 2025",
+    slug: "/blog/prenups-for-business-owners-california",
+    featured: false
+  },
+  {
+    id: "prenups-and-equity-compensation-california",
+    title: "Equity Compensation and Prenups in California (RSUs, Options, Bonuses)",
+    excerpt: "How to classify awards, allocate vesting, and handle refresh grants and taxes under California community property rules.",
+    category: "Prenups 101",
+    readTime: "11 min read",
+    publishDate: "November 15, 2025",
+    slug: "/blog/prenups-and-equity-compensation-california",
+    featured: false
+  },
+  {
+    id: "home-ownership-prenups-california",
+    title: "Home Ownership and Prenups in California: Protecting Equity",
+    excerpt: "Keep your pre-marriage home separate, define credits for marital contributions, and prevent unintended transmutation.",
+    category: "Prenups 101",
+    readTime: "9 min read",
+    publishDate: "November 15, 2025",
+    slug: "/blog/home-ownership-prenups-california",
+    featured: false
+  },
+  {
+    id: "spousal-support-prenups-california",
+    title: "Spousal Support and Prenups in California: What’s Enforceable",
+    excerpt: "Waivers, caps, formulas, enforceability checks, and when courts refuse to enforce support clauses.",
+    category: "Prenups 101",
+    readTime: "8 min read",
+    publishDate: "November 15, 2025",
+    slug: "/blog/spousal-support-prenups-california",
+    featured: false
+  },
+  {
     id: "california-prenup-guide",
     title: "The Complete Guide to California Prenuptial Agreements in 2024",
     excerpt: "Everything you need to know about prenups in California, from community property laws to what can and cannot be included in your agreement.",
@@ -149,6 +199,69 @@ export default function Blog() {
               <p className="text-xl text-muted-foreground max-w-2xl mx-auto" data-testid="text-blog-description">
                 Expert articles on prenuptial agreements, privacy technology, and modern relationship planning
               </p>
+            </div>
+          </section>
+
+          <section className="py-8">
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-2xl font-bold">Local Guides</h2>
+                <Link href="/states/california">
+                  <Button variant="outline" size="sm" data-testid="button-explore-california">
+                    Explore California
+                  </Button>
+                </Link>
+              </div>
+              <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
+                <Link href="/states/california/los-angeles">
+                  <a className="px-3 py-2 rounded-md border hover-elevate text-sm text-foreground/90">Los Angeles</a>
+                </Link>
+                <Link href="/states/california/san-francisco">
+                  <a className="px-3 py-2 rounded-md border hover-elevate text-sm text-foreground/90">San Francisco</a>
+                </Link>
+                <Link href="/states/california/san-diego">
+                  <a className="px-3 py-2 rounded-md border hover-elevate text-sm text-foreground/90">San Diego</a>
+                </Link>
+                <Link href="/states/california/san-jose">
+                  <a className="px-3 py-2 rounded-md border hover-elevate text-sm text-foreground/90">San Jose</a>
+                </Link>
+                <Link href="/states/california/sacramento">
+                  <a className="px-3 py-2 rounded-md border hover-elevate text-sm text-foreground/90">Sacramento</a>
+                </Link>
+                <Link href="/states/california/oakland">
+                  <a className="px-3 py-2 rounded-md border hover-elevate text-sm text-foreground/90">Oakland</a>
+                </Link>
+                <Link href="/states/california/irvine">
+                  <a className="px-3 py-2 rounded-md border hover-elevate text-sm text-foreground/90">Irvine</a>
+                </Link>
+                <Link href="/states/california/long-beach">
+                  <a className="px-3 py-2 rounded-md border hover-elevate text-sm text-foreground/90">Long Beach</a>
+                </Link>
+                <Link href="/states/california/fresno">
+                  <a className="px-3 py-2 rounded-md border hover-elevate text-sm text-foreground/90">Fresno</a>
+                </Link>
+                <Link href="/states/california/santa-ana">
+                  <a className="px-3 py-2 rounded-md border hover-elevate text-sm text-foreground/90">Santa Ana</a>
+                </Link>
+                <Link href="/states/california/anaheim">
+                  <a className="px-3 py-2 rounded-md border hover-elevate text-sm text-foreground/90">Anaheim</a>
+                </Link>
+                <Link href="/states/california/bakersfield">
+                  <a className="px-3 py-2 rounded-md border hover-elevate text-sm text-foreground/90">Bakersfield</a>
+                </Link>
+                <Link href="/states/california/riverside">
+                  <a className="px-3 py-2 rounded-md border hover-elevate text-sm text-foreground/90">Riverside</a>
+                </Link>
+                <Link href="/states/california/stockton">
+                  <a className="px-3 py-2 rounded-md border hover-elevate text-sm text-foreground/90">Stockton</a>
+                </Link>
+                <Link href="/states/california/chula-vista">
+                  <a className="px-3 py-2 rounded-md border hover-elevate text-sm text-foreground/90">Chula Vista</a>
+                </Link>
+                <Link href="/states/california/fremont">
+                  <a className="px-3 py-2 rounded-md border hover-elevate text-sm text-foreground/90">Fremont</a>
+                </Link>
+              </div>
             </div>
           </section>
 

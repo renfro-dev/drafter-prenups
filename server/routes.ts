@@ -720,6 +720,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
         emailDelivered = true;
       } catch (emailErr) {
         console.error('[Email] Delivery failed, falling back to browser download:', emailErr);
+        // Surface provider-specific error details when available (e.g., SendGrid)
+        const anyErr: any = emailErr as any;
+        const providerErrors = anyErr?.response?.body?.errors;
+        if (Array.isArray(providerErrors) && providerErrors.length > 0) {
+          console.error('[Email] Provider error details:', JSON.stringify(providerErrors, null, 2));
+        }
       }
 
       // Provide a browser download URL regardless of email status
@@ -855,6 +861,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
       { url: '/privacy-policy', changefreq: 'monthly', priority: '0.5' },
       { url: '/states/california', changefreq: 'weekly', priority: '0.9' },
       { url: '/states/california/prenuptial-agreement', changefreq: 'weekly', priority: '0.9' },
+      { url: '/states/california/los-angeles', changefreq: 'weekly', priority: '0.8' },
+      { url: '/states/california/san-francisco', changefreq: 'weekly', priority: '0.8' },
+      { url: '/states/california/san-diego', changefreq: 'weekly', priority: '0.8' },
+      { url: '/states/california/san-jose', changefreq: 'weekly', priority: '0.8' },
+      { url: '/states/california/sacramento', changefreq: 'weekly', priority: '0.8' },
+      { url: '/states/california/oakland', changefreq: 'weekly', priority: '0.8' },
+      { url: '/states/california/irvine', changefreq: 'weekly', priority: '0.8' },
+      { url: '/states/california/long-beach', changefreq: 'weekly', priority: '0.8' },
+      { url: '/states/california/fresno', changefreq: 'weekly', priority: '0.8' },
+      { url: '/states/california/santa-ana', changefreq: 'weekly', priority: '0.8' },
+      { url: '/states/california/anaheim', changefreq: 'weekly', priority: '0.8' },
+      { url: '/states/california/bakersfield', changefreq: 'weekly', priority: '0.8' },
+      { url: '/states/california/riverside', changefreq: 'weekly', priority: '0.8' },
+      { url: '/states/california/stockton', changefreq: 'weekly', priority: '0.8' },
+      { url: '/states/california/chula-vista', changefreq: 'weekly', priority: '0.8' },
+      { url: '/states/california/fremont', changefreq: 'weekly', priority: '0.8' },
     ];
 
     const sitemap = `<?xml version="1.0" encoding="UTF-8"?>

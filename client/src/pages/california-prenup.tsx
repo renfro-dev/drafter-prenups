@@ -34,6 +34,15 @@ export default function CaliforniaPrenup() {
     },
     {
       "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "/" },
+        { "@type": "ListItem", "position": 2, "name": "California", "item": "/states/california" },
+        { "@type": "ListItem", "position": 3, "name": "California Prenuptial Agreement Guide 2025", "item": "/states/california/prenuptial-agreement" }
+      ]
+    },
+    {
+      "@context": "https://schema.org",
       "@type": "FAQPage",
       "mainEntity": [
         {
@@ -811,7 +820,7 @@ export default function CaliforniaPrenup() {
                 <AccordionContent className="text-muted-foreground">
                   Traditional attorney-drafted prenups in California cost between $3,000 and $10,000, depending on
                   complexity and attorney rates. AI-powered options like Drafter provide California-compliant prenups
-                  for $49, with optional attorney review available for $500-$2,000.
+                  for free, with optional attorney review available for $500-$2,000.
                 </AccordionContent>
               </AccordionItem>
               <AccordionItem value="faq-8" data-testid="faq-when">
@@ -1035,7 +1044,7 @@ export default function CaliforniaPrenup() {
               <div className="mt-8">
                 <Link href="/intake">
                   <Button size="lg" className="w-full">
-                    Create California Prenup with Drafter - $49
+                    Create California Prenup with Drafter - Free
                     <ChevronRight className="ml-2 h-5 w-5" />
                   </Button>
                 </Link>

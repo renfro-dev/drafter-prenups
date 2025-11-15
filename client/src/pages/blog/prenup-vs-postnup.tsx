@@ -10,6 +10,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { RelatedArticles } from "@/components/related-articles";
 
 export default function PrenupVsPostnup() {
   const articleSchema = {
@@ -31,6 +32,16 @@ export default function PrenupVsPostnup() {
     },
     "datePublished": "2025-04-15",
     "dateModified": "2025-10-19"
+  };
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "/" },
+      { "@type": "ListItem", "position": 2, "name": "Blog", "item": "/blog" },
+      { "@type": "ListItem", "position": 3, "name": "Prenup vs Postnup: Which Is Right for You?", "item": "/blog/prenup-vs-postnup" }
+    ]
   };
 
   const faqSchema = {
@@ -77,7 +88,7 @@ export default function PrenupVsPostnup() {
       <SEOHead
         title="Prenup vs Postnup: Which Is Right for You? | Drafter"
         description="Comprehensive comparison of prenuptial and postnuptial agreements. Learn key differences, enforceability, timing, and which agreement type best protects your financial interests."
-        schema={[articleSchema, faqSchema]}
+        schema={[articleSchema, faqSchema, breadcrumbSchema]}
       />
       
       <div className="min-h-screen bg-background">
@@ -178,7 +189,7 @@ export default function PrenupVsPostnup() {
                     </tr>
                     <tr className="border-b">
                       <td className="p-4 font-semibold">Typical Cost</td>
-                      <td className="p-4">$49-$10,000</td>
+                      <td className="p-4">Free-$10,000</td>
                       <td className="p-4">$1,500-$15,000</td>
                     </tr>
                     <tr className="border-b">
@@ -336,7 +347,7 @@ export default function PrenupVsPostnup() {
               <h3 className="text-2xl font-semibold mt-8 mb-4">Prenup Costs</h3>
 
               <ul>
-                <li><strong>AI-powered (Drafter):</strong> $49 + optional attorney review ($500-$1,000 each party)</li>
+                <li><strong>AI-powered (Drafter):</strong> Free + optional attorney review ($500-$1,000 each party)</li>
                 <li><strong>Traditional attorneys:</strong> $3,000-$10,000 total ($1,500-$5,000 per attorney)</li>
                 <li><strong>Complex situations:</strong> $10,000-$50,000+ (high net worth, multiple businesses)</li>
               </ul>
@@ -468,7 +479,7 @@ export default function PrenupVsPostnup() {
                       Get Started with a Prenup Today
                     </h3>
                     <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
-                      If you're engaged, don't wait. Drafter's AI-powered platform generates comprehensive, state-specific prenups in just 10 minutes for only $49—giving you the strongest possible legal protection before marriage.
+                      If you're engaged, don't wait. Drafter's AI-powered platform generates comprehensive, state-specific prenups in just 10 minutes for free—giving you the strongest possible legal protection before marriage.
                     </p>
                     <Link href="/intake">
                       <Button size="lg" data-testid="button-start-prenup">
@@ -476,7 +487,7 @@ export default function PrenupVsPostnup() {
                       </Button>
                     </Link>
                     <p className="text-sm text-muted-foreground mt-4">
-                      $49 • 10-minute process • Privacy-protected • Attorney review recommended
+                      Free • 10-minute process • Privacy-protected • Attorney review recommended
                     </p>
                   </CardContent>
                 </Card>
@@ -561,49 +572,7 @@ export default function PrenupVsPostnup() {
 
           <Separator className="my-12" />
 
-          <section className="mt-12" data-testid="section-related-articles">
-            <h2 className="text-2xl font-bold mb-6">Related Articles</h2>
-            <div className="grid md:grid-cols-2 gap-6">
-              <Card className="hover-elevate">
-                <CardHeader>
-                  <CardTitle className="text-lg">
-                    <Link href="/blog/do-i-need-prenup" className="hover:text-primary">
-                      Do I Need a Prenup? Complete Guide to Deciding
-                    </Link>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="text-sm text-muted-foreground">
-                  Determine if a prenup is right based on assets, income, and family circumstances.
-                </CardContent>
-              </Card>
-
-              <Card className="hover-elevate">
-                <CardHeader>
-                  <CardTitle className="text-lg">
-                    <Link href="/blog/prenup-mistakes" className="hover:text-primary">
-                      5 Common Prenup Mistakes That Could Invalidate Your Agreement
-                    </Link>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="text-sm text-muted-foreground">
-                  Avoid critical errors that can invalidate your prenup.
-                </CardContent>
-              </Card>
-
-              <Card className="hover-elevate">
-                <CardHeader>
-                  <CardTitle className="text-lg">
-                    <Link href="/blog/prenup-timeline" className="hover:text-primary">
-                      When Should You Get a Prenup? Timeline and Best Practices
-                    </Link>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="text-sm text-muted-foreground">
-                  Follow the ideal 6-month prenup timeline to ensure legal validity.
-                </CardContent>
-              </Card>
-            </div>
-          </section>
+          <RelatedArticles currentId="prenup-vs-postnup" tags={["postnup","prenup","comparison"]} />
         </div>
       </div>
     </>

@@ -14,6 +14,34 @@ export default function Home() {
   const schema = [
     {
       "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Drafter",
+      "url": "https://drafter.com",
+      "logo": "https://drafter.com/logo.png",
+      "sameAs": [
+        "https://www.linkedin.com/company/drafter",
+        "https://x.com/drafter"
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer support",
+        "email": "privacy@drafter.com",
+        "availableLanguage": ["English"]
+      }
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Drafter",
+      "url": "https://drafter.com",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://drafter.com/blog?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    },
+    {
+      "@context": "https://schema.org",
       "@type": "LegalService",
       "name": "Drafter",
       "description": "AI-powered prenuptial agreement drafting platform with privacy-first PII masking. Generate California-compliant prenups for free in under 10 minutes.",

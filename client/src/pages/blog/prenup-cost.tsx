@@ -10,6 +10,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { RelatedArticles } from "@/components/related-articles";
 
 export default function PrenupCost() {
   const articleSchema = {
@@ -33,6 +34,16 @@ export default function PrenupCost() {
     "dateModified": "2025-10-19"
   };
 
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "/" },
+      { "@type": "ListItem", "position": 2, "name": "Blog", "item": "/blog" },
+      { "@type": "ListItem", "position": 3, "name": "How Much Does a Prenup Cost? Complete Price Guide for 2025", "item": "/blog/prenup-cost" }
+    ]
+  };
+
   const faqSchema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
@@ -42,7 +53,7 @@ export default function PrenupCost() {
         "name": "How much does a prenup cost on average?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "The average cost of a prenuptial agreement ranges from $1,500 to $10,000+ depending on complexity and location. Simple prenups with minimal assets typically cost $1,500-$3,000. Complex prenups involving businesses, multiple properties, or intricate asset structures can cost $5,000-$10,000 or more. Modern online services like Drafter offer AI-powered prenups starting at just $49."
+          "text": "The average cost of a prenuptial agreement ranges from $1,500 to $10,000+ depending on complexity and location. Simple prenups with minimal assets typically cost $1,500-$3,000. Complex prenups involving businesses, multiple properties, or intricate asset structures can cost $5,000-$10,000 or more. Modern online services like Drafter offer AI-powered prenups for free."
         }
       },
       {
@@ -93,7 +104,7 @@ export default function PrenupCost() {
       <SEOHead
         title="How Much Does a Prenup Cost? Complete Price Guide for 2025 | Drafter"
         description="Comprehensive breakdown of prenuptial agreement costs in 2025. Learn about attorney fees, online options, state-by-state pricing, and hidden costs to budget for your prenup."
-        schema={[articleSchema, faqSchema]}
+        schema={[articleSchema, faqSchema, breadcrumbSchema]}
       />
       
       <div className="min-h-screen bg-background">
@@ -131,7 +142,7 @@ export default function PrenupCost() {
               </p>
 
               <p>
-                The honest answer? It varies wildly. A simple prenup through an online service can cost as little as $49. A complex prenup drafted by top attorneys in a major city can easily exceed $10,000. Most couples end up somewhere in between—typically $1,500 to $3,000 for straightforward agreements.
+                The honest answer? It varies wildly. A simple prenup through an online service can be free. A complex prenup drafted by top attorneys in a major city can easily exceed $10,000. Most couples end up somewhere in between—typically $1,500 to $3,000 for straightforward agreements.
               </p>
 
               <p>
@@ -145,7 +156,7 @@ export default function PrenupCost() {
                     <div>
                       <h3 className="font-semibold text-lg mb-2">Quick Answer</h3>
                       <p className="text-sm">
-                        Prenup costs range from $49 for AI-powered services like Drafter to $10,000+ for complex attorney-drafted agreements. Most couples pay $1,500-$3,000 for traditional prenups. In California's community property state, costs vary by city—Los Angeles and San Francisco attorneys charge $400-$800/hour, while smaller cities charge less.
+                        Prenup costs range from Free for AI-powered services like Drafter to $10,000+ for complex attorney-drafted agreements. Most couples pay $1,500-$3,000 for traditional prenups. In California's community property state, costs vary by city—Los Angeles and San Francisco attorneys charge $400-$800/hour, while smaller cities charge less.
                       </p>
                     </div>
                   </div>
@@ -161,7 +172,7 @@ export default function PrenupCost() {
                       <ul className="text-sm space-y-1 mb-0">
                         <li><strong>Traditional attorney:</strong> $1,500 - $10,000+ (average $2,500-$3,500)</li>
                         <li><strong>Online legal services:</strong> $500 - $2,000</li>
-                        <li><strong>AI-powered (Drafter):</strong> $49 + optional attorney review</li>
+                        <li><strong>AI-powered (Drafter):</strong> Free + optional attorney review</li>
                         <li><strong>DIY templates:</strong> $0 - $200 (not recommended)</li>
                       </ul>
                     </div>
@@ -289,7 +300,7 @@ export default function PrenupCost() {
                         <strong>Key differentiator:</strong> Enterprise-grade PII masking means your personal financial information never reaches the AI. We mask names, amounts, and identifying details before processing, then unmask in your final document.
                       </p>
                       <ul className="text-sm space-y-1">
-                        <li>✓ $49 flat fee - no hourly billing</li>
+                        <li>✓ Free - no hourly billing</li>
                         <li>✓ Generated in 10 minutes</li>
                         <li>✓ Professional Word document delivered via email</li>
                         <li>✓ Privacy-first: Your PII never reaches the AI</li>
@@ -307,7 +318,7 @@ export default function PrenupCost() {
               </p>
 
               <p>
-                <strong>Total cost with Drafter + attorney review: $1,049 - $3,049</strong>
+                <strong>Total cost with Drafter + attorney review: $1,000 - $3,000</strong>
               </p>
 
               <p>
@@ -525,11 +536,11 @@ export default function PrenupCost() {
               </h2>
 
               <p>
-                Prenup costs range from $49 (AI-generated) to $15,000+ (complex, attorney-drafted). Most couples spend $2,500-$3,500 for traditional attorney services.
+                Prenup costs range from Free (AI-generated) to $15,000+ (complex, attorney-drafted). Most couples spend $2,500-$3,500 for traditional attorney services.
               </p>
 
               <p>
-                The sweet spot for many couples: Use an AI service like Drafter ($49) to generate a comprehensive first draft, then pay attorneys $500-$1,500 each for review and modifications. Total cost: $1,049-$3,049—significantly less than traditional attorney-only routes.
+                The sweet spot for many couples: Use an AI service like Drafter (Free) to generate a comprehensive first draft, then pay attorneys $500-$1,500 each for review and modifications. Total cost: $1,000-$3,000—significantly less than traditional attorney-only routes.
               </p>
 
               <p>
@@ -539,12 +550,12 @@ export default function PrenupCost() {
               <div className="my-12 p-8 bg-primary/5 border border-primary/20 rounded-lg">
                 <h3 className="text-2xl font-bold mb-4">Ready to Create Your Prenup?</h3>
                 <p className="mb-6">
-                  Generate a comprehensive, California-specific prenup in just 10 minutes for $49. Our AI creates a professional agreement tailored to your situation—delivered as a Word document via email.
+                  Generate a comprehensive, California-specific prenup in just 10 minutes for free. Our AI creates a professional agreement tailored to your situation—delivered as a Word document via email.
                 </p>
                 <div className="flex gap-4">
                   <Link href="/intake">
                     <Button size="lg" data-testid="button-start-prenup">
-                      Start Your Prenup - $49
+                      Start Your Prenup – Free
                     </Button>
                   </Link>
                   <Link href="/states/california/prenuptial-agreement">
@@ -605,62 +616,7 @@ export default function PrenupCost() {
 
               <Separator className="my-12" />
 
-              <section className="my-12" data-testid="section-related-articles">
-                <h2 className="text-2xl font-bold mb-6">Related Articles</h2>
-                <div className="grid md:grid-cols-2 gap-6">
-                  <Card className="hover-elevate">
-                    <CardHeader>
-                      <CardTitle className="text-lg">
-                        <Link href="/blog/do-i-need-prenup" className="hover:text-primary">
-                          Do I Need a Prenup? Complete Guide to Deciding
-                        </Link>
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent className="text-sm text-muted-foreground">
-                      Determine if a prenup is right for your situation based on assets, income, business ownership, and family circumstances.
-                    </CardContent>
-                  </Card>
-
-                  <Card className="hover-elevate">
-                    <CardHeader>
-                      <CardTitle className="text-lg">
-                        <Link href="/blog/prenup-mistakes" className="hover:text-primary">
-                          5 Common Prenup Mistakes That Could Invalidate Your Agreement
-                        </Link>
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent className="text-sm text-muted-foreground">
-                      Avoid costly errors like signing too close to the wedding, incomplete disclosure, and missing independent counsel.
-                    </CardContent>
-                  </Card>
-
-                  <Card className="hover-elevate">
-                    <CardHeader>
-                      <CardTitle className="text-lg">
-                        <Link href="/blog/prenup-timeline" className="hover:text-primary">
-                          When Should You Get a Prenup? Timeline and Best Practices
-                        </Link>
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent className="text-sm text-muted-foreground">
-                      Follow the ideal 6-month prenup timeline to ensure legal validity and avoid last-minute pressure.
-                    </CardContent>
-                  </Card>
-
-                  <Card className="hover-elevate">
-                    <CardHeader>
-                      <CardTitle className="text-lg">
-                        <Link href="/blog/second-marriage-prenup" className="hover:text-primary">
-                          Prenup for Second Marriage: What's Different?
-                        </Link>
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent className="text-sm text-muted-foreground">
-                      Protect children's inheritance rights and navigate complex financial situations in second marriages.
-                    </CardContent>
-                  </Card>
-                </div>
-              </section>
+              <RelatedArticles currentId="prenup-cost" tags={["cost","pricing","california"]} />
             </div>
           </article>
         </div>

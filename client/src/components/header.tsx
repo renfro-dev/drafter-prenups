@@ -27,6 +27,11 @@ export function Header() {
         </Link>
 
         <div className="flex items-center gap-4">
+          <Link href="/blog" data-testid="link-blog">
+            <Button variant="ghost" size="sm" className="text-sm">
+              Blog
+            </Button>
+          </Link>
           <Link href="/privacy-policy" data-testid="link-privacy-policy">
             <Button variant="ghost" size="sm" className="text-sm">
               Data Privacy Policy

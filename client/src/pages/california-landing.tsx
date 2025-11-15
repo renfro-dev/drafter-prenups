@@ -10,17 +10,25 @@ export default function CaliforniaLanding() {
       "@context": "https://schema.org",
       "@type": "LegalService",
       "name": "Drafter - California Prenuptial Agreements",
-      "description": "AI-powered California prenuptial agreements for $49. Community property state-specific clauses, privacy-first PII masking, attorney-ready documents in 10 minutes.",
+      "description": "AI-powered California prenuptial agreements for Free. Community property state-specific clauses, privacy-first PII masking, attorney-ready documents in 10 minutes.",
       "areaServed": {
         "@type": "State",
         "name": "California"
       },
       "offers": {
         "@type": "Offer",
-        "price": "49",
+        "price": "0",
         "priceCurrency": "USD",
-        "description": "California-specific prenuptial agreement with community property law compliance"
+        "description": "California-specific prenuptial agreement with community property law compliance (Free)"
       }
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "/" },
+        { "@type": "ListItem", "position": 2, "name": "California Prenuptial Agreements", "item": "/states/california" }
+      ]
     },
     {
       "@context": "https://schema.org",
@@ -57,8 +65,8 @@ export default function CaliforniaLanding() {
   return (
     <>
       <SEOHead
-        title="California Prenuptial Agreement - AI-Powered Prenups for $49 | Drafter"
-        description="Create a California-compliant prenuptial agreement for $49. Community property state-specific clauses. Private AI with PII masking. Attorney-ready in 10 minutes."
+        title="California Prenuptial Agreement - AI-Powered Prenups Free | Drafter"
+        description="Create a California-compliant prenuptial agreement for Free. Community property state-specific clauses. Private AI with PII masking. Attorney-ready in 10 minutes."
         schema={schema}
       />
     <div className="min-h-screen bg-background">
@@ -92,7 +100,7 @@ export default function CaliforniaLanding() {
                 <span>California Community Property State</span>
               </div>
               <h1 className="text-4xl md:text-6xl font-bold tracking-tight leading-tight">
-                California Prenuptial Agreements for $49
+                California Prenuptial Agreements for Free
               </h1>
               <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
                 AI-powered prenups designed specifically for California's community property laws. 
@@ -279,7 +287,7 @@ export default function CaliforniaLanding() {
                 <Card className="border-2 border-primary">
                   <CardHeader>
                     <CardTitle className="text-2xl text-primary">Drafter Platform</CardTitle>
-                    <div className="text-4xl font-bold text-primary mt-4">$49</div>
+                    <div className="text-4xl font-bold text-primary mt-4">Free</div>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="space-y-3">
@@ -325,17 +333,88 @@ export default function CaliforniaLanding() {
                 </p>
               </div>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-                {[
-                  "Los Angeles", "San Francisco", "San Diego", "San Jose",
-                  "Sacramento", "Oakland", "Fresno", "Long Beach",
-                  "Santa Ana", "Anaheim", "Bakersfield", "Riverside",
-                  "Stockton", "Irvine", "Chula Vista", "Fremont"
-                ].map((city) => (
-                  <div key={city} className="flex items-center space-x-2 text-muted-foreground">
+                <Link href="/states/california/los-angeles">
+                  <div className="flex items-center space-x-2 text-muted-foreground cursor-pointer hover:text-foreground transition-colors">
                     <Building2 className="h-4 w-4 text-primary" />
-                    <span>{city}</span>
+                    <span>Los Angeles</span>
                   </div>
-                ))}
+                </Link>
+                <Link href="/states/california/san-francisco">
+                  <div className="flex items-center space-x-2 text-muted-foreground cursor-pointer hover:text-foreground transition-colors">
+                    <Building2 className="h-4 w-4 text-primary" />
+                    <span>San Francisco</span>
+                  </div>
+                </Link>
+                <Link href="/states/california/sacramento">
+                  <div className="flex items-center space-x-2 text-muted-foreground cursor-pointer hover:text-foreground transition-colors">
+                    <Building2 className="h-4 w-4 text-primary" />
+                    <span>Sacramento</span>
+                  </div>
+                </Link>
+                <Link href="/states/california/oakland">
+                  <div className="flex items-center space-x-2 text-muted-foreground cursor-pointer hover:text-foreground transition-colors">
+                    <Building2 className="h-4 w-4 text-primary" />
+                    <span>Oakland</span>
+                  </div>
+                </Link>
+                <Link href="/states/california/san-diego">
+                  <div className="flex items-center space-x-2 text-muted-foreground cursor-pointer hover:text-foreground transition-colors">
+                    <Building2 className="h-4 w-4 text-primary" />
+                    <span>San Diego</span>
+                  </div>
+                </Link>
+                <Link href="/states/california/san-jose">
+                  <div className="flex items-center space-x-2 text-muted-foreground cursor-pointer hover:text-foreground transition-colors">
+                    <Building2 className="h-4 w-4 text-primary" />
+                    <span>San Jose</span>
+                  </div>
+                </Link>
+                <div className="flex items-center space-x-2 text-muted-foreground">
+                  <Building2 className="h-4 w-4 text-primary" />
+                  <span>Fresno</span>
+                </div>
+                <Link href="/states/california/long-beach">
+                  <div className="flex items-center space-x-2 text-muted-foreground cursor-pointer hover:text-foreground transition-colors">
+                    <Building2 className="h-4 w-4 text-primary" />
+                    <span>Long Beach</span>
+                  </div>
+                </Link>
+                <div className="flex items-center space-x-2 text-muted-foreground">
+                  <Building2 className="h-4 w-4 text-primary" />
+                  <span>Santa Ana</span>
+                </div>
+                <div className="flex items-center space-x-2 text-muted-foreground">
+                  <Building2 className="h-4 w-4 text-primary" />
+                  <span>Anaheim</span>
+                </div>
+                <div className="flex items-center space-x-2 text-muted-foreground">
+                  <Building2 className="h-4 w-4 text-primary" />
+                  <span>Bakersfield</span>
+                </div>
+                <div className="flex items-center space-x-2 text-muted-foreground">
+                  <Building2 className="h-4 w-4 text-primary" />
+                  <span>Riverside</span>
+                </div>
+                <div className="flex items-center space-x-2 text-muted-foreground">
+                  <Building2 className="h-4 w-4 text-primary" />
+                  <span>Stockton</span>
+                </div>
+                <div className="flex items-center space-x-2 text-muted-foreground">
+                  <Building2 className="h-4 w-4 text-primary" />
+                  <span>Irvine</span>
+                </div>
+                <Link href="/states/california/chula-vista">
+                  <div className="flex items-center space-x-2 text-muted-foreground cursor-pointer hover:text-foreground transition-colors">
+                    <Building2 className="h-4 w-4 text-primary" />
+                    <span>Chula Vista</span>
+                  </div>
+                </Link>
+                <Link href="/states/california/fremont">
+                  <div className="flex items-center space-x-2 text-muted-foreground cursor-pointer hover:text-foreground transition-colors">
+                    <Building2 className="h-4 w-4 text-primary" />
+                    <span>Fremont</span>
+                  </div>
+                </Link>
               </div>
               <p className="text-center text-sm text-muted-foreground mt-12">
                 Valid in all 58 California counties. Works with Los Angeles County, San Francisco County,
@@ -376,7 +455,7 @@ export default function CaliforniaLanding() {
               </p>
               <Link href="/intake" data-testid="link-get-started-cta">
                 <Button size="lg" className="h-12 px-8 text-base" data-testid="button-get-started-cta">
-                  Create California Prenup - $49
+                  Create California Prenup - Free
                   <ChevronRight className="ml-2 h-5 w-5" />
                 </Button>
               </Link>

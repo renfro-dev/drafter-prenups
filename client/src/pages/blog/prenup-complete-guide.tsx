@@ -14,6 +14,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { RelatedArticles } from "@/components/related-articles";
 
 export default function PrenupCompleteGuide() {
   const articleSchema = {
@@ -35,6 +36,16 @@ export default function PrenupCompleteGuide() {
     },
     "datePublished": "2025-06-15",
     "dateModified": "2025-10-19"
+  };
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "/" },
+      { "@type": "ListItem", "position": 2, "name": "Blog", "item": "/blog" },
+      { "@type": "ListItem", "position": 3, "name": "Complete Guide to Prenuptial Agreements in 2025", "item": "/blog/prenup-complete-guide" }
+    ]
   };
 
   const faqSchema = {
@@ -113,7 +124,7 @@ export default function PrenupCompleteGuide() {
       <SEOHead
         title="Complete Guide to Prenuptial Agreements in 2025 | Drafter"
         description="Comprehensive guide to prenuptial agreements covering California law, costs, timing, common mistakes, and modern AI-powered drafting options. Everything you need to know before marriage."
-        schema={[articleSchema, faqSchema]}
+        schema={[articleSchema, faqSchema, breadcrumbSchema]}
       />
       
       <div className="min-h-screen bg-background">
@@ -154,7 +165,7 @@ export default function PrenupCompleteGuide() {
               </CardHeader>
               <CardContent>
                 <p className="text-base leading-relaxed">
-                  A prenuptial agreement is a legal contract defining property division and financial responsibilities if you divorce. In California's community property system, without a prenup, all marital assets and income are split 50/50—regardless of who earned them. Prenups cost $1,500-$10,000 with traditional attorneys or $49 with AI-powered services like Drafter. Start 3-6 months before your wedding.
+                  A prenuptial agreement is a legal contract defining property division and financial responsibilities if you divorce. In California's community property system, without a prenup, all marital assets and income are split 50/50—regardless of who earned them. Prenups cost $1,500-$10,000 with traditional attorneys or Free with AI-powered services like Drafter. Start 3-6 months before your wedding.
                 </p>
               </CardContent>
             </Card>
@@ -169,7 +180,7 @@ export default function PrenupCompleteGuide() {
                     <DollarSign className="h-5 w-5 text-primary mt-1" />
                     <div>
                       <div className="font-semibold">Average Cost</div>
-                      <div className="text-sm text-muted-foreground">$1,500-$10,000 traditional<br/>$49 with AI services</div>
+                      <div className="text-sm text-muted-foreground">$1,500-$10,000 traditional<br/>Free with AI services</div>
                     </div>
                   </div>
                   <div className="flex items-start gap-3">
@@ -193,7 +204,7 @@ export default function PrenupCompleteGuide() {
             <div className="flex justify-center mb-12">
               <Link href="/intake">
                 <Button size="lg" className="gap-2" data-testid="button-cta-hero">
-                  Start Your Prenup for $49
+                  Start Your Prenup – Free
                   <ArrowRight className="h-4 w-4" />
                 </Button>
               </Link>
@@ -603,7 +614,7 @@ export default function PrenupCompleteGuide() {
               </p>
 
               <p className="text-lg mb-4">
-                AI-powered services like Drafter cost around $49, generate comprehensive agreements in 10 minutes, use privacy-preserving PII masking technology, and work well for straightforward estates. They're ideal for couples who want attorney review but prefer to avoid high hourly fees for initial drafting.
+                AI-powered services like Drafter are Free, generate comprehensive agreements in 10 minutes, use privacy-preserving PII masking technology, and work well for straightforward estates. They're ideal for couples who want attorney review but prefer to avoid high hourly fees for initial drafting.
               </p>
 
               <p className="text-lg mb-4">
@@ -634,7 +645,7 @@ export default function PrenupCompleteGuide() {
             <div className="flex justify-center my-12">
               <Link href="/intake">
                 <Button size="lg" className="gap-2" data-testid="button-cta-testimonial">
-                  Create Your Prenup for $49
+                  Create Your Prenup – Free
                   <ArrowRight className="h-4 w-4" />
                 </Button>
               </Link>
@@ -819,7 +830,7 @@ export default function PrenupCompleteGuide() {
               <h3 className="text-2xl font-semibold mb-4 mt-6">Modern Prenup Options</h3>
 
               <p className="text-lg mb-4">
-                Today's couples have more prenup options than ever: traditional family law attorneys ($1,500-$10,000), online legal document services ($500-$1,500), and AI-powered drafting platforms like Drafter ($49).
+                Today's couples have more prenup options than ever: traditional family law attorneys ($1,500-$10,000), online legal document services ($500-$1,500), and AI-powered drafting platforms like Drafter (Free).
               </p>
 
               <p className="text-lg mb-4">
@@ -847,7 +858,7 @@ export default function PrenupCompleteGuide() {
               </p>
 
               <p className="text-lg mb-4">
-                AI-powered services like Drafter cost just $49 total—a 97% cost reduction compared to traditional attorneys. You still get a comprehensive, state-specific agreement; you just save thousands on initial drafting. Many couples use the savings to pay for independent attorney review, ensuring professional oversight at a fraction of traditional costs.
+                AI-powered services like Drafter are free—a 100% reduction in drafting cost compared to traditional attorneys. You still get a comprehensive, state-specific agreement; you just save thousands on initial drafting. Many couples use the savings to pay for independent attorney review, ensuring professional oversight at a fraction of traditional costs.
               </p>
             </section>
 
@@ -949,116 +960,7 @@ export default function PrenupCompleteGuide() {
 
             <Separator className="my-12" />
 
-            <section className="mb-12">
-              <h2 className="text-3xl font-bold mb-6">Related Articles</h2>
-              <p className="text-lg text-muted-foreground mb-6">
-                Dive deeper into specific prenup topics with our comprehensive guides
-              </p>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <Card className="hover-elevate">
-                  <CardHeader>
-                    <CardTitle>Do I Need a Prenup?</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-muted-foreground mb-4">
-                      Complete guide to determining if you need a prenuptial agreement based on your unique situation, assets, and relationship.
-                    </p>
-                    <Link href="/blog/do-i-need-prenup">
-                      <Button variant="ghost" className="w-full justify-between group" data-testid="button-related-need-prenup">
-                        Read Article
-                        <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                      </Button>
-                    </Link>
-                  </CardContent>
-                </Card>
-
-                <Card className="hover-elevate">
-                  <CardHeader>
-                    <CardTitle>How Much Does a Prenup Cost?</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-muted-foreground mb-4">
-                      Comprehensive breakdown of prenuptial agreement costs from traditional attorneys to AI-powered services, plus hidden fees to budget for.
-                    </p>
-                    <Link href="/blog/prenup-cost">
-                      <Button variant="ghost" className="w-full justify-between group" data-testid="button-related-cost">
-                        Read Article
-                        <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                      </Button>
-                    </Link>
-                  </CardContent>
-                </Card>
-
-                <Card className="hover-elevate">
-                  <CardHeader>
-                    <CardTitle>When Should You Get a Prenup?</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-muted-foreground mb-4">
-                      Month-by-month timeline showing exactly when to start your prenup, how long each phase takes, and critical deadlines to meet.
-                    </p>
-                    <Link href="/blog/prenup-timeline">
-                      <Button variant="ghost" className="w-full justify-between group" data-testid="button-related-timeline">
-                        Read Article
-                        <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                      </Button>
-                    </Link>
-                  </CardContent>
-                </Card>
-
-                <Card className="hover-elevate">
-                  <CardHeader>
-                    <CardTitle>5 Common Prenup Mistakes</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-muted-foreground mb-4">
-                      Critical errors that can render your prenuptial agreement unenforceable and exactly how to avoid them with expert guidance.
-                    </p>
-                    <Link href="/blog/prenup-mistakes">
-                      <Button variant="ghost" className="w-full justify-between group" data-testid="button-related-mistakes">
-                        Read Article
-                        <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                      </Button>
-                    </Link>
-                  </CardContent>
-                </Card>
-
-                <Card className="hover-elevate">
-                  <CardHeader>
-                    <CardTitle>Prenup for Second Marriage</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-muted-foreground mb-4">
-                      Essential guide for protecting children's inheritance and navigating the unique financial complexities of second marriages and blended families.
-                    </p>
-                    <Link href="/blog/second-marriage-prenup">
-                      <Button variant="ghost" className="w-full justify-between group" data-testid="button-related-second-marriage">
-                        Read Article
-                        <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                      </Button>
-                    </Link>
-                  </CardContent>
-                </Card>
-
-                <Card className="hover-elevate">
-                  <CardHeader>
-                    <CardTitle>Prenup vs Postnup</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-muted-foreground mb-4">
-                      Comprehensive comparison of prenuptial and postnuptial agreements, including enforceability differences and which best protects your interests.
-                    </p>
-                    <Link href="/blog/prenup-vs-postnup">
-                      <Button variant="ghost" className="w-full justify-between group" data-testid="button-related-prenup-vs-postnup">
-                        Read Article
-                        <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                      </Button>
-                    </Link>
-                  </CardContent>
-                </Card>
-              </div>
-            </section>
+            <RelatedArticles currentId="prenup-complete-guide" tags={["basics","guide","california"]} />
 
             <Separator className="my-12" />
 
@@ -1067,7 +969,7 @@ export default function PrenupCompleteGuide() {
                 <div className="text-center">
                   <h2 className="text-3xl font-bold mb-4">Ready to Protect Your Financial Future?</h2>
                   <p className="text-lg text-muted-foreground mb-6 max-w-2xl mx-auto">
-                    Get your comprehensive, California-compliant prenuptial agreement in 10 minutes with privacy-preserving AI technology. Attorney-ready documents for just $49.
+                    Get your comprehensive, California-compliant prenuptial agreement in 10 minutes with privacy-preserving AI technology. Attorney-ready documents for Free.
                   </p>
                   <Link href="/intake">
                     <Button size="lg" className="gap-2" data-testid="button-cta-final">

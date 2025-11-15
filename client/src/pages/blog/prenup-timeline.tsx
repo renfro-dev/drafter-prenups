@@ -10,6 +10,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { RelatedArticles } from "@/components/related-articles";
 
 export default function PrenupTimeline() {
   const articleSchema = {
@@ -80,6 +81,16 @@ export default function PrenupTimeline() {
     ]
   };
 
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "/" },
+      { "@type": "ListItem", "position": 2, "name": "Blog", "item": "/blog" },
+      { "@type": "ListItem", "position": 3, "name": "When Should You Get a Prenup? Timeline and Best Practices", "item": "/blog/prenup-timeline" }
+    ]
+  };
+
   const howToSchema = {
     "@context": "https://schema.org",
     "@type": "HowTo",
@@ -131,7 +142,7 @@ export default function PrenupTimeline() {
       <SEOHead
         title="When Should You Get a Prenup? Timeline and Best Practices | Drafter"
         description="Complete guide to prenup timing with month-by-month timeline from 6 months before wedding to signing. Learn when to start, how long it takes, and what to do at each stage."
-        schema={[articleSchema, faqSchema, howToSchema]}
+        schema={[articleSchema, faqSchema, howToSchema, breadcrumbSchema]}
       />
       
       <div className="min-h-screen bg-background">
@@ -544,7 +555,7 @@ export default function PrenupTimeline() {
               </div>
 
               <p>
-                <strong>Total cost:</strong> $49 (Drafter) + $1,000-$2,000 (attorney review for both parties) = $1,049-$2,049
+                <strong>Total cost:</strong> $0 (Drafter) + $1,000-$2,000 (attorney review for both parties) = $1,000-$2,000
                 <br />
                 <strong>Total time:</strong> 3-4 months (vs. 6+ months with traditional attorneys)
                 <br />
@@ -743,7 +754,7 @@ export default function PrenupTimeline() {
                       </Button>
                     </Link>
                     <p className="text-sm text-muted-foreground mt-4">
-                      $49 • Privacy-protected with PII masking • Attorney review recommended
+                      Free • Privacy-protected with PII masking • Attorney review recommended
                     </p>
                   </CardContent>
                 </Card>
@@ -837,49 +848,7 @@ export default function PrenupTimeline() {
 
           <Separator className="my-12" />
 
-          <section className="mt-12" data-testid="section-related-articles">
-            <h2 className="text-2xl font-bold mb-6">Related Articles</h2>
-            <div className="grid md:grid-cols-2 gap-6">
-              <Card className="hover-elevate">
-                <CardHeader>
-                  <CardTitle className="text-lg">
-                    <Link href="/blog/prenup-mistakes" className="hover:text-primary">
-                      5 Common Prenup Mistakes That Could Invalidate Your Agreement
-                    </Link>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="text-sm text-muted-foreground">
-                  Learn critical errors that can invalidate your prenup and how to avoid them.
-                </CardContent>
-              </Card>
-
-              <Card className="hover-elevate">
-                <CardHeader>
-                  <CardTitle className="text-lg">
-                    <Link href="/blog/prenup-cost" className="hover:text-primary">
-                      How Much Does a Prenup Cost? Complete Price Guide
-                    </Link>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="text-sm text-muted-foreground">
-                  Compare costs from $49 AI services to $10,000+ attorney fees and find the best value.
-                </CardContent>
-              </Card>
-
-              <Card className="hover-elevate">
-                <CardHeader>
-                  <CardTitle className="text-lg">
-                    <Link href="/blog/do-i-need-prenup" className="hover:text-primary">
-                      Do I Need a Prenup? Complete Guide to Deciding
-                    </Link>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="text-sm text-muted-foreground">
-                  Determine if a prenup is right based on assets, income, and family circumstances.
-                </CardContent>
-              </Card>
-            </div>
-          </section>
+          <RelatedArticles currentId="when-to-get-prenup" tags={["timeline","7-day","california"]} />
         </div>
       </div>
     </>

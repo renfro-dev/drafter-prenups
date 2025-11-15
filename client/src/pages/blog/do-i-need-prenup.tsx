@@ -10,6 +10,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { RelatedArticles } from "@/components/related-articles";
 
 export default function DoINeedPrenup() {
   const articleSchema = {
@@ -31,6 +32,16 @@ export default function DoINeedPrenup() {
     },
     "datePublished": "2024-12-15",
     "dateModified": "2025-10-19"
+  };
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "/" },
+      { "@type": "ListItem", "position": 2, "name": "Blog", "item": "/blog" },
+      { "@type": "ListItem", "position": 3, "name": "Do I Need a Prenup? Complete Guide to Deciding", "item": "/blog/do-i-need-prenup" }
+    ]
   };
 
   const faqSchema = {
@@ -93,7 +104,7 @@ export default function DoINeedPrenup() {
       <SEOHead
         title="Do I Need a Prenup? Complete Guide to Deciding | Drafter"
         description="Comprehensive guide to determining if you need a prenuptial agreement. Learn when prenups are essential, who benefits most, common myths, and how to decide what's right for your relationship."
-        schema={[articleSchema, faqSchema]}
+        schema={[articleSchema, faqSchema, breadcrumbSchema]}
       />
       
       <div className="min-h-screen bg-background">
@@ -427,7 +438,7 @@ export default function DoINeedPrenup() {
               </p>
 
               <p>
-                <strong>However:</strong> Even in this scenario, a prenup facilitates important financial conversations. And at just $49 with modern AI-powered services, the barrier to entry has never been lower.
+                <strong>However:</strong> Even in this scenario, a prenup facilitates important financial conversations. And at free with modern AI-powered services, the barrier to entry has never been lower.
               </p>
 
               <h2 className="text-3xl font-bold mt-12 mb-6">
@@ -491,7 +502,7 @@ export default function DoINeedPrenup() {
                         <h4 className="font-semibold">Myth: "Prenups are too expensive"</h4>
                       </div>
                       <p className="text-sm text-muted-foreground ml-8">
-                        <strong>Reality:</strong> Traditional attorney-drafted prenups cost $2,500-$3,500. Modern AI-powered services like Drafter generate comprehensive prenups for $49. Even with attorney review, you'll spend $1,000-$3,000 total—far less than divorce litigation.
+                        <strong>Reality:</strong> Traditional attorney-drafted prenups cost $2,500-$3,500. Modern AI-powered services like Drafter generate comprehensive prenups for free. Even with attorney review, you'll spend $1,000-$3,000 total—far less than divorce litigation.
                       </p>
                     </div>
                   </div>
@@ -640,7 +651,7 @@ export default function DoINeedPrenup() {
               </div>
 
               <p>
-                Even if you fall into the "probably don't need one" category, modern AI-powered services have made prenups so affordable ($49 with Drafter) that the question becomes: why <em>not</em> get one?
+                Even if you fall into the "probably don't need one" category, modern AI-powered services have made prenups so affordable (free with Drafter) that the question becomes: why <em>not</em> get one?
               </p>
 
               <p>
@@ -650,12 +661,12 @@ export default function DoINeedPrenup() {
               <div className="my-12 p-8 bg-primary/5 border border-primary/20 rounded-lg">
                 <h3 className="text-2xl font-bold mb-4">Create Your Prenup Today</h3>
                 <p className="mb-6">
-                  Whether you're absolutely certain you need a prenup or just exploring your options, Drafter makes it easy. Generate a comprehensive, California-specific prenup in 10 minutes for just $49.
+                  Whether you're absolutely certain you need a prenup or just exploring your options, Drafter makes it easy. Generate a comprehensive, California-specific prenup in 10 minutes for free.
                 </p>
                 <div className="flex gap-4">
                   <Link href="/intake">
                     <Button size="lg" data-testid="button-start-prenup">
-                      Get Started - $49
+                      Get Started – Free
                     </Button>
                   </Link>
                   <Link href="/blog/prenup-cost">
@@ -716,62 +727,7 @@ export default function DoINeedPrenup() {
 
               <Separator className="my-12" />
 
-              <section className="my-12" data-testid="section-related-articles">
-                <h2 className="text-2xl font-bold mb-6">Related Articles</h2>
-                <div className="grid md:grid-cols-2 gap-6">
-                  <Card className="hover-elevate">
-                    <CardHeader>
-                      <CardTitle className="text-lg">
-                        <Link href="/blog/prenup-cost" className="hover:text-primary">
-                          How Much Does a Prenup Cost? Complete Price Guide
-                        </Link>
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent className="text-sm text-muted-foreground">
-                      Compare costs from $49 AI services to $10,000+ attorney fees and find the best value for your situation.
-                    </CardContent>
-                  </Card>
-
-                  <Card className="hover-elevate">
-                    <CardHeader>
-                      <CardTitle className="text-lg">
-                        <Link href="/blog/second-marriage-prenup" className="hover:text-primary">
-                          Prenup for Second Marriage: What's Different?
-                        </Link>
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent className="text-sm text-muted-foreground">
-                      Protect children's inheritance and navigate complex financial situations in remarriage.
-                    </CardContent>
-                  </Card>
-
-                  <Card className="hover-elevate">
-                    <CardHeader>
-                      <CardTitle className="text-lg">
-                        <Link href="/blog/prenup-vs-postnup" className="hover:text-primary">
-                          Prenup vs Postnup: Key Differences and Which to Choose
-                        </Link>
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent className="text-sm text-muted-foreground">
-                      Compare prenuptial and postnuptial agreements to determine which fits your timing and needs.
-                    </CardContent>
-                  </Card>
-
-                  <Card className="hover-elevate">
-                    <CardHeader>
-                      <CardTitle className="text-lg">
-                        <Link href="/blog/prenup-mistakes" className="hover:text-primary">
-                          5 Common Prenup Mistakes That Could Invalidate Your Agreement
-                        </Link>
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent className="text-sm text-muted-foreground">
-                      Learn how to avoid the most common errors that can make your prenup unenforceable.
-                    </CardContent>
-                  </Card>
-                </div>
-              </section>
+              <RelatedArticles currentId="do-i-need-prenup" tags={["basics","decision","california"]} />
             </div>
           </article>
         </div>

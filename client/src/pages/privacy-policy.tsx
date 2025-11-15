@@ -415,21 +415,11 @@ export default function PrivacyPolicy() {
 
             <div className="bg-muted/50 rounded-lg p-6 space-y-3">
               <h3 className="font-semibold">Contact Us</h3>
-              <div className="grid md:grid-cols-3 gap-4 text-sm">
+              <div className="grid md:grid-cols-1 gap-4 text-sm">
                 <div>
                   <p className="font-semibold mb-1">Privacy Questions</p>
                   <a href="mailto:privacy@drafter.com" className="text-primary hover:underline">privacy@drafter.com</a>
                   <p className="text-xs text-muted-foreground mt-1">48 hour response</p>
-                </div>
-                <div>
-                  <p className="font-semibold mb-1">Security Issues</p>
-                  <a href="mailto:security@drafter.com" className="text-primary hover:underline">security@drafter.com</a>
-                  <p className="text-xs text-muted-foreground mt-1">24 hour response</p>
-                </div>
-                <div>
-                  <p className="font-semibold mb-1">General Support</p>
-                  <a href="mailto:support@drafter.com" className="text-primary hover:underline">support@drafter.com</a>
-                  <p className="text-xs text-muted-foreground mt-1">2 business days</p>
                 </div>
               </div>
             </div>

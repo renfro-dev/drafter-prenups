@@ -10,6 +10,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { RelatedArticles } from "@/components/related-articles";
 
 export default function SecondMarriagePrenup() {
   const articleSchema = {
@@ -31,6 +32,16 @@ export default function SecondMarriagePrenup() {
     },
     "datePublished": "2025-05-15",
     "dateModified": "2025-10-19"
+  };
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "/" },
+      { "@type": "ListItem", "position": 2, "name": "Blog", "item": "/blog" },
+      { "@type": "ListItem", "position": 3, "name": "Prenup for Second Marriage: What's Different?", "item": "/blog/second-marriage-prenup" }
+    ]
   };
 
   const faqSchema = {
@@ -77,7 +88,7 @@ export default function SecondMarriagePrenup() {
       <SEOHead
         title="Prenup for Second Marriage: What's Different? | Drafter"
         description="Essential guide to prenuptial agreements for second marriages. Learn how children from previous relationships, existing assets, and estate planning affect your prenup strategy."
-        schema={[articleSchema, faqSchema]}
+        schema={[articleSchema, faqSchema, breadcrumbSchema]}
       />
       
       <div className="min-h-screen bg-background">
@@ -605,62 +616,7 @@ export default function SecondMarriagePrenup() {
 
           <Separator className="my-12" />
 
-          <section className="mt-12" data-testid="section-related-articles">
-            <h2 className="text-2xl font-bold mb-6">Related Articles</h2>
-            <div className="grid md:grid-cols-2 gap-6">
-              <Card className="hover-elevate">
-                <CardHeader>
-                  <CardTitle className="text-lg">
-                    <Link href="/blog/do-i-need-prenup" className="hover:text-primary">
-                      Do I Need a Prenup? Complete Guide to Deciding
-                    </Link>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="text-sm text-muted-foreground">
-                  Determine if a prenup is right based on assets, income, and family circumstances.
-                </CardContent>
-              </Card>
-
-              <Card className="hover-elevate">
-                <CardHeader>
-                  <CardTitle className="text-lg">
-                    <Link href="/blog/prenup-cost" className="hover:text-primary">
-                      How Much Does a Prenup Cost? Complete Price Guide
-                    </Link>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="text-sm text-muted-foreground">
-                  Compare costs from $49 AI services to $10,000+ attorney fees and find the best value.
-                </CardContent>
-              </Card>
-
-              <Card className="hover-elevate">
-                <CardHeader>
-                  <CardTitle className="text-lg">
-                    <Link href="/blog/prenup-timeline" className="hover:text-primary">
-                      When Should You Get a Prenup? Timeline and Best Practices
-                    </Link>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="text-sm text-muted-foreground">
-                  Follow the ideal 6-month prenup timeline to ensure legal validity.
-                </CardContent>
-              </Card>
-
-              <Card className="hover-elevate">
-                <CardHeader>
-                  <CardTitle className="text-lg">
-                    <Link href="/blog/prenup-vs-postnup" className="hover:text-primary">
-                      Prenup vs Postnup: Which Is Right for You?
-                    </Link>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="text-sm text-muted-foreground">
-                  Compare prenups and postnups to choose the right agreement for your situation.
-                </CardContent>
-              </Card>
-            </div>
-          </section>
+          <RelatedArticles currentId="second-marriage-prenup" tags={["second-marriage","children","estate"]} />
         </div>
       </div>
     </>

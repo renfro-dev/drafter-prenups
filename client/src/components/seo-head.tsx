@@ -5,14 +5,16 @@ interface SEOHeadProps {
   description?: string;
   ogImage?: string;
   ogType?: string;
+  canonical?: string;
   schema?: Record<string, any> | Record<string, any>[];
 }
 
 export function SEOHead({
   title = "Drafter - AI-Powered Prenuptial Agreements | Private & Affordable",
-  description = "Draft your prenup in 10 minutes with AI-powered legal technology. Private, secure, and attorney-ready for just $49. Protect your future with Drafter.",
+  description = "Draft your prenup in 10 minutes with AI-powered legal technology. Private, secure, and attorney-ready for free. Protect your future with Drafter.",
   ogImage = "/og-image.png",
   ogType = "website",
+  canonical,
   schema,
 }: SEOHeadProps) {
   useEffect(() => {
@@ -33,6 +35,7 @@ export function SEOHead({
 
     // Update meta description
     updateOrCreateMeta('description', description);
+    updateOrCreateMeta('robots', 'index, follow');
 
     // Open Graph tags
     updateOrCreateMeta('og:title', title, true);
@@ -41,6 +44,22 @@ export function SEOHead({
     updateOrCreateMeta('og:type', ogType, true);
     updateOrCreateMeta('og:url', window.location.href, true);
     updateOrCreateMeta('og:site_name', 'Drafter', true);
+
+    // Canonical link
+    const ensureCanonicalLink = (href: string) => {
+      let link = document.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
+      if (!link) {
+        link = document.createElement('link');
+        link.setAttribute('rel', 'canonical');
+        document.head.appendChild(link);
+      }
+      link.setAttribute('href', href);
+    };
+    const canonicalHref =
+      canonical ||
+      `${window.location.origin}${window.location.pathname}`.replace(/\/+$/, '') ||
+      window.location.href;
+    ensureCanonicalLink(canonicalHref);
 
     // Twitter Card tags
     updateOrCreateMeta('twitter:card', 'summary_large_image');
@@ -77,7 +96,7 @@ export function SEOHead({
         schemaScript.remove();
       }
     };
-  }, [title, description, ogImage, ogType, schema]);
+  }, [title, description, ogImage, ogType, schema, canonical]);
 
   return null;
 }

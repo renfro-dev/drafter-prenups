@@ -10,6 +10,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { RelatedArticles } from "@/components/related-articles";
 
 export default function PrenupMistakes() {
   const articleSchema = {
@@ -31,6 +32,16 @@ export default function PrenupMistakes() {
     },
     "datePublished": "2025-03-15",
     "dateModified": "2025-10-19"
+  };
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "/" },
+      { "@type": "ListItem", "position": 2, "name": "Blog", "item": "/blog" },
+      { "@type": "ListItem", "position": 3, "name": "5 Common Prenup Mistakes That Could Invalidate Your Agreement", "item": "/blog/prenup-mistakes" }
+    ]
   };
 
   const faqSchema = {
@@ -85,7 +96,7 @@ export default function PrenupMistakes() {
       <SEOHead
         title="5 Common Prenup Mistakes That Could Invalidate Your Agreement | Drafter"
         description="Learn about the most common prenuptial agreement mistakes that can render your prenup unenforceable in court. Expert guidance on avoiding costly errors and ensuring your prenup holds up."
-        schema={[articleSchema, faqSchema]}
+        schema={[articleSchema, faqSchema, breadcrumbSchema]}
       />
       
       <div className="min-h-screen bg-background">
@@ -333,7 +344,7 @@ export default function PrenupMistakes() {
               <h3 className="text-2xl font-semibold mt-8 mb-4">The AI-Powered Alternative</h3>
 
               <p>
-                Modern technology is changing the landscape. AI-powered services like <Link href="/">Drafter</Link> can generate comprehensive prenuptial agreements at a fraction of the cost of traditional attorneys (typically $49 vs $3,000-$10,000).
+                Modern technology is changing the landscape. AI-powered services like <Link href="/">Drafter</Link> can generate comprehensive prenuptial agreements at a fraction of the cost of traditional attorneys (typically Free vs $3,000-$10,000).
               </p>
 
               <p>
@@ -579,7 +590,7 @@ export default function PrenupMistakes() {
                 <li><strong>Guided disclosure:</strong> Our intake process ensures you provide comprehensive financial disclosure for both parties</li>
                 <li><strong>Attorney review ready:</strong> All Drafter prenups are formatted for easy attorney review, encouraging you to seek independent counsel</li>
                 <li><strong>Quick turnaround:</strong> Generate your prenup in 10 minutes, giving you months to review before your wedding</li>
-                <li><strong>Affordable:</strong> At $49, both parties can afford to have separate attorneys review the agreement</li>
+                <li><strong>Affordable:</strong> At no cost, both parties can afford to have separate attorneys review the agreement</li>
               </ul>
 
               <div className="my-12">
@@ -589,7 +600,7 @@ export default function PrenupMistakes() {
                       Create Your California Prenup in 10 Minutes
                     </h3>
                     <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
-                      Drafter's AI-powered platform helps you avoid these common mistakes with built-in safeguards, privacy protection, and state-specific compliance—all for $49.
+                      Drafter's AI-powered platform helps you avoid these common mistakes with built-in safeguards, privacy protection, and state-specific compliance—all for Free.
                     </p>
                     <Link href="/intake">
                       <Button size="lg" data-testid="button-start-prenup">
@@ -690,50 +701,7 @@ export default function PrenupMistakes() {
           </article>
 
           <Separator className="my-12" />
-
-          <section className="mt-12" data-testid="section-related-articles">
-            <h2 className="text-2xl font-bold mb-6">Related Articles</h2>
-            <div className="grid md:grid-cols-2 gap-6">
-              <Card className="hover-elevate">
-                <CardHeader>
-                  <CardTitle className="text-lg">
-                    <Link href="/blog/prenup-cost" className="hover:text-primary">
-                      How Much Does a Prenup Cost? Complete Price Guide
-                    </Link>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="text-sm text-muted-foreground">
-                  Understand prenup costs from $49 AI services to $10,000+ attorney fees.
-                </CardContent>
-              </Card>
-
-              <Card className="hover-elevate">
-                <CardHeader>
-                  <CardTitle className="text-lg">
-                    <Link href="/blog/prenup-timeline" className="hover:text-primary">
-                      When Should You Get a Prenup? Timeline and Best Practices
-                    </Link>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="text-sm text-muted-foreground">
-                  Follow the ideal 6-month prenup timeline to ensure legal validity and avoid last-minute pressure.
-                </CardContent>
-              </Card>
-
-              <Card className="hover-elevate">
-                <CardHeader>
-                  <CardTitle className="text-lg">
-                    <Link href="/blog/do-i-need-prenup" className="hover:text-primary">
-                      Do I Need a Prenup? Complete Guide to Deciding
-                    </Link>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="text-sm text-muted-foreground">
-                  Determine if a prenup is right based on assets, income, business ownership, and family circumstances.
-                </CardContent>
-              </Card>
-            </div>
-          </section>
+          <RelatedArticles currentId="prenup-mistakes" tags={["mistakes","enforceability","california"]} />
         </div>
       </div>
     </>
