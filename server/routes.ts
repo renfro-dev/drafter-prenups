@@ -1,12 +1,12 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertIntakeSchema, generatedPrenupSchema } from "@shared/schema";
+import { insertIntakeSchema, generatedPrenupSchema, insertTermsAcceptanceSchema } from "@shared/schema";
 import { maskPII, unmaskText, maskTextForDisplay } from "./utils/pii-masking";
 import { generatePrenup } from "./lib/anthropic-client";
 import { generateWordDocument } from "./utils/document-generator";
-import { sendEmail, generatePrenupEmail } from "./utils/email-sender";
-import { setupAuth, isAuthenticated } from "./replitAuth";
+import { sendEmail, generatePrenupEmail, generateWelcomeEmail } from "./utils/email-sender";
+import { setupAuth, isAuthenticated, attachUserIfPresent } from "./replitAuth";
 import { ensureCanonicalUser } from "./middleware/authenticated-user";
 import { parsePrenupClauses } from "./utils/clause-parser";
 import { z } from "zod";
@@ -38,6 +38,63 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Setup Replit Auth
   await setupAuth(app);
 
+  // --- Diagnostics: Environment and Auth status ---
+  app.get('/api/debug/status', async (_req: any, res) => {
+    try {
+      let dbOk = true;
+      let clausesCount: number | undefined = undefined;
+      try {
+        // lightweight DB check via storage.getClauses('CA') count
+        const result = await storage.getClauses('CA');
+        clausesCount = result.length;
+      } catch (e: any) {
+        dbOk = false;
+      }
+
+      res.json({
+        authProvider: process.env.AUTH_PROVIDER || 'replit',
+        supabaseUrl: process.env.SUPABASE_URL || null,
+        jwtIssuer: process.env.SUPABASE_JWT_ISSUER || null,
+        jwtAudience: process.env.SUPABASE_JWT_AUDIENCE || null,
+        db: { ok: dbOk },
+        clauses: { count: clausesCount },
+        port: process.env.PORT || '5000',
+        nodeEnv: process.env.NODE_ENV || 'development',
+      });
+    } catch (err: any) {
+      res.status(500).json({ error: 'debug status failed', details: err?.message });
+    }
+  });
+
+  app.get('/api/debug/auth', attachUserIfPresent, async (req: any, res) => {
+    const authenticated = !!req.user?.claims;
+    res.json({ authenticated, claims: authenticated ? req.user.claims : null });
+  });
+
+  app.get('/api/debug/intake/:id', async (req: any, res) => {
+    try {
+      const id = req.params.id;
+      const intake = await storage.getIntake(id);
+      if (!intake) {
+        return res.json({ exists: false });
+      }
+      const clauses = await storage.getPrenupClauses(id);
+      res.json({
+        exists: true,
+        intake: {
+          id: intake.id,
+          status: intake.status,
+          hasPiiMap: !!intake.piiMap,
+          email: intake.email,
+          createdAt: intake.createdAt,
+        },
+        prenupClauses: { count: clauses.length },
+      });
+    } catch (err: any) {
+      res.status(500).json({ error: 'debug intake failed', details: err?.message });
+    }
+  });
+
   // Auth route
   app.get('/api/auth/user', isAuthenticated, ensureCanonicalUser, async (req: any, res) => {
     try {
@@ -49,9 +106,32 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Send welcome email once after signup/login (idempotent)
+  app.post('/api/auth/welcome', isAuthenticated, ensureCanonicalUser, async (req: any, res) => {
+    try {
+      const user = req.authUser as any;
+      if (!user?.email) {
+        return res.status(400).json({ error: 'User email is required' });
+      }
+
+      if (user.welcomeEmailSent) {
+        return res.json({ success: true, alreadySent: true });
+      }
+
+      const htmlBody = generateWelcomeEmail(user.firstName);
+      await sendEmail({ to: user.email, subject: 'Welcome to Drafter', htmlBody });
+      await storage.markWelcomeEmailSent(user.id);
+
+      res.json({ success: true, sent: true });
+    } catch (error: any) {
+      console.error('Failed to send welcome email:', error);
+      res.status(500).json({ error: 'Failed to send welcome email', details: error?.message });
+    }
+  });
+
   // Collaborative review endpoints
   // View prenup clauses - NO AUTH REQUIRED (UUID acts as access token)
-  app.get('/api/review/:intakeId/clauses', async (req: any, res) => {
+  app.get('/api/review/:intakeId/clauses', attachUserIfPresent, async (req: any, res) => {
     try {
       const intakeId = req.params.intakeId;
       if (process.env.NODE_ENV === 'development') {
@@ -129,15 +209,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.json([]); // Return empty array to allow graceful handling
       }
 
-      // Require pii_map for security - don't expose raw data
+      // If pii_map is missing, gracefully fall back to returning stored (masked) clauses
+      // This preserves privacy (no unmasking) and avoids a hard error
       if (!intake.piiMap) {
-        console.error('[Review] ERROR: No pii_map found for intake, cannot safely return clauses');
-        console.error('[Review] Intake object keys:', Object.keys(intake));
-        console.error('[Review] Intake piiMap value:', intake.piiMap);
-        console.error('[Review] Intake pii_map value (snake_case):', (intake as any).pii_map);
-        return res.status(500).json({
-          error: 'Prenup data not available for review. Please regenerate your prenup.'
-        });
+        console.warn('[Review] WARNING: No pii_map found for intake, returning stored (masked) clauses');
+        console.warn('[Review] Intake object keys:', Object.keys(intake));
+        return res.json(clauses);
       }
 
       const piiMap = intake.piiMap as any;
@@ -452,6 +529,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/generate", async (req, res) => {
     try {
       const intake = insertIntakeSchema.parse(req.body);
+      // Enforce terms acceptance
+      const acceptedForGenerate = await storage.hasAcceptedTerms(intake.email);
+      if (!acceptedForGenerate) {
+        return res.status(400).json({ error: 'TermsNotAccepted' });
+      }
 
       const { maskedData, piiMap } = maskPII(intake);
 
@@ -580,6 +662,95 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error('Error fetching clauses:', error);
       res.status(500).json({ error: 'Failed to fetch clauses' });
+    }
+  });
+
+  // Lightweight, no-auth, no-PII-storage generation + email delivery
+  app.post('/api/generate-email', async (req, res) => {
+    try {
+      // Validate intake
+      const intake = insertIntakeSchema.parse(req.body);
+      // Enforce terms acceptance
+      const accepted = await storage.hasAcceptedTerms(intake.email);
+      if (!accepted) {
+        return res.status(400).json({ success: false, error: 'TermsNotAccepted' });
+      }
+
+      // Mask for AI processing; do not persist anything
+      const { maskedData, piiMap } = maskPII(intake);
+
+      // Load base clause library (not sensitive)
+      const clauses = await storage.getClauses(intake.state);
+      if (clauses.length === 0) {
+        throw new Error(`No clauses found for jurisdiction: ${intake.state}`);
+      }
+
+      // Generate agreement JSON via AI
+      const prenupData = await generatePrenup(
+        maskedData,
+        clauses.map(c => ({
+          title: c.title,
+          text_normalized: c.textNormalized,
+          category: c.category,
+        }))
+      );
+
+      // Validate structure
+      const validatedPrenup = generatedPrenupSchema.parse(prenupData);
+
+      // Create Word document buffer (unmasking happens inside)
+      const documentBuffer = await generateWordDocument(validatedPrenup, piiMap, intake);
+
+      // Try emailing attachment; do not store to DB either way
+      let emailDelivered = false;
+      try {
+        const emailHtml = generatePrenupEmail(intake.partyAName, intake.partyBName);
+        await sendEmail({
+          to: intake.email,
+          subject: 'Your Prenuptial Agreement Draft (California) – Drafter',
+          htmlBody: emailHtml,
+          attachments: [
+            {
+              filename: 'Prenuptial-Agreement.docx',
+              content: documentBuffer,
+              contentType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            },
+          ],
+        });
+        emailDelivered = true;
+      } catch (emailErr) {
+        console.error('[Email] Delivery failed, falling back to browser download:', emailErr);
+      }
+
+      // Provide a browser download URL regardless of email status
+      const downloadUrl = `data:application/vnd.openxmlformats-officedocument.wordprocessingml.document;base64,${documentBuffer.toString('base64')}`;
+
+      res.json({ success: true, emailDelivered, downloadUrl });
+    } catch (error: any) {
+      console.error('[Generate Email] Error:', error);
+      res.status(400).json({ success: false, error: error?.message || 'Failed to generate prenup' });
+    }
+  });
+
+  // Record Terms & Conditions acceptance (ledger)
+  app.post('/api/terms/accept', attachUserIfPresent, async (req: any, res) => {
+    try {
+      const acceptance = insertTermsAcceptanceSchema.parse(req.body);
+      const ip = (req.headers['x-forwarded-for'] as string)?.split(',')[0]?.trim() || req.socket.remoteAddress || undefined;
+      const ua = req.headers['user-agent'] as string | undefined;
+      await storage.createTermsAcceptance({
+        email: acceptance.email,
+        partyAName: acceptance.partyAName,
+        partyBName: acceptance.partyBName,
+        ip,
+        userAgent: ua,
+        version: acceptance.version,
+        userId: req.user?.claims?.sub || null,
+      });
+      res.json({ success: true });
+    } catch (error: any) {
+      console.error('[Terms] Acceptance record failed:', error);
+      res.status(400).json({ success: false, error: error?.message || 'Invalid terms acceptance' });
     }
   });
 

@@ -16,7 +16,7 @@ export default function Home() {
       "@context": "https://schema.org",
       "@type": "LegalService",
       "name": "Drafter",
-      "description": "AI-powered prenuptial agreement drafting platform with privacy-first PII masking. Generate California-compliant prenups for $49 in under 10 minutes.",
+      "description": "AI-powered prenuptial agreement drafting platform with privacy-first PII masking. Generate California-compliant prenups for free in under 10 minutes.",
       "url": "https://drafter.com",
       "logo": "https://drafter.com/logo.png",
       "telephone": "+1-XXX-XXX-XXXX",
@@ -28,9 +28,9 @@ export default function Home() {
       },
       "offers": {
         "@type": "Offer",
-        "price": "49",
+        "price": "0",
         "priceCurrency": "USD",
-        "description": "AI-powered prenuptial agreement for California couples",
+        "description": "AI-powered prenuptial agreement for California couples (Free)",
         "availability": "https://schema.org/InStock"
       }
     },
@@ -91,7 +91,7 @@ export default function Home() {
           "name": "What if my partner doesn't want a prenup?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Start by explaining that prenups protect both partners, not just one. Frame it as financial planning rather than distrust. Share that at $49, it's affordable protection that brings clarity to your marriage. Many partners become supportive once they understand the mutual benefits and see it as responsible financial planning together."
+              "text": "Start by explaining that prenups protect both partners, not just one. Frame it as financial planning rather than distrust. Share that it's free with Drafter, offering accessible protection that brings clarity to your marriage. Many partners become supportive once they understand the mutual benefits and see it as responsible financial planning together."
           }
         },
         {
@@ -174,8 +174,8 @@ export default function Home() {
   return (
     <>
       <SEOHead
-        title="Drafter - AI-Powered Prenuptial Agreements | $49 California Prenups"
-        description="Generate attorney-ready prenups in 10 minutes. AI-powered with privacy-first PII masking. California-specific legal clauses. $49 vs $3,000+ traditional cost."
+        title="Drafter - AI-Powered Prenuptial Agreements | Free California Prenups"
+        description="Generate attorney-ready prenups in 10 minutes. AI-powered with privacy-first PII masking. California-specific legal clauses. Free vs $3,000+ traditional cost."
         schema={schema}
       />
     <div className="min-h-screen bg-background">
@@ -210,7 +210,7 @@ export default function Home() {
                     </div>
                     <div className="flex items-center space-x-2">
                       <Check className="h-4 w-4 text-chart-2" />
-                      <span className="text-muted-foreground">$49 Fixed Price</span>
+                    <span className="text-muted-foreground">Free</span>
                     </div>
                     <div className="flex items-center space-x-2">
                       <Check className="h-4 w-4 text-chart-2" />
@@ -329,15 +329,15 @@ export default function Home() {
                   </div>
                   <h2 className="text-3xl md:text-4xl font-bold">Your Information Stays Private</h2>
                   <p className="text-lg text-muted-foreground">
-                    We use advanced PII masking to protect your sensitive information before any AI processing.
-                    Your names, financial details, and personal data are encrypted and never used to train AI models.
+                    No account required and no sensitive intake stored. We use PII masking to protect your details
+                    during AI processing, email your document, then discard your intake data.
                   </p>
                   <div className="space-y-4">
                     {[
-                      "256-bit encryption for all data in transit and at rest",
+                      "No account required, no sensitive data stored in our DB",
                       "PII masking before AI analysis—your data stays anonymized",
-                      "No training on your data—Anthropic Claude privacy commitments",
-                      "Automatic data deletion after 7 days (optional)",
+                      "We email your document and discard intake data",
+                      "No model training on your data",
                     ].map((item, i) => (
                       <div key={i} className="flex items-start space-x-3">
                         <div className="h-6 w-6 rounded-full bg-chart-3/10 flex items-center justify-center flex-shrink-0 mt-0.5">
@@ -371,7 +371,7 @@ export default function Home() {
                     <div className="h-px bg-border" />
                     <div className="flex items-center justify-between pb-4 border-b">
                       <span className="font-semibold text-primary">Drafter Platform</span>
-                      <span className="text-2xl font-bold text-primary">$49</span>
+                      <span className="text-2xl font-bold text-primary">Free</span>
                     </div>
                     <div className="space-y-3">
                       <div className="flex items-center justify-between text-sm">
@@ -384,7 +384,7 @@ export default function Home() {
                       </div>
                       <div className="flex items-center justify-between text-sm">
                         <span className="text-muted-foreground">Privacy protection</span>
-                        <span className="text-chart-2">AI + encryption</span>
+                        <span className="text-chart-2">No account; no DB storage of sensitive intake</span>
                       </div>
                     </div>
                   </div>
@@ -400,13 +400,13 @@ export default function Home() {
               <div className="text-center mb-16">
                 <h2 className="text-3xl md:text-4xl font-bold mb-4">Simple, Transparent Pricing</h2>
                 <p className="text-lg text-muted-foreground">
-                  One price, complete prenup draft—no hidden fees
+                  Free, complete prenup draft—no hidden fees
                 </p>
               </div>
               <Card className="p-8 md:p-12">
                 <div className="text-center mb-8">
                   <div className="inline-flex items-baseline">
-                    <span className="text-5xl md:text-6xl font-bold">$49</span>
+                    <span className="text-5xl md:text-6xl font-bold">Free</span>
                     <span className="text-xl text-muted-foreground ml-2">/prenup</span>
                   </div>
                 </div>
@@ -415,7 +415,7 @@ export default function Home() {
                     "California-specific prenuptial agreement draft",
                     "AI-powered clause selection from verified legal library",
                     "Word document (.docx) delivered via email",
-                    "Private, encrypted processing with PII masking",
+                    "Private processing with PII masking; no DB storage of sensitive intake",
                     "Instant delivery—receive draft in minutes",
                     "Legal disclaimers and compliance guidance included",
                   ].map((item, i) => (
@@ -520,7 +520,7 @@ export default function Home() {
                   </AccordionTrigger>
                   <AccordionContent className="text-muted-foreground">
                     Start by explaining that prenups protect both partners, not just one. Frame it as financial planning
-                    rather than distrust. Share that at $49, it's affordable protection that brings clarity to your marriage.
+                    rather than distrust. Share that it's free with Drafter, which brings clarity to your marriage without cost.
                     Many partners become supportive once they understand the mutual benefits and see it as responsible
                     financial planning together.
                   </AccordionContent>
@@ -616,7 +616,7 @@ export default function Home() {
                 <div>
                   <h3 className="text-xl font-semibold mb-3">Is a prenup worth it for middle-class couples?</h3>
                   <p className="text-muted-foreground">
-                    Absolutely. Prenups aren't just for the wealthy—they're valuable for anyone with retirement accounts, student loans, family businesses, or expected inheritances. At $49 with Drafter, a prenup is affordable protection that can save thousands in legal fees and emotional stress if divorce occurs.
+                    Absolutely. Prenups aren't just for the wealthy—they're valuable for anyone with retirement accounts, student loans, family businesses, or expected inheritances. At $0 with Drafter, a prenup is accessible protection that can save thousands in legal fees and emotional stress if divorce occurs.
                   </p>
                 </div>
               </div>
@@ -758,7 +758,7 @@ export default function Home() {
                 <div className="space-y-3">
                   <div className="flex items-center space-x-2 text-sm text-muted-foreground">
                     <Lock className="h-4 w-4" />
-                    <span>256-bit Encryption</span>
+                    <span>No DB storage of sensitive intake</span>
                   </div>
                   <div className="flex items-center space-x-2 text-sm text-muted-foreground">
                     <Shield className="h-4 w-4" />

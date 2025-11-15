@@ -311,3 +311,49 @@ export const setupAuth = AUTH_PROVIDER === 'replit'
 export const isAuthenticated: RequestHandler = AUTH_PROVIDER === 'replit'
   ? isAuthenticatedReplit
   : isAuthenticatedSupabase;
+
+// Optional attachment of user if a valid Supabase Bearer token is present.
+// Does not enforce auth; simply sets req.user when verification succeeds.
+const attachSupabaseUserIfPresent: RequestHandler = async (req: any, res, next) => {
+  try {
+    const authHeader = req.headers["authorization"] || req.headers["Authorization"];
+    if (!authHeader || Array.isArray(authHeader)) {
+      return next();
+    }
+    const match = (authHeader as string).match(/^Bearer (.+)$/i);
+    const token = match?.[1];
+    if (!token) {
+      return next();
+    }
+
+    const jwks = getSupabaseJwks();
+    const { payload } = await jwtVerify(token, jwks, {
+      issuer: process.env.SUPABASE_JWT_ISSUER || undefined,
+      audience: process.env.SUPABASE_JWT_AUDIENCE || undefined,
+    });
+
+    const claims: JWTPayload & {
+      email?: string;
+      user_metadata?: Record<string, any>;
+    } = payload as any;
+
+    req.user = {
+      claims: {
+        sub: claims.sub,
+        email: claims.email,
+        first_name: (claims as any).user_metadata?.first_name || (claims as any).user_metadata?.firstName,
+        last_name: (claims as any).user_metadata?.last_name || (claims as any).user_metadata?.lastName,
+        profile_image_url: (claims as any).user_metadata?.avatar_url || (claims as any).user_metadata?.picture,
+      },
+    };
+  } catch (_err) {
+    // Silently ignore invalid/absent tokens for optional attach
+  } finally {
+    next();
+  }
+};
+
+// Export a no-op in Replit mode; real attach in Supabase mode
+export const attachUserIfPresent: RequestHandler = AUTH_PROVIDER === 'replit'
+  ? ((req, _res, next) => next())
+  : attachSupabaseUserIfPresent;

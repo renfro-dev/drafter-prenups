@@ -133,3 +133,36 @@ export function generatePrenupEmail(partyAName: string, partyBName: string): str
 </html>
   `.trim();
 }
+
+export function generateWelcomeEmail(firstName?: string): string {
+  const greeting = firstName ? `Hi ${firstName},` : 'Welcome,';
+  return `
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif; line-height: 1.6; color: #111827; max-width: 600px; margin: 0 auto; padding: 24px; }
+    .header { background: linear-gradient(135deg, #6366f1, #8b5cf6); color: white; padding: 28px; border-radius: 12px; text-align: center; }
+    .content { background: #ffffff; padding: 24px; border: 1px solid #e5e7eb; border-radius: 12px; margin-top: 16px; }
+    .cta { display: inline-block; background: #6366f1; color: white; padding: 10px 16px; border-radius: 8px; text-decoration: none; font-weight: 600; }
+    .muted { color: #6b7280; font-size: 12px; }
+  </style>
+  <meta name="color-scheme" content="light only" />
+  <meta name="supported-color-schemes" content="light" />
+</head>
+<body>
+  <div class="header">
+    <h1>Welcome to Drafter</h1>
+    <p>Your private prenup assistant</p>
+  </div>
+  <div class="content">
+    <p>${greeting}</p>
+    <p>Thanks for signing up for Drafter. You can start your prenuptial agreement in minutes and collaborate securely with your partner.</p>
+    <p><a class="cta" href="${process.env.PUBLIC_BASE_URL || 'http://localhost:5000'}/intake">Start your prenup</a></p>
+    <p class="muted">Questions? Reply to this email and our team will help.</p>
+  </div>
+  <p class="muted">© ${new Date().getFullYear()} Drafter. All rights reserved.</p>
+</body>
+</html>
+  `.trim();
+}

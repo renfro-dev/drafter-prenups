@@ -41,7 +41,7 @@ export default function CaliforniaPrenup() {
           "name": "How much does a prenup cost in California?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Traditional attorney-drafted prenups in California cost between $3,000 and $10,000, depending on complexity and attorney rates. AI-powered options like Drafter provide California-compliant prenups for $49, with optional attorney review available."
+            "text": "Traditional attorney-drafted prenups in California cost between $3,000 and $10,000, depending on complexity and attorney rates. AI-powered options like Drafter provide California-compliant prenups for free, with optional attorney review available."
           }
         },
         {
@@ -204,7 +204,7 @@ export default function CaliforniaPrenup() {
     <>
       <SEOHead
         title="California Prenuptial Agreement Guide 2025 - Requirements, Costs, Laws"
-        description="Complete guide to California prenups: UPAA requirements, community property laws, enforcement rules, costs, and AI-powered $49 alternatives. Attorney-approved information."
+        description="Complete guide to California prenups: UPAA requirements, community property laws, enforcement rules, costs, and AI-powered free alternatives. Attorney-approved information."
         schema={schema}
       />
     <div className="min-h-screen bg-background">
@@ -226,7 +226,7 @@ export default function CaliforniaPrenup() {
               </Link>
               <Link href="/intake" data-testid="link-create-prenup">
                 <Button size="default" data-testid="button-create-prenup">
-                  Create Prenup - $49
+                  Create Prenup - Free
                   <ChevronRight className="ml-1 h-4 w-4" />
                 </Button>
               </Link>
@@ -248,7 +248,7 @@ export default function CaliforniaPrenup() {
             <p className="text-lg text-muted-foreground leading-relaxed">
               Everything you need to know about prenuptial agreements in California, including legal requirements,
               costs, enforceability, community property laws, and modern AI-powered alternatives that make
-              quality prenups accessible for $49 instead of $3,000+.
+              quality prenups accessible for free instead of $3,000+.
             </p>
             <div className="flex flex-wrap gap-4 mt-6 text-sm text-muted-foreground">
               <div className="flex items-center space-x-2">
@@ -285,7 +285,7 @@ export default function CaliforniaPrenup() {
               </CardHeader>
               <CardContent>
                 <p className="text-muted-foreground mb-4">
-                  Create a California-compliant prenup with Drafter's AI-powered platform for $49. Our system uses
+                  Create a California-compliant prenup with Drafter's AI-powered platform for free. Our system uses
                   verified California legal clauses and PII masking for privacy. Attorney review available at a
                   fraction of traditional costs.
                 </p>
@@ -542,7 +542,7 @@ export default function CaliforniaPrenup() {
                   <div className="border-t pt-6">
                     <div className="flex items-baseline justify-between mb-2">
                       <h4 className="font-bold text-lg text-primary">Drafter AI Platform</h4>
-                      <span className="text-2xl font-bold text-primary">$49</span>
+                      <span className="text-2xl font-bold text-primary">Free</span>
                     </div>
                     <p className="text-sm text-muted-foreground mb-3">
                       AI-powered California prenup with verified legal clauses, PII masking for privacy, and attorney
@@ -550,7 +550,7 @@ export default function CaliforniaPrenup() {
                     </p>
                     <Link href="/intake">
                       <Button className="w-full">
-                        Create California Prenup for $49
+                        Create California Prenup for Free
                         <ChevronRight className="ml-2 h-4 w-4" />
                       </Button>
                     </Link>
@@ -718,7 +718,7 @@ export default function CaliforniaPrenup() {
               <CardContent className="space-y-4">
                 <div className="grid md:grid-cols-3 gap-4 text-center">
                   <div>
-                    <div className="text-3xl font-bold text-primary mb-1">$49</div>
+                    <div className="text-3xl font-bold text-primary mb-1">Free</div>
                     <p className="text-sm text-muted-foreground">vs $3,000-$10,000 traditional</p>
                   </div>
                   <div>

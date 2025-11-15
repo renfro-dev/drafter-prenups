@@ -188,6 +188,27 @@ export async function initializeDatabase() {
     }
     console.log('✓ Database tables created');
 
+    // Ensure new columns exist (idempotent)
+    await getDb().unsafe(
+      "ALTER TABLE users ADD COLUMN IF NOT EXISTS welcome_email_sent BOOLEAN DEFAULT FALSE"
+    );
+    // Ensure terms ledger table exists
+    await getDb().unsafe(`
+      CREATE TABLE IF NOT EXISTS terms_acceptances (
+        id VARCHAR PRIMARY KEY DEFAULT gen_random_uuid()::text,
+        email TEXT NOT NULL,
+        party_a_name TEXT,
+        party_b_name TEXT,
+        agreed_at TIMESTAMP NOT NULL DEFAULT NOW(),
+        ip TEXT,
+        user_agent TEXT,
+        version TEXT
+      )
+    `);
+    await getDb().unsafe(
+      "ALTER TABLE terms_acceptances ADD COLUMN IF NOT EXISTS user_id VARCHAR"
+    );
+
     // Check if clauses need to be seeded
     const existingClauses = await getDb()`SELECT COUNT(*) as count FROM clauses`;
     const clauseCount = parseInt(existingClauses[0].count as string);

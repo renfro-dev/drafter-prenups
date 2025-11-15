@@ -19,6 +19,10 @@ import {
   type InsertClauseReview,
 } from "@shared/schema";
 import postgres from "postgres";
+import { randomUUID } from "crypto";
+import { readFileSync } from "fs";
+import { join, dirname } from "path";
+import { fileURLToPath } from "url";
 
 // Lazy initialization of database connection
 let sql: ReturnType<typeof postgres>;
@@ -42,6 +46,19 @@ export interface IStorage {
   // Auth methods - Required for Replit Auth
   getUser(id: string): Promise<User | undefined>;
   upsertUser(user: UpsertUser): Promise<User>;
+  markWelcomeEmailSent(userId: string): Promise<void>;
+  
+  // Terms acceptances
+  createTermsAcceptance(data: {
+    email: string;
+    partyAName: string;
+    partyBName: string;
+    ip?: string | null;
+    userAgent?: string | null;
+    version?: string | null;
+    userId?: string | null;
+  }): Promise<void>;
+  hasAcceptedTerms(email: string): Promise<boolean>;
   
   // Intake methods
   createIntake(intake: InsertIntake, maskedData: any, piiMap: PIIMap): Promise<Intake>;
@@ -214,6 +231,7 @@ export class DatabaseStorage implements IStorage {
       firstName: row.first_name,
       lastName: row.last_name,
       profileImageUrl: row.profile_image_url,
+      welcomeEmailSent: !!row.welcome_email_sent,
       createdAt: row.created_at,
       updatedAt: row.updated_at,
     } as User;
@@ -242,9 +260,29 @@ export class DatabaseStorage implements IStorage {
       firstName: row.first_name,
       lastName: row.last_name,
       profileImageUrl: row.profile_image_url,
+      welcomeEmailSent: !!row.welcome_email_sent,
       createdAt: row.created_at,
       updatedAt: row.updated_at,
     } as User;
+  }
+
+  async createTermsAcceptance(data: { email: string; partyAName: string; partyBName: string; ip?: string | null; userAgent?: string | null; version?: string | null; userId?: string | null; }): Promise<void> {
+    await getDb()`
+      INSERT INTO terms_acceptances (email, party_a_name, party_b_name, ip, user_agent, version, user_id)
+      VALUES (${data.email}, ${data.partyAName}, ${data.partyBName}, ${data.ip || null}, ${data.userAgent || null}, ${data.version || null}, ${data.userId || null})
+    `;
+  }
+  async hasAcceptedTerms(email: string): Promise<boolean> {
+    const result = await getDb()`SELECT EXISTS(SELECT 1 FROM terms_acceptances WHERE email = ${email}) as ok`;
+    return !!result?.[0]?.ok;
+  }
+
+  async markWelcomeEmailSent(userId: string): Promise<void> {
+    await getDb()`
+      UPDATE users
+      SET welcome_email_sent = TRUE, updated_at = NOW()
+      WHERE id = ${userId}
+    `;
   }
 
   async updateIntakeUsers(id: string, partyAUserId: string | null, partyBUserId: string | null): Promise<void> {
@@ -518,4 +556,345 @@ export class DatabaseStorage implements IStorage {
   }
 }
 
-export const storage = new DatabaseStorage();
+// ---------------- In-Memory Storage (Local fallback) ----------------
+
+class InMemoryStorage implements IStorage {
+  private usersById = new Map<string, User>();
+  private usersByEmail = new Map<string, string>();
+  private intakes = new Map<string, Intake>();
+  private clauses: Clause[] = [];
+  private termsAcceptances: Array<{ email: string; partyAName: string; partyBName: string; agreedAt: string; ip?: string | null; ua?: string | null; version?: string | null; userId?: string | null; }> = [];
+  private prenupClausesByIntake = new Map<string, PrenupClause[]>();
+  private commentsByClause = new Map<string, ClauseComment[]>();
+  private flagsByClause = new Map<string, ClauseFlag[]>();
+  private questionsByClause = new Map<string, ClauseQuestion[]>();
+  private reviewsByClause = new Map<string, ClauseReview[]>();
+
+  constructor() {
+    try {
+      const __filename = fileURLToPath(import.meta.url);
+      const __dirname = dirname(__filename);
+      const clausesJSON = readFileSync(
+        join(__dirname, "../data/clauses/california-clauses.json").replace("/server/server/", "/server/"),
+        "utf-8"
+      );
+      const californiaClausesData = JSON.parse(clausesJSON);
+      this.clauses = californiaClausesData.map((c: any): Clause => ({
+        id: randomUUID(),
+        clauseId: c.clauseId,
+        title: c.title,
+        category: c.category,
+        jurisdiction: c.jurisdiction,
+        textNormalized: c.textNormalized,
+        applicableWhen: c.applicableWhen,
+        version: c.version,
+        createdAt: new Date().toISOString() as any,
+      }));
+      console.log(`[InMemoryStorage] Seeded ${this.clauses.length} California clauses`);
+    } catch (e) {
+      console.warn('[InMemoryStorage] Could not load California clauses JSON. Review features may be limited.');
+      this.clauses = [];
+    }
+  }
+
+  // Auth
+  async getUser(id: string): Promise<User | undefined> {
+    return this.usersById.get(id);
+  }
+  async upsertUser(user: UpsertUser): Promise<User> {
+    // Keep ID stable per email
+    const existingId = user.email ? this.usersByEmail.get(user.email) : undefined;
+    const id = existingId || user.id || randomUUID();
+    const existing = this.usersById.get(id);
+    const record: User = {
+      id,
+      email: (user.email || existing?.email || null) as any,
+      firstName: (user.firstName ?? existing?.firstName) as any,
+      lastName: (user.lastName ?? existing?.lastName) as any,
+      profileImageUrl: (user.profileImageUrl ?? existing?.profileImageUrl) as any,
+      welcomeEmailSent: existing?.welcomeEmailSent ?? false,
+      createdAt: (existing?.createdAt || new Date().toISOString()) as any,
+      updatedAt: new Date().toISOString() as any,
+    };
+    this.usersById.set(id, record);
+    if (user.email) this.usersByEmail.set(user.email, id);
+    return record;
+  }
+
+  async markWelcomeEmailSent(userId: string): Promise<void> {
+    const user = this.usersById.get(userId);
+    if (user) {
+      (user as any).welcomeEmailSent = true;
+      (user as any).updatedAt = new Date().toISOString() as any;
+      this.usersById.set(userId, user);
+    }
+  }
+  async createTermsAcceptance(data: { email: string; partyAName: string; partyBName: string; ip?: string | null; userAgent?: string | null; version?: string | null; userId?: string | null; }): Promise<void> {
+    this.termsAcceptances.push({
+      email: data.email,
+      partyAName: data.partyAName,
+      partyBName: data.partyBName,
+      agreedAt: new Date().toISOString(),
+      ip: data.ip || null,
+      ua: data.userAgent || null,
+      version: data.version || null,
+      userId: data.userId || null,
+    });
+  }
+  async hasAcceptedTerms(email: string): Promise<boolean> {
+    return this.termsAcceptances.some(t => t.email.toLowerCase() === (email || '').toLowerCase());
+  }
+
+  // Intake
+  async createIntake(intake: InsertIntake, maskedData: any, piiMap: PIIMap): Promise<Intake> {
+    const id = randomUUID();
+    const rec: Intake = {
+      id,
+      email: intake.email,
+      state: intake.state,
+      partyAName: intake.partyAName,
+      partyBName: intake.partyBName,
+      partyAUserId: null as any,
+      partyBUserId: null as any,
+      weddingDate: intake.weddingDate,
+      intakeData: intake as any,
+      maskedData,
+      piiMap,
+      prenupDocUrl: null as any,
+      status: 'pending',
+      paid: false as any,
+      paymentAmount: null as any,
+      paymentDate: null as any,
+      stripePaymentIntentId: null as any,
+      promoCodeUsed: null as any,
+      reviewCompleted: false as any,
+      reviewCompletedDate: null as any,
+      createdAt: new Date().toISOString() as any,
+    };
+    this.intakes.set(id, rec);
+    return rec;
+  }
+  async getIntake(id: string): Promise<Intake | undefined> {
+    return this.intakes.get(id);
+  }
+  async updateIntakePrenupUrl(id: string, url: string): Promise<void> {
+    const rec = this.intakes.get(id);
+    if (rec) {
+      rec.prenupDocUrl = url as any;
+      rec.status = 'completed' as any;
+    }
+  }
+  async updateIntakeStatus(id: string, status: string): Promise<void> {
+    const rec = this.intakes.get(id);
+    if (rec) rec.status = status as any;
+  }
+  async updateIntakeReviewCompleted(id: string, completed: boolean): Promise<void> {
+    const rec = this.intakes.get(id);
+    if (rec) {
+      rec.reviewCompleted = completed as any;
+      rec.reviewCompletedDate = completed ? new Date().toISOString() as any : null as any;
+    }
+  }
+  async updateIntakeUsers(id: string, partyAUserId: string | null, partyBUserId: string | null): Promise<void> {
+    const rec = this.intakes.get(id);
+    if (rec) {
+      rec.partyAUserId = partyAUserId as any;
+      rec.partyBUserId = partyBUserId as any;
+    }
+  }
+
+  // Clause library
+  async getClauses(jurisdiction: string, categories?: string[]): Promise<Clause[]> {
+    const list = this.clauses.filter(c => c.jurisdiction === jurisdiction);
+    if (categories && categories.length) {
+      return list.filter(c => categories.includes(c.category));
+    }
+    return list;
+  }
+  async createClause(clause: InsertClause): Promise<Clause> {
+    const created: Clause = {
+      id: randomUUID(),
+      clauseId: clause.clauseId,
+      title: clause.title,
+      category: clause.category,
+      jurisdiction: clause.jurisdiction,
+      textNormalized: clause.textNormalized,
+      applicableWhen: clause.applicableWhen as any,
+      version: clause.version,
+      createdAt: new Date().toISOString() as any,
+    };
+    this.clauses.push(created);
+    return created;
+  }
+
+  // Generation logs
+  async createGenerationLog(log: { intakeId: string; clausesUsed: any; promptTokens?: number | undefined; completionTokens?: number | undefined; success: boolean; errorMessage?: string | undefined; }): Promise<GenerationLog> {
+    return {
+      id: randomUUID(),
+      intakeId: log.intakeId,
+      clausesUsed: log.clausesUsed as any,
+      promptTokens: log.promptTokens as any,
+      completionTokens: log.completionTokens as any,
+      success: log.success,
+      errorMessage: log.errorMessage as any,
+      createdAt: new Date().toISOString() as any,
+    } as GenerationLog;
+  }
+
+  // Collaborative review
+  async createPrenupClause(clause: InsertPrenupClause): Promise<PrenupClause> {
+    const rec: PrenupClause = {
+      id: randomUUID(),
+      intakeId: clause.intakeId,
+      clauseNumber: clause.clauseNumber,
+      title: clause.title,
+      legalText: clause.legalText,
+      plainExplanation: clause.plainExplanation || null as any,
+      category: clause.category || null as any,
+      createdAt: new Date().toISOString() as any,
+    };
+    const list = this.prenupClausesByIntake.get(clause.intakeId) || [];
+    list.push(rec);
+    this.prenupClausesByIntake.set(clause.intakeId, list);
+    return rec;
+  }
+  async getPrenupClause(id: string): Promise<PrenupClause | undefined> {
+    for (const list of this.prenupClausesByIntake.values()) {
+      const found = list.find(c => c.id === id);
+      if (found) return found;
+    }
+    return undefined;
+  }
+  async getPrenupClauses(intakeId: string): Promise<PrenupClause[]> {
+    return [...(this.prenupClausesByIntake.get(intakeId) || [])].sort((a,b) => a.clauseNumber - b.clauseNumber);
+    }
+  async updateClauseExplanation(id: string, explanation: string): Promise<void> {
+    for (const list of this.prenupClausesByIntake.values()) {
+      const found = list.find(c => c.id === id);
+      if (found) {
+        (found as any).plainExplanation = explanation;
+        return;
+      }
+    }
+  }
+
+  async createClauseComment(comment: InsertClauseComment): Promise<ClauseComment> {
+    const rec: ClauseComment = {
+      id: randomUUID(),
+      prenupClauseId: comment.prenupClauseId,
+      userId: comment.userId,
+      comment: comment.comment,
+      createdAt: new Date().toISOString() as any,
+    };
+    const list = this.commentsByClause.get(comment.prenupClauseId) || [];
+    list.push(rec);
+    this.commentsByClause.set(comment.prenupClauseId, list);
+    return rec;
+  }
+  async getClauseComments(prenupClauseId: string): Promise<ClauseComment[]> {
+    return [...(this.commentsByClause.get(prenupClauseId) || [])];
+  }
+
+  async createClauseFlag(flag: InsertClauseFlag): Promise<ClauseFlag> {
+    const rec: ClauseFlag = {
+      id: randomUUID(),
+      prenupClauseId: flag.prenupClauseId,
+      userId: flag.userId,
+      reason: flag.reason || null as any,
+      resolved: flag.resolved || false,
+      createdAt: new Date().toISOString() as any,
+    };
+    const list = this.flagsByClause.get(flag.prenupClauseId) || [];
+    list.push(rec);
+    this.flagsByClause.set(flag.prenupClauseId, list);
+    return rec;
+  }
+  async getClauseFlags(prenupClauseId: string): Promise<ClauseFlag[]> {
+    return [...(this.flagsByClause.get(prenupClauseId) || [])];
+  }
+  async resolveClauseFlag(id: string): Promise<void> {
+    for (const list of this.flagsByClause.values()) {
+      const found = list.find(f => f.id === id);
+      if (found) {
+        (found as any).resolved = true;
+        return;
+      }
+    }
+  }
+
+  async createClauseQuestion(question: InsertClauseQuestion): Promise<ClauseQuestion> {
+    const rec: ClauseQuestion = {
+      id: randomUUID(),
+      prenupClauseId: question.prenupClauseId,
+      userId: question.userId,
+      question: question.question,
+      answer: question.answer || null as any,
+      createdAt: new Date().toISOString() as any,
+    };
+    const list = this.questionsByClause.get(question.prenupClauseId) || [];
+    list.push(rec);
+    this.questionsByClause.set(question.prenupClauseId, list);
+    return rec;
+  }
+  async updateClauseAnswer(id: string, answer: string): Promise<void> {
+    for (const list of this.questionsByClause.values()) {
+      const found = list.find(q => q.id === id);
+      if (found) {
+        (found as any).answer = answer;
+        return;
+      }
+    }
+  }
+  async getClauseQuestions(prenupClauseId: string): Promise<ClauseQuestion[]> {
+    return [...(this.questionsByClause.get(prenupClauseId) || [])];
+  }
+
+  async createClauseReview(review: InsertClauseReview): Promise<ClauseReview> {
+    const list = this.reviewsByClause.get(review.prenupClauseId) || [];
+    const existing = list.find(r => r.userId === review.userId);
+    if (existing) return existing;
+    const rec: ClauseReview = {
+      id: randomUUID(),
+      prenupClauseId: review.prenupClauseId,
+      userId: review.userId,
+      reviewedAt: new Date().toISOString() as any,
+    };
+    list.push(rec);
+    this.reviewsByClause.set(review.prenupClauseId, list);
+    return rec;
+  }
+  async getClauseReview(prenupClauseId: string, userId: string): Promise<ClauseReview | undefined> {
+    const list = this.reviewsByClause.get(prenupClauseId) || [];
+    return list.find(r => r.userId === userId);
+  }
+  async getUserReviewedClauses(userId: string, intakeId: string): Promise<string[]> {
+    const cla = this.prenupClausesByIntake.get(intakeId) || [];
+    const reviewedIds: string[] = [];
+    for (const c of cla) {
+      const list = this.reviewsByClause.get(c.id) || [];
+      if (list.find(r => r.userId === userId)) reviewedIds.push(c.id);
+    }
+    return reviewedIds;
+  }
+  async getReviewProgress(intakeId: string): Promise<{ total: number; reviewed: number; }> {
+    const cla = this.prenupClausesByIntake.get(intakeId) || [];
+    const total = cla.length;
+    const reviewedSet = new Set<string>();
+    for (const c of cla) {
+      const list = this.reviewsByClause.get(c.id) || [];
+      if (list.length > 0) reviewedSet.add(c.id);
+    }
+    return { total, reviewed: reviewedSet.size };
+  }
+}
+
+function createStorage(): IStorage {
+  const dbUrl = process.env.SUPABASE_DB_URL || process.env.DATABASE_URL;
+  if (!dbUrl) {
+    console.warn('[Storage] No SUPABASE_DB_URL/DATABASE_URL found. Using in-memory storage.');
+    return new InMemoryStorage();
+  }
+  return new DatabaseStorage();
+}
+
+export const storage: IStorage = createStorage();

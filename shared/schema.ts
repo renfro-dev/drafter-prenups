@@ -21,8 +21,22 @@ export const users = pgTable("users", {
   firstName: varchar("first_name"),
   lastName: varchar("last_name"),
   profileImageUrl: varchar("profile_image_url"),
+  welcomeEmailSent: boolean("welcome_email_sent").notNull().default(false),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Terms acceptance ledger
+export const termsAcceptances = pgTable("terms_acceptances", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  email: text("email").notNull(),
+  partyAName: text("party_a_name"),
+  partyBName: text("party_b_name"),
+  agreedAt: timestamp("agreed_at").defaultNow().notNull(),
+  ip: text("ip"),
+  userAgent: text("user_agent"),
+  version: text("version"),
+  userId: varchar("user_id"),
 });
 
 // Intake table - stores user prenup intake data
@@ -146,13 +160,37 @@ export const insertIntakeSchema = z.object({
   state: z.string().default("CA"),
   partyAName: z.string().min(2, "Name required"),
   partyBName: z.string().min(2, "Name required"),
-  weddingDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Date must be YYYY-MM-DD"),
+  weddingDate: z.string().refine((s) => {
+    // Accept YYYY-MM-DD or MM/DD/YYYY or MM-DD-YYYY (basic range checks)
+    const iso = /^\d{4}-\d{2}-\d{2}$/;
+    const us = /^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/;
+    if (iso.test(s)) {
+      const [y, m, d] = s.split('-').map((n) => parseInt(n, 10));
+      return m >= 1 && m <= 12 && d >= 1 && d <= 31;
+    }
+    const m = s.match(us);
+    if (m) {
+      const month = parseInt(m[1], 10);
+      const day = parseInt(m[2], 10);
+      const year = parseInt(m[3], 10);
+      return month >= 1 && month <= 12 && day >= 1 && day <= 31 && year >= 1900;
+    }
+    return false;
+  }, "Enter a valid date (e.g., 10/21/2025)"),
   assets: z.array(assetSchema).default([]),
   debts: z.array(debtSchema).default([]),
   spousalSupportWaived: z.boolean().default(false),
   separatePropertyProtection: z.boolean().default(true),
   counselRepresented: z.boolean().default(false),
   additionalProvisions: z.string().optional(),
+});
+
+// Terms acceptance insert schema
+export const insertTermsAcceptanceSchema = z.object({
+  email: z.string().email("Valid email required"),
+  partyAName: z.string().min(2, "Name required"),
+  partyBName: z.string().min(2, "Name required"),
+  version: z.string().default("v1"),
 });
 
 // Clause insert schema
@@ -207,3 +245,4 @@ export const generatedPrenupSchema = z.object({
 
 export type PrenupSection = z.infer<typeof prenupSectionSchema>;
 export type GeneratedPrenup = z.infer<typeof generatedPrenupSchema>;
+export type InsertTermsAcceptance = z.infer<typeof insertTermsAcceptanceSchema>;

@@ -46,6 +46,11 @@ app.use((req, res, next) => {
     console.error('Server will start anyway. Please check database configuration.');
   }
   
+  // Log key environment diagnostics (non-secret)
+  console.log('[Boot] AUTH_PROVIDER =', process.env.AUTH_PROVIDER || 'replit');
+  console.log('[Boot] SUPABASE_URL =', process.env.SUPABASE_URL ? 'set' : 'not set');
+  console.log('[Boot] SUPABASE_DB_URL =', process.env.SUPABASE_DB_URL ? 'set' : (process.env.DATABASE_URL ? 'DATABASE_URL set' : 'not set'));
+
   const server = await registerRoutes(app);
 
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {

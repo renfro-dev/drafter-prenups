@@ -15,9 +15,9 @@ export function PrivacyNotice() {
             <span className="font-semibold text-chart-3">Privacy Protected</span>
           </div>
           <p className="text-sm text-muted-foreground">
-            Your sensitive information (names, financial details) is automatically masked before AI processing.
-            We use 256-bit encryption and never train AI models on your data. All information is securely deleted
-            after 7 days.
+            No account required. We don’t store your sensitive intake in our database. Your information is used
+            only to generate your draft and send it to your email, then discarded. We also mask sensitive details
+            before AI processing.
           </p>
         </div>
       </div>

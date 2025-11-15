@@ -78,31 +78,6 @@ export default function Success() {
             </p>
           </div>
 
-          {!emailDelivered && result?.downloadUrl && (
-            <Card className="mb-8 border-chart-4/30 bg-chart-4/5" data-testid="card-download">
-              <CardHeader>
-                <CardTitle className="flex items-center space-x-2">
-                  <AlertTriangle className="h-5 w-5 text-chart-4" />
-                  <span>Email Delivery Failed</span>
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <p className="text-muted-foreground">
-                  We weren't able to send your document via email. Please download it directly using the button below.
-                </p>
-                <Button 
-                  onClick={handleDownload} 
-                  className="w-full" 
-                  size="lg"
-                  data-testid="button-download"
-                >
-                  <Download className="mr-2 h-5 w-5" />
-                  Download Your Prenuptial Agreement
-                </Button>
-              </CardContent>
-            </Card>
-          )}
-
           {emailDelivered && (
             <Card className="mb-8" data-testid="card-email-sent">
               <CardHeader>
@@ -141,6 +116,43 @@ export default function Success() {
                     </li>
                   </ul>
                 </div>
+                {result?.downloadUrl && (
+                  <Button 
+                    onClick={handleDownload}
+                    className="w-full"
+                    size="lg"
+                    data-testid="button-download-inline"
+                  >
+                    <Download className="mr-2 h-5 w-5" />
+                    Download Your Prenuptial Agreement
+                  </Button>
+                )}
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Always present a general download section when available */}
+          {result?.downloadUrl && !emailDelivered && (
+            <Card className="mb-8 border-chart-4/30 bg-chart-4/5" data-testid="card-download">
+              <CardHeader>
+                <CardTitle className="flex items-center space-x-2">
+                  <AlertTriangle className="h-5 w-5 text-chart-4" />
+                  <span>Email Delivery Failed</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <p className="text-muted-foreground">
+                  We weren't able to send your document via email. Please download it directly using the button below.
+                </p>
+                <Button 
+                  onClick={handleDownload} 
+                  className="w-full" 
+                  size="lg"
+                  data-testid="button-download"
+                >
+                  <Download className="mr-2 h-5 w-5" />
+                  Download Your Prenuptial Agreement
+                </Button>
               </CardContent>
             </Card>
           )}
