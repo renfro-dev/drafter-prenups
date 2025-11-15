@@ -65,17 +65,7 @@ export function Header() {
                 Logout
               </Button>
             </>
-          ) : (
-            <Button
-              onClick={handleLogin}
-              variant="ghost"
-              size="sm"
-              data-testid="button-login"
-            >
-              <LogIn className="h-4 w-4 mr-2" />
-              Sign in
-            </Button>
-          )}
+          ) : null}
         </div>
       </div>
     </header>

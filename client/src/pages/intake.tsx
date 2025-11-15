@@ -230,7 +230,7 @@ export default function Intake() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
         <div className="max-w-4xl mx-auto">
           {/* Email gate modal (blocks interaction but shows steps behind) */}
-          <Dialog open={emailGateOpen}>
+          <Dialog open={emailGateOpen} onOpenChange={setEmailGateOpen}>
             <DialogContent className="sm:max-w-md">
               <DialogHeader>
                 <DialogTitle>Where would you like us to send your agreement?</DialogTitle>
