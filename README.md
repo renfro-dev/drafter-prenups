@@ -31,7 +31,6 @@ An end‑to‑end web app that generates a California prenuptial agreement using
 - `shared/` — shared types and schemas
 - `scripts/` — utilities for QA, PII map checks, etc.
 
-
 ## Prerequisites
 - Node.js 20+
 - A Postgres database (Neon recommended)
@@ -199,5 +198,3 @@ The generated document is not legal advice. Parties must consult independent cou
 
 ## License
 MIT
-
-
