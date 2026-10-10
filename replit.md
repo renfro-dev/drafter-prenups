@@ -21,42 +21,6 @@ Preferred communication style: Simple, everyday language.
 
 ---
 
-## QA Testing Status
-
-**Last Updated**: October 22, 2025
-
-**Testing Completed**:
-- ✅ Automated E2E testing with Playwright
-- ✅ Database verification (10 comments, 8 flags, 3 questions persisting correctly)
-- ✅ All engagement features tested (Explain, Flag, Comment, Ask)
-- ✅ Authentication flow verified (OAuth redirect preservation working)
-- ✅ Session persistence fixed and verified
-- ✅ Review page loading confirmed working
-- ✅ Comprehensive documentation in `QA testing/` folder
-
-**Overall Assessment**: Production-ready with excellent core functionality
-
-**Recent Fixes (October 22, 2025)**:
-- ✅ **Session Cookie Configuration**: Fixed `secure: true` blocking cookies in development by making it conditional (`secure: process.env.NODE_ENV === 'production'`)
-- ✅ **CSRF Protection**: Added `sameSite: 'lax'` to session cookie
-- ✅ **Privacy-First Logging**: All PII-containing logs (emails, user data) now gated behind `NODE_ENV === 'development'` check
-- ✅ **End-to-End Verification**: Complete authentication and review flow tested and passing
-
-**Test Reports**:
-- `QA testing/README.md` - Summary and findings
-- `QA testing/database.md` - Database integrity verification (EXCELLENT ✅)
-- `QA testing/UI.md` - User interface review (GOOD ⚠️)
-- `QA testing/UX.md` - User experience analysis (GOOD ⚠️)
-- `QA testing/user-journey.md` - End-to-end journey mapping (EXCELLENT ✅)
-
-**Next Steps for Launch**:
-1. Configure SendGrid email delivery for production
-2. Mobile device testing (iOS, Android)
-3. Cross-browser verification (Firefox, Safari, Edge)
-4. Monitor session refresh token flow under production load
-
----
-
 ## System Architecture
 
 ### Frontend Architecture
